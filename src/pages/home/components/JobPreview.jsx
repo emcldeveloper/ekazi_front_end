@@ -13,6 +13,7 @@ import {
 import MainLayout1 from "../../../layouts/MainLayout1";
 import JobDetails from "./JobDetails";
 import { useJobDetail, useJobIncrement } from "../../../hooks/useJobs";
+import TemplateSlider from "../../JobSeeker/Cv/components/TemplateSlider";
 
 const JobPreview = () => {
   useEffect(() => {
@@ -102,7 +103,11 @@ const JobPreview = () => {
           </Col>
 
           <Col md={3}>
-            <Card className="h-100">
+            <div className="mb-4">
+              <TemplateSlider />
+            </div>
+
+            <Card className="h-50">
               <Card.Body className="d-flex align-items-center justify-content-center">
                 Google Ad Space
               </Card.Body>
