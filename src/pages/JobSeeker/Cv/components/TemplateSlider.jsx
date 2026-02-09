@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { TEMPLATES } from "../data/templates";
 import { Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function TemplateSlider() {
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const total = TEMPLATES.length;
 
@@ -20,7 +22,10 @@ export default function TemplateSlider() {
         <h3 className="text-sm font-bold text-gray-900 mb-2">
           Available CV Templates
         </h3>
-        <div className="w-full overflow-hidden rounded-lg">
+        <div
+          className="w-full overflow-hidden rounded-lg cursor-pointer"
+          onClick={() => navigate("/jobseeker/sample-selection")}
+        >
           <img
             src={TEMPLATES[index].image}
             alt=""

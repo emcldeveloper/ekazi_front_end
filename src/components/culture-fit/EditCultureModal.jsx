@@ -19,7 +19,7 @@ const EditCultureModal = ({ show, onHide }) => {
   const cultureData = useMemo(
     () =>
       Array.isArray(applicant?.data?.culture) ? applicant?.data?.culture : [],
-    [applicant?.data?.culture]
+    [applicant?.data?.culture],
   );
 
   /* ---------------- Culture options ---------------- */
@@ -29,14 +29,14 @@ const EditCultureModal = ({ show, onHide }) => {
         value: c.id,
         label: c.culture_name,
       })) ?? [],
-    [culture]
+    [culture],
   );
 
   const [visibleCount, setVisibleCount] = useState(10);
 
   const cultureOptions = useMemo(
     () => allCultureOptions.slice(0, visibleCount),
-    [allCultureOptions, visibleCount]
+    [allCultureOptions, visibleCount],
   );
 
   const loadMoreCulture = () => setVisibleCount((prev) => prev + 10);
@@ -48,7 +48,7 @@ const EditCultureModal = ({ show, onHide }) => {
         value: item.culture?.id || item.culture_id,
         label: item.culture?.culture_name || item.culture_name,
       })),
-    [cultureData]
+    [cultureData],
   );
 
   /* ---------------- Merge options + selected (CRITICAL FIX) ---------------- */
@@ -95,7 +95,7 @@ const EditCultureModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">Work Compatibility Profile</Modal.Title>
       </Modal.Header>
