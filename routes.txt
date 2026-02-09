@@ -1,0 +1,283 @@
+<?php
+
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\Applicant\GenerateCv;
+use App\Http\Controllers\Auth\ClientRegistrationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Employer\EmployerJobController;
+use App\Http\Controllers\Employer\EmployerController;
+use App\Http\Controllers\Universals\GenderController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Universals\PlanController;
+use App\Http\Controllers\Universals\TermAndConditionController;
+
+use App\Http\Controllers\Api\Auth\AuthController;
+
+
+
+
+/*
+
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:api');
+
+
+Route::post('password/email', 'ForgotPasswordController@forgot')->name('password.email');
+#verification link will be here #auth
+
+Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('auth/register', [AuthController::class, 'register']);
+Route::get('/auth/verify', [AuthController::class, 'verify']);
+Route::post('/auth/resend-verification', [AuthController::class, 'resend']);
+
+Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/auth/password-new', [AuthController::class, 'changePassword']);
+
+
+Route::post('password/reset', 'ForgotPasswordController@reset')->name('password.reset');
+Route::get('/cv/cv_builder/{id}', [App\Http\Controllers\Applicant\GenerateCv::class, 'cv_builder']);
+// Route::post('/applicant/experience/',[EducationController::class, 'store'])
+ 
+
+//Route::middleware('auth:api')->get('/cv/cv_builder/{id}', [GenerateCv::class, 'cv_builder']);
+ 
+#Universal API
+Route::get('/universal/regions',[App\Http\Controllers\Api\Universals\Regions::class, 'region']);
+Route::get('/universal/country',[App\Http\Controllers\Api\Universals\CountryController::class, 'country']);
+Route::get('/universal/citizenship',[App\Http\Controllers\Api\Universals\CountryController::class, 'Nationalities']);
+Route::get('/universal/industry',[App\Http\Controllers\Api\Universals\IndustryController::class, 'industry']);
+Route::get('/universal/education_level',[App\Http\Controllers\Api\Universals\EducationLevelController::class, 'education_level']);
+Route::get('/universal/course',[App\Http\Controllers\Api\Universals\CourseController::class, 'course']);
+Route::get('/universal/major',[App\Http\Controllers\Api\Universals\MajorController::class, 'major']);
+Route::get('/universal/gender',[GenderController::class, 'getGender']);
+Route::get('/universal/marital',[GenderController::class, 'getMaritalStatus']);
+Route::get('/universal/position',[App\Http\Controllers\Api\Universals\PositionController::class, 'position']);
+Route::get('/universal/position_level',[App\Http\Controllers\Api\Universals\PositionLevelController::class, 'positionlevel']);
+Route::get('/universal/job-type',[App\Http\Controllers\Universals\JobTypeUniversalController::class,'getJobTypeApi']);
+Route::get('/universal/organization',[App\Http\Controllers\Api\Universals\OrganizationController::class, 'organization']);
+Route::get('/universal/getproficiency',[App\Http\Controllers\Api\Universals\Proficiency::class, 'getproficiency']);
+
+#Employer Price List Packages
+Route::get('/universal/employer/packages', [PlanController::class, 'employerAPiPlans']);
+
+#Job API
+Route::get('/jobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'job']);
+#job-summary
+Route::get('/job-count-by-region', [EmployerJobController::class, 'jobCountByRegion']);
+Route::get('/job-category-summary', [EmployerJobController::class, 'jobCountByCategory']);
+Route::get('/clients-job-count-by-industry', [EmployerController::class, 'getJobsCountByIndustry']);
+#List OF Employer
+Route::get('/list-of-employer', [EmployerController::class, 'listOfEmployerApi']);
+#Ekazi Statistic
+Route::get('/site-statistics', [EmployerController::class, 'getStats']);
+#List OF Employer
+Route::get('/test-empo', [EmployerController::class, 'testEmployer']);
+
+
+Route::get('/applicant/position',[App\Http\Controllers\Api\Universals\PositionController::class, 'position']);
+Route::get('/applicant/position_level',[App\Http\Controllers\Api\Universals\PositionLevelController::class, 'positionlevel']);
+Route::get('/applicant/organization',[App\Http\Controllers\Api\Universals\OrganizationController::class, 'organization']);
+Route::get('/applicant/applicant_employer',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'employer']);
+Route::get('/applicant/salary_range',[App\Http\Controllers\Api\Universals\SalaryRangeController::class, 'salaryrange']);
+
+Route::get('/applicant/college',[App\Http\Controllers\Api\Universals\CollegeController::class, 'college']);
+
+Route::get('/applicant/culture',[App\Http\Controllers\Api\Universals\CultureController::class, 'culture']);
+Route::get('/applicant/personality',[App\Http\Controllers\Api\Universals\PersonalityController::class, 'personality']);
+Route::get('/applicant/knowlege',[App\Http\Controllers\Api\Universals\SkillController::class, 'knowledge']);
+Route::get('/applicant/software',[App\Http\Controllers\Api\Universals\SoftwareController::class, 'software']);
+Route::get('/applicant/tool',[App\Http\Controllers\Api\Universals\ToolController::class, 'tool']);
+Route::get('/applicant/language',[App\Http\Controllers\Api\Universals\LanguageController::class, 'language']);
+Route::get('/applicant/language_read',[App\Http\Controllers\Api\Universals\LanguageReadController::class, 'language_reads']);
+Route::get('/applicant/language_speak',[App\Http\Controllers\Api\Universals\LanguageSpeakController::class, 'language_speak']);
+Route::get('/applicant/language_understand',[App\Http\Controllers\Api\Universals\LanguageUnderstandController::class, 'language_understand']);
+Route::get('/applicant/language_write',[App\Http\Controllers\Api\Universals\LanguageWriteController::class, 'language_write']);
+Route::get('/applicant/gettraining',[App\Http\Controllers\Api\Universals\Training::class, 'gettraining']);
+Route::get('/applicant/experiencetype',[App\Http\Controllers\Api\Universals\ExperienceTypeController::class, 'getexperiencetype']);
+
+#Cv Subscription 
+Route::get('/applicant/CvSubscription',[App\Http\Controllers\Api\Applicant\ApplicantCvPlanSubscription::class, 'cvsubscription']);
+Route::get('/applicant/CvSubscriptiondata/{id}',[App\Http\Controllers\Api\Applicant\ApplicantCvSubscription::class, 'getcvsubscription']);
+Route::get('/applicant/mycv/{id}',[App\Http\Controllers\Api\Applicant\ApplicantCvSubscription::class, 'mycv']);
+Route::get('/applicant/MyCvView/{id}/{CvId}',[App\Http\Controllers\Api\Applicant\ApplicantCvSubscription::class, 'mycvdownload']);
+Route::post('/applicant/savesubsription',[App\Http\Controllers\Api\Applicant\ApplicantCvSubscription::class, 'savesubscription']);
+Route::get('/applicant/checksubsription/{id}',[App\Http\Controllers\Api\Applicant\ApplicantCvSubscription::class, 'checksubscription']);
+
+
+#experience
+Route::post('/applicant/experiencestore',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'addExperience']);
+Route::delete('/applicant/deleteexperience/{id}',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'deleteExperience']);
+Route::post('/applicant/updateexperience/{id}',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'update']);
+Route::get('/applicant/experiences/{id}',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'getexperience']);
+Route::post('/applicant/hideexperiences/{id}',[App\Http\Controllers\Api\Applicant\WorkExperienceController::class, 'hideexperience']);
+ 
+
+
+#career skill
+Route::post('/applicant/culturestore',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'addculture']);
+Route::post('/applicant/personalitystore',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'add_personality']);
+Route::post('/applicant/knowledgestore',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'add_knowledge']);
+Route::post('/applicant/softwarestore',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'add_software']);
+Route::post('/applicant/toolstore',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'add_tool']);
+Route::post('/applicant/generalskills',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'generalskills']);
+Route::delete('/applicant/deleteculture/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'delete_culture']);
+Route::post('/applicant/hideculture/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'hide']);
+Route::post('/applicant/hidetool/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'hidetool']);
+Route::post('/applicant/hidepersonality/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'hidepersonality']);
+Route::post('/applicant/hidesoftware/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'hidesoftware']);
+Route::post('/applicant/hideknowledge/{id}',[App\Http\Controllers\Api\Applicant\CareerSkillsController::class, 'hideknowledge']);
+
+#career
+Route::get('/applicant/careerprofile/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'index']);
+Route::put('/applicant/storecareerobjective/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'saveBriefCareer']);
+Route::put('/applicant/storeObjective/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'storeCareerObjectives']);
+Route::put('/applicant/updateIntroduction',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'editPersonalInfo']);
+Route::get('/applicant/check/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'check']);
+Route::get('/applicant/primarydata/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'primarydata']);
+Route::get('/applicant/complete/{id}',[App\Http\Controllers\Api\Applicant\CareerProfile::class, 'Completion']);
+
+ 
+#referee
+Route::get('/applicant/referee/{id}',[App\Http\Controllers\Api\Applicant\RefereeController::class, 'index']);
+Route::post('/applicant/refereestore',[App\Http\Controllers\Api\Applicant\RefereeController::class, 'storereferee']);
+Route::put('/applicant/updatereferee',[App\Http\Controllers\Api\Applicant\RefereeController::class, 'update']);
+Route::delete('/applicant/refereedelete/{id}',[App\Http\Controllers\Api\Applicant\RefereeController::class, 'destroy']);
+Route::post('/applicant/hide/{id}',[App\Http\Controllers\Api\Applicant\RefereeController::class, 'hide']);
+
+#jobcontroll
+Route::get('/jobdetail/{id}',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'job_detail']);
+Route::get('/applicant/appliedjob',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'applied_job']);
+Route::get('/applicant/jobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'job']);
+Route::get('/applicant/featuredJobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'feature_job']);
+Route::post('/applicant/cartJobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'cartjob']);
+Route::get('/applicant/getcartJobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'getcartjob']);
+Route::delete('/applicant/deletecartJobs/{id}',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'removecartjob']);
+
+
+Route::get('/public/featuredJobs',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'public_feature_job']);
+Route::post('/applicant/jobApplyNonuser',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'storeApplicationNonUser']);
+Route::post('/applicant/jobApply',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'storeApplication']);
+Route::post('/applicant/jobInternalApplication',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'storejobApplication']);
+Route::post('/applicant/internaljobApply',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'storejobApplication']);
+Route::post('/applicant/emailjobApply',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'ApplicationNonUser']);
+Route::delete('/applicant/deleteApplication/{id}',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'cancelApplication']);
+
+Route::get('/applicant/savedjob/{id}',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'jobsaved']);
+Route::get('/applicant/seachjob',[App\Http\Controllers\Api\Applicant\SeachJobController::class, 'search_job']);
+Route::get('/applicant/filterjob',[App\Http\Controllers\Api\Applicant\SeachJobController::class, 'jobfilter']);
+Route::get('/applicant/seachsavedJob',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'savedJob']);
+Route::get('/applicant/checkProfileForJob/{id}',[App\Http\Controllers\Api\Applicant\AppliedJobController::class, 'checkProfileForJob']);
+
+#ApplicantNotification
+Route::get('/applicant/wellcomeNote/{id}',[App\Http\Controllers\Api\Applicant\OfficialNotification\Note::class, 'getnote']);
+Route::get('/applicant/unsubscribeWellcomeNote/{id}',[App\Http\Controllers\Api\Applicant\OfficialNotification\Note::class, 'unsubscribeNote']);
+
+#Statistics
+Route::get('/applicant/dashboardstatistics/{id}',[App\Http\Controllers\Api\Applicant\Statistic::class, 'statisticsDashboard']);
+
+
+#applicant educationdoc
+Route::post('/applicant/educationstore',[App\Http\Controllers\Api\Applicant\EducationController::class, 'store']);
+Route::delete('/applicant/deleteeducation/{id}',[App\Http\Controllers\Api\Applicant\EducationController::class, 'destroy']);
+Route::post('/applicant/hideeducation/{id}',[App\Http\Controllers\Api\Applicant\EducationController::class, 'hide']);
+Route::put('/applicant/updateeducation',[App\Http\Controllers\Api\Applicant\EducationController::class, 'update']);
+Route::get('applicant/{id}/education', [App\Http\Controllers\Api\Applicant\EducationController::class, 'getEducationByApplicantId']);
+#applicant archiviements
+Route::post('applicant/archiviements', [App\Http\Controllers\Api\Applicant\ArchiviementsController::class, 'store']);
+Route::get('applicant/getarchivemenents', [App\Http\Controllers\Api\Applicant\ArchiviementsController::class, 'archiviements']);
+Route::get('/applicant/job_match',[App\Http\Controllers\Api\Applicant\JobmatchController::class, 'index']);
+Route::get('/applicant/jobmatchData/{applicantId}/{JobId}',[App\Http\Controllers\Api\Applicant\MatchData::class, 'jobMatchData']);
+
+#languageP
+Route::post('applicant/storeLanguage', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'storeLanguage']);
+Route::get('applicant/language/{id}', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'language']);
+Route::delete('applicant/languagedelete/{id}', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'deleteApplicantLanguage']);
+Route::put('applicant/languageupdate', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'editLanguage']);
+Route::post('applicant/hidelanguage/{id}', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'hide']);
+#training
+Route::get('applicant/training/{id}', [App\Http\Controllers\Api\Applicant\TrainingController::class, 'training']);
+Route::delete('applicant/trainingdelete/{id}', [App\Http\Controllers\Api\Applicant\TrainingController::class, 'destroy']);
+Route::post('applicant/storetraining', [App\Http\Controllers\Api\Applicant\TrainingController::class, 'store']);
+Route::put('applicant/updatetraining', [App\Http\Controllers\Api\Applicant\TrainingController::class, 'update']);
+Route::post('applicant/hidetraining/{id}', [App\Http\Controllers\Api\Applicant\TrainingController::class, 'hide']);
+#profficiency
+Route::get('applicant/profficiency/{id}', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'profficiency']);
+Route::post('applicant/proficiencystore', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'store']);
+Route::delete('applicant/deleteproficiency/{id}', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'destroy']);
+Route::put('applicant/updateproficiency', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'update']);
+Route::get('applicant/proficiency', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'proficiency']);
+Route::post('applicant/hideproficiency/{id}', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'hide']);
+
+#consent
+Route::get('applicant/consent', [App\Http\Controllers\Api\Applicant\JobConsentController::class, 'consent']);
+Route::post('applicant/consentForm', [App\Http\Controllers\Api\Applicant\JobConsentController::class, 'job_consent']);
+
+#notification
+Route::get('applicant/importantNotification/{id}', [App\Http\Controllers\Api\Applicant\NotificationController::class, 'notification']);
+Route::get('applicant/Notification/{id}', [App\Http\Controllers\Api\Applicant\NotificationController::class, 'allnotification']);
+#cvBuilder
+Route::get('applicant/CvBuilder/{id}', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'cv_builder']);
+Route::get('applicant/GenerateCv', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'generate_cv']);
+Route::post('applicant/savedCv', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'saved_resume']);
+Route::get('applicant/getcv/{id}', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'get_saved_cv']);
+Route::get('applicant/viewCv/{id}', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'view_saved_cv']);
+Route::post('applicant/countcv', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'incrementCvview']);
+Route::get('applicant/getcvno', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'getcvno']);
+Route::delete('applicant/deletecv/{id}', [App\Http\Controllers\Api\Applicant\CvBuilderController::class, 'deletecv']);
+
+#chat
+Route::get('applicant/chat', [App\Http\Controllers\Api\Applicant\ChatController::class, 'list_user']);
+Route::post('applicant/chatMessage', [App\Http\Controllers\Api\Applicant\ChatController::class, 'sendMessage']);
+Route::get('applicant/loadMessage', [App\Http\Controllers\Api\Applicant\ChatController::class, 'loadMessages']);
+Route::get('applicant/deleteMessage/{id}', [App\Http\Controllers\Api\Applicant\ChatController::class, 'deleteMessages']);
+#promotion
+Route::get('applicant/promotion', [App\Http\Controllers\Api\Applicant\UpgradeAccountController::class, 'index']);
+Route::post('applicant/finishpayment', [App\Http\Controllers\Api\Applicant\UpgradeAccountController::class, 'finishPayment']);
+
+#Hide cv infor for admin
+Route::post('applicant/Hidepersoninfo', [App\Http\Controllers\Api\Applicant\HidePersonalInfo::class, 'HideInformation']);
+
+#getfeacturecandidate
+Route::get('applicant/feacture-candidate', [App\Http\Controllers\Api\Applicant\FeactureCandidate::class, 'getfeacturecandidate']);
+// Route::post('applicant/feacture-view', [App\Http\Controllers\Api\Applicant\FeactureCandidate::class, 'increment_view']);
+
+
+#applicant Profile
+
+Route::get('applicant/profile', [App\Http\Controllers\Api\Applicant\ApplicantProfile::class, 'getApplicantProfile']);
+Route::get('applicant/applicantpipeline/{id}', [App\Http\Controllers\Api\Applicant\ApplicantProfile::class, 'application_pipeline']);
+Route::post('applicant/profileimagesave', [App\Http\Controllers\Api\Applicant\ApplicantProfile::class, 'editPicture']);
+Route::post('applicant/backgroundimagesave', [App\Http\Controllers\Api\Applicant\ApplicantProfile::class, 'editBackgroundPicture']);
+
+#Tax calculator
+Route::get('applicant/salar-calculator', [App\Http\Controllers\Api\Applicant\SalaryCalculator::class, 'getTax']);
+Route::post('applicant/viewincrement', [App\Http\Controllers\Api\Applicant\SalaryCalculator::class, 'userInsight']);
+#account subscription
+Route::post('applicant/accountsubscription', [App\Http\Controllers\Api\Applicant\SubscriptionController::class, 'finishPayment']);
+Route::get('applicant/accountsubscriptionStatus/{id}', [App\Http\Controllers\Api\Applicant\SubscriptionController::class, 'status_verification']);
+
+#Contact Controller API
+Route::post('/contact', [ContactController::class, 'store']);
+
+Route::get('terms', [TermAndConditionController::class, 'termApi']);
+
+#NEw Api 
+// Route::match(['get','post','put','delete'],'applicants/Language', [App\Http\Controllers\Api\Applicant\LanguageController::class, 'languaguages']);
+// Route::match(['get','post','put','delete'],'applicants/proficience', [App\Http\Controllers\Api\Applicant\profficiencyController::class, 'proficiences']);
+#Applicant api
+Route::match(['get','post','put','delete'], 'applicant/feature-view',   [App\Http\Controllers\Api\Applicant\NoofView::class, 'applicantview']);
+Route::post('applicant/jobView', [App\Http\Controllers\Api\Applicant\NoofView::class, 'increment_job']);
+
+#Univsersal Api

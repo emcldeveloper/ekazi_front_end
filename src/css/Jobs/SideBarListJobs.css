@@ -1,0 +1,50 @@
+/* Styling for individual job items */
+.job-item {
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Hover effect */
+.job-item:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow */
+}
+
+/* Active job highlight */
+.job-item.active {
+  background-color: #e0f7fa; /* Light blue background for active job */
+  border-left: 4px solid #007bff; /* Blue left border for active job */
+  font-weight: bold;
+}
+
+/* Styling for job image */
+.job-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Styling for job title and text */
+.job-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.job-company,
+.job-location,
+.job-posted {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.full-width {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

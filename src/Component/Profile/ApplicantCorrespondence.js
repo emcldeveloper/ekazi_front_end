@@ -1,0 +1,271 @@
+
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  ListGroup,
+  Form,
+  Button,
+  Spinner,
+  Alert,
+  Row,
+  Col,
+  Container,
+  Modal,
+} from "react-bootstrap";
+import { Envelope, Search, CheckCircle, XCircle, Trash } from "react-bootstrap-icons";
+import dayjs from "dayjs";
+import useCorrespondence from "../../hooks/candidates/useCorrespondence";
+
+const ITEMS_PER_PAGE = 5;
+
+const ApplicantCorrespondence = ({ applicantId, setCorrespondences }) => {
+  const {
+    correspondences,
+    activeCorrespondence,
+    activeThread,
+    setActiveThread,
+    loading,
+    searchTerm,
+    setSearchTerm,
+    canReply,
+    showRejectModal,
+    setShowRejectModal,
+    rejectReason,
+    setRejectReason,
+    accept,
+    reject,
+    removeCorrespondence, // for deletion
+  } = useCorrespondence(78);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const totalPages = Math.ceil(correspondences.length / ITEMS_PER_PAGE);
+  const paginatedThreads = correspondences.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => setCurrentPage(1), [searchTerm]);
+
+  useEffect(() => {
+    if (setCorrespondences) setCorrespondences(correspondences);
+  }, [correspondences, setCorrespondences]);
+
+  const handleThreadClick = (id) => setActiveThread(id);
+
+  const handleDelete = async () => {
+    if (!activeCorrespondence) return;
+    try {
+      await removeCorrespondence(activeCorrespondence.id);
+      setShowDeleteModal(false);
+    } catch (error) {
+      alert(error.message || "Failed to delete correspondence");
+    }
+  };
+
+  const getImportantMeta = (c) => {
+    const text = `${c.subject} ${c.type || ""}`.toLowerCase();
+    if (text.includes("offer")) return { label: "OFFER", variant: "success" };
+    if (text.includes("interview")) return { label: "INTERVIEW", variant: "warning" };
+    if (text.includes("screening")) return { label: "SCREENING", variant: "danger" };
+    if (text.includes("negotiation")) return { label: "NEGOTIATION", variant: "info" };
+    if (text.includes("selection")) return { label: "SELECTION", variant: "secondary" };
+    if (text.includes("background check")) return { label: "BACKGROUND CHECK", variant: "dark" };
+    if (text.includes("shortlisted")) return { label: "SHORTLISTED", variant: "primary" };
+    if (text.includes("applied")) return { label: "APPLIED", variant: "light" };
+    if (text.includes("employed")) return { label: "EMPLOYED", variant: "secondary" };
+    return null;
+  };
+
+  return (
+    <Container fluid className="p-0 h-100">
+      <Row className="g-0 h-100">
+        {/* SIDEBAR */}
+        <Col md={3} className="border-end bg-light d-flex flex-column">
+          <div className="p-3 border-bottom bg-white">
+            <h5>Correspondences</h5>
+            <Form.Group className="position-relative">
+              <Form.Control
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="ps-4"
+              />
+              <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
+            </Form.Group>
+          </div>
+
+          <div className="flex-grow-1 overflow-auto">
+            <ListGroup variant="flush">
+              {paginatedThreads.map((c) => {
+                const important = getImportantMeta(c);
+                return (
+                  <ListGroup.Item
+                    key={c.id}
+                    action
+                    active={c.id === activeThread}
+                    onClick={() => handleThreadClick(c.id)}
+                  >
+                    <div className="d-flex justify-content-between align-items-start">
+                      <h6 className="mb-1 text-truncate">{c.subject}</h6>
+                      {important && (
+                        <span
+                          className={`badge bg-${important.variant}`}
+                          style={{ fontSize: "0.65rem" }}
+                        >
+                          {important.label}
+                        </span>
+                      )}
+                    </div>
+                    <small className="text-muted">
+                      {dayjs(c.created_at).format("MMM D, h:mm A")}
+                    </small>
+                    {!c.is_read && <span className="badge bg-primary mt-1">New</span>}
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
+          </div>
+
+          {/* PAGINATION */}
+          <div className="p-2 border-top bg-white d-flex justify-content-between align-items-center">
+            <small className="text-muted">
+              {correspondences.length
+                ? `${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
+                    currentPage * ITEMS_PER_PAGE,
+                    correspondences.length
+                  )} of ${correspondences.length}`
+                : "0 results"}
+            </small>
+            <div className="d-flex gap-1">
+              <Button
+                size="sm"
+                variant="outline-secondary"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                Prev
+              </Button>
+              <Button
+                size="sm"
+                variant="outline-secondary"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </Col>
+
+        {/* CONTENT */}
+        <Col md={9} className="bg-white d-flex flex-column">
+          <Card className="flex-grow-1 border-0">
+            <Card.Header>
+              <h5>{activeCorrespondence?.subject || "Select a message"}</h5>
+              <small className="text-muted">
+                {activeCorrespondence &&
+                  dayjs(activeCorrespondence.created_at).format("MMM D, h:mm A")}
+              </small>
+            </Card.Header>
+
+            <Card.Body className="overflow-auto">
+              {activeCorrespondence ? (
+                <>
+                  <p>{activeCorrespondence.message}</p>
+                  <small className="text-muted">
+                    Type: <strong>{activeCorrespondence.type || "N/A"}</strong>
+                  </small>
+                </>
+              ) : (
+                <div className="h-100 d-flex justify-content-center align-items-center text-muted">
+                  <Envelope size={40} />
+                </div>
+              )}
+            </Card.Body>
+
+            {activeCorrespondence && (
+              <Card.Footer className="d-flex justify-content-end gap-2">
+                {canReply ? (
+                  <>
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => setShowRejectModal(true)}
+                    >
+                      <XCircle /> Reject
+                    </Button>
+                    <Button
+                      variant="success"
+                      disabled={loading}
+                      onClick={accept}
+                    >
+                      {loading ? <Spinner size="sm" /> : <><CheckCircle /> Accept</>}
+                    </Button>
+                  </>
+                ) : (
+                  <Alert variant="info">No action required for this message</Alert>
+                )}
+                {/* DELETE BUTTON */}
+                <Button
+                  variant="danger"
+                  disabled={loading}
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  <Trash /> Delete
+                </Button>
+              </Card.Footer>
+            )}
+          </Card>
+        </Col>
+      </Row>
+
+      {/* REJECT MODAL */}
+      <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reject Application</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Control
+            as="textarea"
+            rows={4}
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            disabled={!rejectReason.trim() || loading}
+            onClick={reject}
+          >
+            Confirm Reject
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* DELETE MODAL */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Correspondence</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this correspondence? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={loading}>
+            {loading ? <Spinner size="sm" /> : "Delete"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
+  );
+};
+
+export default ApplicantCorrespondence;

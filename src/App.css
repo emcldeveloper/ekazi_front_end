@@ -1,0 +1,19 @@
+.custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+  content: ">" !important; /* Change the value to your desired separator, e.g., '>>', '-' */
+}
+
+/* Optional: if using Bootstrap 5's CSS variable directly on the component */
+.custom-breadcrumb {
+  --bs-breadcrumb-divider: ">"; /* This is the modern Bootstrap 5 approach */
+}
+
+/* Add this to your CSS file or use a CSS-in-JS solution */
+@media (max-width: 768px) {
+  .md\\:flex {
+    display: none;
+  }
+  .md\\:flex.md\\:items-center {
+    display: flex;
+    flex-direction: column;
+  }
+}
