@@ -33,39 +33,40 @@ const CoverLetterForm = () => {
     error: jobError,
   } = useJobDetail();
 
-  const { mutate: submitApplication, isPending } = useApplyJobInternal({
-    onSuccess: (response) => {
-      const successMessage = response?.success;
-      const errorMessage = response?.error;
+  const { mutate: submitApplication, isPending: isSubmitting } =
+    useApplyJobInternal({
+      onSuccess: (response) => {
+        const successMessage = response?.success;
+        const errorMessage = response?.error;
 
-      if (errorMessage) {
+        if (errorMessage) {
+          Swal.fire({
+            title: "Already Applied",
+            text: errorMessage,
+            icon: "info",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+
         Swal.fire({
-          title: "Already Applied",
-          text: errorMessage,
-          icon: "info",
+          title: "Application Sent!",
+          text: successMessage,
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          setShowModal(false);
+        });
+      },
+      onError: (error) => {
+        Swal.fire({
+          title: "Error!",
+          text: error?.response?.data?.error || "Failed to send application.",
+          icon: "error",
           confirmButtonText: "OK",
         });
-        return;
-      }
-
-      Swal.fire({
-        title: "Application Sent!",
-        text: successMessage,
-        icon: "success",
-        confirmButtonText: "OK",
-      }).then(() => {
-        setShowModal(false);
-      });
-    },
-    onError: (error) => {
-      Swal.fire({
-        title: "Error!",
-        text: error?.response?.data?.error || "Failed to send application.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    },
-  });
+      },
+    });
 
   const onSubmit = (data) => {
     const applicant_id = localStorage.getItem("applicantId");
@@ -192,7 +193,7 @@ const CoverLetterForm = () => {
               </div>
 
               <MatchModalButton
-                loading={isPending}
+                isSubmitting={isSubmitting}
                 handleSubmit={handleSubmit(onSubmit)}
                 show={showModal}
                 setShow={setShowModal}

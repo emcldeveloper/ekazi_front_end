@@ -7,8 +7,9 @@ const MatchModalButton = ({
   handleSubmit,
   show,
   setShow,
+  isSubmitting,
 }) => {
-  const { data, isLoading, isError } = useJobMatchData();
+  const { data, isPending: isLoading, isError } = useJobMatchData();
 
   const percentage = data?.requirements?.percentage ?? 0;
   const categories = data?.requirements?.categories ?? [];
@@ -33,9 +34,9 @@ const MatchModalButton = ({
           type="button"
           className="btn btn-primary px-5 py-1 fw-bold"
           onClick={() => setShow(true)}
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          Submit Application
+          {isSubmitting ? "Submitting..." : "Submit Application"}
         </button>
       </div>
 
@@ -179,9 +180,9 @@ const MatchModalButton = ({
             variant={percentage >= 70 ? "primary" : "outline-danger"}
             style={{ minWidth: "140px" }}
             onClick={handleSubmit}
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
-            Apply Anyway
+            {isSubmitting ? "Applying..." : "Apply Anyway"}
           </Button>
         </Modal.Footer>
       </Modal>
