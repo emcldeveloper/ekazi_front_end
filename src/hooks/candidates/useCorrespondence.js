@@ -3,13 +3,12 @@ import CorrespondenceService from "../../services/candidates/correspondence.serv
 
 const ACTION_KEYWORDS = ["interview", "offer", "screening", "shortlisted"];
 
-const useCorrespondence = (applicantId) => {
+const useCorrespondence = (applicantId, token) => {
   const [correspondences, setCorrespondences] = useState([]);
   const [activeThread, setActiveThread] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [rejectReason, setRejectReason] = useState("");
-  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState("");
 
   // Fetch correspondences on load or applicantId change
   useEffect(() => {
@@ -18,7 +17,7 @@ const useCorrespondence = (applicantId) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await CorrespondenceService.getAll(applicantId);
+        const data = await CorrespondenceService.getAll(applicantId, token);
         // Sort by important keywords
         const sorted = [...data].sort((a, b) => {
           const aIndex = ACTION_KEYWORDS.findIndex((kw) =>
@@ -45,7 +44,7 @@ const useCorrespondence = (applicantId) => {
     };
 
     fetchData();
-  }, [applicantId]);
+  }, [applicantId, token]);
 
   const activeCorrespondence = correspondences.find(
     (c) => c.id === activeThread
@@ -66,7 +65,7 @@ const useCorrespondence = (applicantId) => {
   // API calls
   const markAsRead = async (id) => {
     try {
-      await CorrespondenceService.markAsRead(id);
+      await CorrespondenceService.markAsRead(id, token);
       setCorrespondences((prev) =>
         prev.map((c) => (c.id === id ? { ...c, is_read: 1 } : c))
       );
@@ -75,55 +74,40 @@ const useCorrespondence = (applicantId) => {
     }
   };
 
-  const accept = async () => {
-    if (!activeCorrespondence) return;
+  const reply = async (message) => {
+    if (!activeCorrespondence || !message.trim()) return;
     setLoading(true);
     try {
-      const data = await CorrespondenceService.accept(activeCorrespondence.id);
-      alert(data.message || "Accepted successfully ✅");
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Failed to accept");
-    }
-    setLoading(false);
-  };
-
-  const reject = async () => {
-    if (!activeCorrespondence || !rejectReason.trim()) return;
-    setLoading(true);
-    try {
-      const data = await CorrespondenceService.reject(
+      const data = await CorrespondenceService.reply(
         activeCorrespondence.id,
-        rejectReason
+        message,
+        token
       );
-      alert(data.message || "Rejected successfully ❌");
-      setRejectReason("");
-      setShowRejectModal(false);
+      alert(data.message || "Reply sent ✅");
+      setReplyMessage("");
     } catch (error) {
       console.error(error);
-      alert(error.message || "Failed to reject");
+      alert(error.message || "Failed to send reply");
     }
     setLoading(false);
   };
 
-  // NEW: Remove correspondence
+  // Remove correspondence
   const removeCorrespondence = async (id) => {
     if (!id) return;
     setLoading(true);
     try {
-      await CorrespondenceService.delete(id); // call your service
+      await CorrespondenceService.deleteThread(id, token);
       setCorrespondences((prev) => prev.filter((c) => c.id !== id));
 
-      // If deleted correspondence was active, reset active thread
+      // Reset active thread if deleted
       if (activeThread === id) {
-        setActiveThread((prev) => {
-          const remaining = correspondences.filter((c) => c.id !== id);
-          return remaining.length ? remaining[0].id : null;
-        });
+        const remaining = correspondences.filter((c) => c.id !== id);
+        setActiveThread(remaining.length ? remaining[0].id : null);
       }
     } catch (error) {
       console.error(error);
-      throw new Error(error.message || "Failed to delete correspondence");
+      alert(error.message || "Failed to delete correspondence");
     }
     setLoading(false);
   };
@@ -137,13 +121,10 @@ const useCorrespondence = (applicantId) => {
     searchTerm,
     setSearchTerm,
     canReply,
-    showRejectModal,
-    setShowRejectModal,
-    rejectReason,
-    setRejectReason,
-    accept,
-    reject,
-    removeCorrespondence, // expose deletion function
+    replyMessage,
+    setReplyMessage,
+    reply, // replaces accept/reject
+    removeCorrespondence,
   };
 };
 

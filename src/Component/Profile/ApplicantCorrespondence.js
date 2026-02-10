@@ -1,18 +1,20 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Card,
   ListGroup,
   Form,
   Button,
-  Spinner,
-  Alert,
   Row,
   Col,
   Container,
   Modal,
 } from "react-bootstrap";
-import { Envelope, Search, CheckCircle, XCircle, Trash } from "react-bootstrap-icons";
+import {
+  Envelope,
+  Trash,
+  CheckCircle,
+  XCircle,
+} from "react-bootstrap-icons";
 import dayjs from "dayjs";
 import useCorrespondence from "../../hooks/candidates/useCorrespondence";
 
@@ -32,162 +34,176 @@ const ApplicantCorrespondence = ({ applicantId, setCorrespondences }) => {
     setShowRejectModal,
     rejectReason,
     setRejectReason,
-    accept,
-    reject,
-    removeCorrespondence, // for deletion
+    reply,
+    removeCorrespondence,
   } = useCorrespondence(78);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [openThreads, setOpenThreads] = useState({});
+
+  useEffect(() => setCurrentPage(1), [searchTerm]);
+
+  useEffect(() => {
+    setCorrespondences?.(correspondences);
+  }, [correspondences, setCorrespondences]);
 
   const totalPages = Math.ceil(correspondences.length / ITEMS_PER_PAGE);
+
   const paginatedThreads = correspondences.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
-  useEffect(() => setCurrentPage(1), [searchTerm]);
-
-  useEffect(() => {
-    if (setCorrespondences) setCorrespondences(correspondences);
-  }, [correspondences, setCorrespondences]);
-
-  const handleThreadClick = (id) => setActiveThread(id);
+  const toggleThread = (id) => {
+    setOpenThreads((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const handleDelete = async () => {
     if (!activeCorrespondence) return;
-    try {
-      await removeCorrespondence(activeCorrespondence.id);
-      setShowDeleteModal(false);
-    } catch (error) {
-      alert(error.message || "Failed to delete correspondence");
-    }
+    await removeCorrespondence(activeCorrespondence.id);
+    setShowDeleteModal(false);
   };
 
-  const getImportantMeta = (c) => {
-    const text = `${c.subject} ${c.type || ""}`.toLowerCase();
-    if (text.includes("offer")) return { label: "OFFER", variant: "success" };
-    if (text.includes("interview")) return { label: "INTERVIEW", variant: "warning" };
-    if (text.includes("screening")) return { label: "SCREENING", variant: "danger" };
-    if (text.includes("negotiation")) return { label: "NEGOTIATION", variant: "info" };
-    if (text.includes("selection")) return { label: "SELECTION", variant: "secondary" };
-    if (text.includes("background check")) return { label: "BACKGROUND CHECK", variant: "dark" };
-    if (text.includes("shortlisted")) return { label: "SHORTLISTED", variant: "primary" };
-    if (text.includes("applied")) return { label: "APPLIED", variant: "light" };
-    if (text.includes("employed")) return { label: "EMPLOYED", variant: "secondary" };
+  const handleAccept = async () => {
+    if (!activeCorrespondence) return;
+    const message = `Your application for "${activeCorrespondence.subject}" has been accepted.`;
+    await reply(message);
+  };
+
+  const handleReject = async () => {
+    if (!activeCorrespondence || !rejectReason.trim()) return;
+    const message = `Your application for "${activeCorrespondence.subject}" has been rejected. Reason: ${rejectReason}`;
+    await reply(message);
+    setRejectReason("");
+    setShowRejectModal(false);
+  };
+
+  const getStageBadge = (subject) => {
+    const text = subject.toLowerCase();
+    if (text.includes("offer")) return ["OFFER", "success"];
+    if (text.includes("interview")) return ["INTERVIEW", "warning"];
+    if (text.includes("screening")) return ["SCREENING", "danger"];
+    if (text.includes("shortlisted")) return ["SHORTLISTED", "primary"];
+    if (text.includes("applied")) return ["APPLIED", "secondary"];
+    if (text.includes("employed")) return ["EMPLOYED", "success"];
     return null;
   };
 
   return (
     <Container fluid className="p-0 h-100">
       <Row className="g-0 h-100">
-        {/* SIDEBAR */}
+        {/* ================= SIDEBAR ================= */}
         <Col md={3} className="border-end bg-light d-flex flex-column">
           <div className="p-3 border-bottom bg-white">
             <h5>Correspondences</h5>
-            <Form.Group className="position-relative">
-              <Form.Control
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="ps-4"
-              />
-              <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
-            </Form.Group>
+            <Form.Control
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
-          <div className="flex-grow-1 overflow-auto">
-            <ListGroup variant="flush">
-              {paginatedThreads.map((c) => {
-                const important = getImportantMeta(c);
-                return (
+          <ListGroup variant="flush" className="flex-grow-1 overflow-auto">
+            {paginatedThreads.map((c) => {
+              const badge = getStageBadge(c.subject);
+              const hasChildren = c.messages && c.messages.length > 1;
+              const isOpen = openThreads[c.id];
+
+              return (
+                <React.Fragment key={c.id}>
+                  {/* Parent */}
                   <ListGroup.Item
-                    key={c.id}
                     action
                     active={c.id === activeThread}
-                    onClick={() => handleThreadClick(c.id)}
+                    onClick={() =>
+                      hasChildren
+                        ? toggleThread(c.id)
+                        : setActiveThread(c.id)
+                    }
+                    className="d-flex justify-content-between align-items-center"
                   >
-                    <div className="d-flex justify-content-between align-items-start">
-                      <h6 className="mb-1 text-truncate">{c.subject}</h6>
-                      {important && (
-                        <span
-                          className={`badge bg-${important.variant}`}
-                          style={{ fontSize: "0.65rem" }}
-                        >
-                          {important.label}
+                    <div className="text-truncate">
+                      {c.subject}
+                      {hasChildren && (
+                        <small className="ms-2 text-muted">
+                          ({c.messages.length})
+                        </small>
+                      )}
+                    </div>
+
+                    <div className="d-flex gap-1 align-items-center">
+                      {badge && (
+                        <span className={`badge bg-${badge[1]}`}>
+                          {badge[0]}
+                        </span>
+                      )}
+                      {hasChildren && (
+                        <span className="text-muted">
+                          {isOpen ? "▾" : "▸"}
                         </span>
                       )}
                     </div>
-                    <small className="text-muted">
-                      {dayjs(c.created_at).format("MMM D, h:mm A")}
-                    </small>
-                    {!c.is_read && <span className="badge bg-primary mt-1">New</span>}
                   </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
-          </div>
 
-          {/* PAGINATION */}
-          <div className="p-2 border-top bg-white d-flex justify-content-between align-items-center">
-            <small className="text-muted">
-              {correspondences.length
-                ? `${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
-                    currentPage * ITEMS_PER_PAGE,
-                    correspondences.length
-                  )} of ${correspondences.length}`
-                : "0 results"}
-            </small>
-            <div className="d-flex gap-1">
-              <Button
-                size="sm"
-                variant="outline-secondary"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => p - 1)}
-              >
-                Prev
-              </Button>
-              <Button
-                size="sm"
-                variant="outline-secondary"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => p + 1)}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+                  {/* Children (Thread) */}
+                  {hasChildren && isOpen && (
+                    <>
+                      {c.messages.map((m, idx) => (
+                        <ListGroup.Item
+                          key={idx}
+                          action
+                          className="ps-5 small"
+                          onClick={() => setActiveThread(c.id)}
+                        >
+                          <div className="text-truncate">
+                            {m.message.slice(0, 40)}…
+                          </div>
+                          <small className="text-muted">
+                            {dayjs(m.created_at).format("MMM D, h:mm A")}
+                          </small>
+                        </ListGroup.Item>
+                      ))}
+                    </>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </ListGroup>
         </Col>
 
-        {/* CONTENT */}
-        <Col md={9} className="bg-white d-flex flex-column">
-          <Card className="flex-grow-1 border-0">
+        {/* ================= CONTENT ================= */}
+        <Col md={9}>
+          <Card className="h-100 border-0">
             <Card.Header>
               <h5>{activeCorrespondence?.subject || "Select a message"}</h5>
-              <small className="text-muted">
-                {activeCorrespondence &&
-                  dayjs(activeCorrespondence.created_at).format("MMM D, h:mm A")}
-              </small>
             </Card.Header>
 
             <Card.Body className="overflow-auto">
-              {activeCorrespondence ? (
-                <>
-                  <p>{activeCorrespondence.message}</p>
-                  <small className="text-muted">
-                    Type: <strong>{activeCorrespondence.type || "N/A"}</strong>
-                  </small>
-                </>
-              ) : (
-                <div className="h-100 d-flex justify-content-center align-items-center text-muted">
+              {!activeCorrespondence ? (
+                <div className="text-center text-muted">
                   <Envelope size={40} />
                 </div>
+              ) : (
+                (activeCorrespondence.messages ||
+                  [activeCorrespondence]).map((m, i) => (
+                  <div key={i}>
+                    <p>{m.message}</p>
+                    <small className="text-muted">
+                      {dayjs(m.created_at).format("MMM D, h:mm A")}
+                    </small>
+                    <hr />
+                  </div>
+                ))
               )}
             </Card.Body>
 
             {activeCorrespondence && (
               <Card.Footer className="d-flex justify-content-end gap-2">
-                {canReply ? (
+                {canReply && (
                   <>
                     <Button
                       variant="outline-danger"
@@ -195,21 +211,15 @@ const ApplicantCorrespondence = ({ applicantId, setCorrespondences }) => {
                     >
                       <XCircle /> Reject
                     </Button>
-                    <Button
-                      variant="success"
-                      disabled={loading}
-                      onClick={accept}
-                    >
-                      {loading ? <Spinner size="sm" /> : <><CheckCircle /> Accept</>}
+
+                    <Button variant="success" onClick={handleAccept}>
+                      <CheckCircle /> Accept
                     </Button>
                   </>
-                ) : (
-                  <Alert variant="info">No action required for this message</Alert>
                 )}
-                {/* DELETE BUTTON */}
+
                 <Button
                   variant="danger"
-                  disabled={loading}
                   onClick={() => setShowDeleteModal(true)}
                 >
                   <Trash /> Delete
@@ -220,7 +230,7 @@ const ApplicantCorrespondence = ({ applicantId, setCorrespondences }) => {
         </Col>
       </Row>
 
-      {/* REJECT MODAL */}
+      {/* ================= REJECT MODAL ================= */}
       <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Reject Application</Modal.Title>
@@ -237,30 +247,26 @@ const ApplicantCorrespondence = ({ applicantId, setCorrespondences }) => {
           <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
             Cancel
           </Button>
-          <Button
-            variant="danger"
-            disabled={!rejectReason.trim() || loading}
-            onClick={reject}
-          >
+          <Button variant="danger" onClick={handleReject}>
             Confirm Reject
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* DELETE MODAL */}
+      {/* ================= DELETE MODAL ================= */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Correspondence</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete this correspondence? This action cannot be undone.
+          Are you sure you want to delete this correspondence?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleDelete} disabled={loading}>
-            {loading ? <Spinner size="sm" /> : "Delete"}
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>
