@@ -19,6 +19,7 @@ const useCorrespondence = (applicantId) => {
       setLoading(true);
       try {
         const data = await CorrespondenceService.getAll(applicantId);
+
         // Sort by important keywords
         const sorted = [...data].sort((a, b) => {
           const aIndex = ACTION_KEYWORDS.findIndex((kw) =>
@@ -32,6 +33,7 @@ const useCorrespondence = (applicantId) => {
           if (aPos !== bPos) return aPos - bPos;
           return new Date(b.created_at) - new Date(a.created_at);
         });
+
         setCorrespondences(sorted);
 
         if (sorted.length) {
@@ -75,55 +77,45 @@ const useCorrespondence = (applicantId) => {
     }
   };
 
-  const accept = async () => {
-    if (!activeCorrespondence) return;
-    setLoading(true);
-    try {
-      const data = await CorrespondenceService.accept(activeCorrespondence.id);
-      alert(data.message || "Accepted successfully ✅");
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Failed to accept");
-    }
-    setLoading(false);
-  };
 
-  const reject = async () => {
-    if (!activeCorrespondence || !rejectReason.trim()) return;
-    setLoading(true);
-    try {
-      const data = await CorrespondenceService.reject(
-        activeCorrespondence.id,
-        rejectReason
-      );
-      alert(data.message || "Rejected successfully ❌");
-      setRejectReason("");
-      setShowRejectModal(false);
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Failed to reject");
-    }
-    setLoading(false);
-  };
+const reply = async (message) => {
+  if (!activeCorrespondence || typeof message !== "string" || !message.trim()) return;
 
-  // NEW: Remove correspondence
+  setLoading(true);
+  try {
+    // Pass both threadId and message
+    const data = await CorrespondenceService.reply(activeCorrespondence.id, message);
+
+    // Update state with the new message
+    setCorrespondences((prev) =>
+      prev.map((c) =>
+        c.id === activeCorrespondence.id
+          ? { ...c, messages: [...(c.messages || []), data] }
+          : c
+      )
+    );
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Failed to send reply");
+  }
+  setLoading(false);
+};
+
+
   const removeCorrespondence = async (id) => {
     if (!id) return;
     setLoading(true);
     try {
-      await CorrespondenceService.delete(id); // call your service
+      await CorrespondenceService.deleteThread(id);
       setCorrespondences((prev) => prev.filter((c) => c.id !== id));
 
-      // If deleted correspondence was active, reset active thread
       if (activeThread === id) {
-        setActiveThread((prev) => {
-          const remaining = correspondences.filter((c) => c.id !== id);
-          return remaining.length ? remaining[0].id : null;
-        });
+        const remaining = correspondences.filter((c) => c.id !== id);
+        setActiveThread(remaining.length ? remaining[0].id : null);
       }
     } catch (error) {
       console.error(error);
-      throw new Error(error.message || "Failed to delete correspondence");
+      alert(error.message || "Failed to delete correspondence");
     }
     setLoading(false);
   };
@@ -141,9 +133,9 @@ const useCorrespondence = (applicantId) => {
     setShowRejectModal,
     rejectReason,
     setRejectReason,
-    accept,
-    reject,
-    removeCorrespondence, // expose deletion function
+    reply, // send a message
+    markAsRead,
+    removeCorrespondence, // delete a thread
   };
 };
 
