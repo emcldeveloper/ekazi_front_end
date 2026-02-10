@@ -5,7 +5,7 @@ import api from "../lib/axios.js";
 // =====================
 
 export const fetchCvProfile = async (uuid) => {
-  const res = await api.get(`/cv_builder/${uuid}`);
+  const res = await api.get(`/cv/cv_builder/${uuid}`);
   return res.data;
 };
 
@@ -56,7 +56,7 @@ export const fetchFeaturedJobSeeker = async () => {
 
 export const fetchSubscriptionStatus = async (applicant_id) => {
   const res = await api.get(
-    `/applicant/accountsubscriptionStatus/${applicant_id}`
+    `/applicant/accountsubscriptionStatus/${applicant_id}`,
   );
   return res.data?.verification_status ?? null;
 };

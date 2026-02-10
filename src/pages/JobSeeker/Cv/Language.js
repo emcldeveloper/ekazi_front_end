@@ -1,17 +1,16 @@
-import React from "react";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { Card } from "react-bootstrap";
 import LanguagesCvComponent from "../../../Component/Cv/Language";
 
-const LanguageCv =()=>{
-   return (
+const LanguageCv = () => {
+  return (
     <JobSeekerLayout>
-    <Card>
+      <Card>
         <Card.Body>
           <LanguagesCvComponent />
         </Card.Body>
-    </Card>
+      </Card>
     </JobSeekerLayout>
-   ) 
-}
+  );
+};
 export default LanguageCv;

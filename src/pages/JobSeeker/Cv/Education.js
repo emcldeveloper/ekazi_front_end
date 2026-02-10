@@ -1,18 +1,17 @@
-import React from "react";
-import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { Card } from "react-bootstrap";
+
+import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import EducationsCv from "../../../Component/Cv/Education";
 
-const EducationCv =()=>{
-   
- return (
+const EducationCv = () => {
+  return (
     <JobSeekerLayout>
-        <Card>
-            <Card.Body>
-            <EducationsCv  />
-            </Card.Body>
-        </Card>
+      <Card>
+        <Card.Body>
+          <EducationsCv />
+        </Card.Body>
+      </Card>
     </JobSeekerLayout>
- )
-}
-export default EducationCv
+  );
+};
+export default EducationCv;
