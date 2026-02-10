@@ -26,7 +26,7 @@ const EditJobfitModal = ({ show, onHide, editData }) => {
         value: i.id,
         label: i.industry_name,
       })) ?? [],
-    [industry]
+    [industry],
   );
 
   /* --------------------------------------------------
@@ -36,7 +36,7 @@ const EditJobfitModal = ({ show, onHide, editData }) => {
 
   const industryOptions = useMemo(
     () => allIndustryOptions.slice(0, visibleCount),
-    [allIndustryOptions, visibleCount]
+    [allIndustryOptions, visibleCount],
   );
 
   const loadMoreIndustry = () => setVisibleCount((prev) => prev + 10);
@@ -89,7 +89,7 @@ const EditJobfitModal = ({ show, onHide, editData }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">List Of Jobs I May Fit</Modal.Title>
       </Modal.Header>

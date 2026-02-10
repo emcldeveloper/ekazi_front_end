@@ -25,7 +25,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
       Array.isArray(applicant?.data?.applicant_personality)
         ? applicant?.data?.applicant_personality
         : [],
-    [applicant?.data?.applicant_personality]
+    [applicant?.data?.applicant_personality],
   );
 
   /* ---------------- Personality options ---------------- */
@@ -37,7 +37,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
             label: p.personality_name,
           }))
         : [],
-    [personality]
+    [personality],
   );
 
   /* ---------------- Load more ---------------- */
@@ -45,7 +45,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
 
   const personalityOptions = useMemo(
     () => allPersonalityOptions.slice(0, visibleCount),
-    [allPersonalityOptions, visibleCount]
+    [allPersonalityOptions, visibleCount],
   );
 
   const loadMorePersonality = () => setVisibleCount((prev) => prev + 10);
@@ -57,7 +57,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
         value: item.personality?.id || item.personality_id,
         label: item.personality?.personality_name || item.personality_name,
       })),
-    [personalityData]
+    [personalityData],
   );
 
   /* ---------------- Merge options + selected ---------------- */
@@ -98,7 +98,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">Personality Traits</Modal.Title>
       </Modal.Header>

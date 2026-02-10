@@ -23,7 +23,7 @@ const EditSkillsModal = ({ show, onHide }) => {
       Array.isArray(applicant?.data?.knowledge)
         ? applicant?.data?.knowledge
         : [],
-    [applicant?.data?.knowledge]
+    [applicant?.data?.knowledge],
   );
 
   const allKnowledgeOptions = useMemo(
@@ -32,14 +32,14 @@ const EditSkillsModal = ({ show, onHide }) => {
         value: k.id,
         label: k.knowledge_name.trim(),
       })) ?? [],
-    [knowledge]
+    [knowledge],
   );
 
   const [visibleCount, setVisibleCount] = useState(10);
 
   const knowledgeOptions = useMemo(
     () => allKnowledgeOptions.slice(0, visibleCount),
-    [allKnowledgeOptions, visibleCount]
+    [allKnowledgeOptions, visibleCount],
   );
 
   const loadMoreKnowledge = () => setVisibleCount((prev) => prev + 10);
@@ -70,14 +70,7 @@ const EditSkillsModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal
-      key={applicant_id}
-      show={show}
-      onHide={onHide}
-      size="lg"
-      centered
-      scrollable
-    >
+    <Modal key={applicant_id} show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">Key Skills & Competencies</Modal.Title>
       </Modal.Header>

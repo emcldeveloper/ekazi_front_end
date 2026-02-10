@@ -19,7 +19,7 @@ const EditSoftwareModal = ({ show, onHide }) => {
   const softwareData = useMemo(
     () =>
       Array.isArray(applicant?.data?.software) ? applicant?.data?.software : [],
-    [applicant?.data?.software]
+    [applicant?.data?.software],
   );
 
   /* ---------------- Software options ---------------- */
@@ -29,14 +29,14 @@ const EditSoftwareModal = ({ show, onHide }) => {
         value: s.id,
         label: s.software_name,
       })) ?? [],
-    [software]
+    [software],
   );
 
   const [visibleCount, setVisibleCount] = useState(10);
 
   const softwareOptions = useMemo(
     () => allSoftwareOptions.slice(0, visibleCount),
-    [allSoftwareOptions, visibleCount]
+    [allSoftwareOptions, visibleCount],
   );
 
   const loadMoreSoftware = () => setVisibleCount((prev) => prev + 10);
@@ -48,7 +48,7 @@ const EditSoftwareModal = ({ show, onHide }) => {
         value: item.software?.id || item.software_id,
         label: item.software?.software_name || item.software_name,
       })),
-    [softwareData]
+    [softwareData],
   );
 
   /* ---------------- Merge options + selected (CRITICAL FIX) ---------------- */
@@ -94,7 +94,7 @@ const EditSoftwareModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">Software Application</Modal.Title>
       </Modal.Header>

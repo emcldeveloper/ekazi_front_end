@@ -18,13 +18,13 @@ const EditToolModal = ({ show, onHide }) => {
 
   const toolsList = useMemo(
     () => (Array.isArray(tools?.tool) ? tools.tool : []),
-    [tools?.tool]
+    [tools?.tool],
   );
 
   /* ---------------- Existing applicant tools ---------------- */
   const toolData = useMemo(
     () => (Array.isArray(applicant?.data?.tools) ? applicant.data.tools : []),
-    [applicant?.data?.tools]
+    [applicant?.data?.tools],
   );
 
   /* ---------------- Tool options ---------------- */
@@ -34,14 +34,14 @@ const EditToolModal = ({ show, onHide }) => {
         value: t.id,
         label: t.tool_name,
       })),
-    [toolsList]
+    [toolsList],
   );
 
   const [visibleCount, setVisibleCount] = useState(10);
 
   const toolOptions = useMemo(
     () => allToolOptions.slice(0, visibleCount),
-    [allToolOptions, visibleCount]
+    [allToolOptions, visibleCount],
   );
 
   const loadMoreTools = () => setVisibleCount((prev) => prev + 10);
@@ -53,7 +53,7 @@ const EditToolModal = ({ show, onHide }) => {
         value: item.tool?.id || item.tool_id,
         label: item.tool?.tool_name,
       })),
-    [toolData]
+    [toolData],
   );
 
   /* ---------------- Merge options + selected (CRITICAL FIX) ---------------- */
@@ -99,7 +99,7 @@ const EditToolModal = ({ show, onHide }) => {
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="fs-5">Tools & Technologies</Modal.Title>
       </Modal.Header>

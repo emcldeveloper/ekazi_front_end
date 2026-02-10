@@ -78,7 +78,8 @@ const Checkcompleteprofile = ({
       show={showProfileCompleteModal}
       onHide={() => setShowProfileCompleteModal(false)}
       centered
-      size="md"
+      size="lg"
+      scrollable
     >
       <Modal.Header closeButton className="border-bottom-0 pb-0">
         <Modal.Title
@@ -255,9 +256,9 @@ const Checkcompleteprofile = ({
         </div>
       </Modal.Body>
 
-      <Modal.Footer className="d-flex justify-content-between border-top-0 pt-0">
+      <Modal.Footer>
         <Button
-          variant="outline-secondary"
+          variant="outline-danger"
           onClick={() => setShowProfileCompleteModal(false)}
           style={{ minWidth: "100px" }}
         >
