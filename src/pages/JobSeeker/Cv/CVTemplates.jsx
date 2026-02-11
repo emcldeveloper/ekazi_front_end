@@ -126,12 +126,12 @@ const CVTemplates = () => {
               </div>
 
               {/* Document Content Area */}
-              <div className="flex flex-col md:flex-row">
+              <div className="flex flex-col md:flex-row ">
                 {/* Main Document Preview */}
                 <div className="flex-1 p-0">
-                  <div className="max-w-4xl mx-auto  p-8 min-h-[70vh]">
-                    {/* CV Preview Content Would Go Here */}
-                    <div className="text-center  text-gray-400     rounded">
+                  {/* CV TEMPLATE */}
+                  <div className="w-full overflow-x-auto flex justify-center bg-gray-100 py-6">
+                    <div className="origin-top scale-[0.65] sm:scale-[0.75] md:scale-[0.85] lg:scale-100 transition-transform duration-300">
                       {SelectedTemplate ? (
                         <SelectedTemplate />
                       ) : (

@@ -26,7 +26,7 @@ export default function Template2() {
         <div className="flex items-center gap-4 px-6 mb-2">
           <div className="flex items-center justify-start">
             <div
-              className="w-[150px] h-[150px] overflow-hidden flex items-center justify-center shadow-[0_8px_18px_rgba(14,165,164,.35)]"
+              className="w-[130px] h-[130px] overflow-hidden flex items-center justify-center shadow-[0_8px_18px_rgba(14,165,164,.35)]"
               style={{
                 backgroundColor: ACCENT,
                 clipPath:
@@ -40,7 +40,7 @@ export default function Template2() {
                     : "https://placehold.co/320x320?text=Photo"
                 }
                 alt="profile"
-                className="w-[140px] h-[140px] object-cover rounded-[10px]"
+                className="w-[120px] h-[120px] object-cover rounded-[10px]"
                 onError={(e) =>
                   (e.currentTarget.src =
                     "https://placehold.co/320x320?text=Photo")
@@ -49,13 +49,12 @@ export default function Template2() {
             </div>
           </div>
           <div className="flex-1 text-start">
-            <h1 className="text-4xl font-semibold leading-tight">
+            <h1 className="text-[30px] font-semibold leading-tight">
               {cvData.fullName}
             </h1>
             <div className="text-gray-500 text-lg py-2">
               {cvData.current_position}
             </div>
-            <div className="text-gray-500 text-lg py-2">Hellooo</div>
           </div>
         </div>
 

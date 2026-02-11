@@ -17,7 +17,7 @@ const CvPrintPage = () => {
 
   return (
     <div
-      className="max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none"
+      className="w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none"
       id="cv-content"
     >
       {/* Page Content */}
