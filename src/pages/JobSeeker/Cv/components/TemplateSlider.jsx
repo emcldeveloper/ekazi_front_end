@@ -57,8 +57,9 @@ export default function TemplateSlider() {
           </div>
 
           <p className="text-xs text-gray-500 mb-3 leading-snug">
-            Completely free and ready to use, Choose any design and start
-            building your CV instantly.
+            Build a professional CV in minutes — completely free. Select your
+            preferred design and get started right away. Click the link to
+            register or log in.
           </p>
         </Card.Body>
       </Card>
