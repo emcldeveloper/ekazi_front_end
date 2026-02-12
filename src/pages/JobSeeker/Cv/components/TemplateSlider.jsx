@@ -45,6 +45,7 @@ export default function TemplateSlider() {
           <h3 className="text-base font-bold text-gray-900 mb-2">
             Available CV Templates
           </h3>
+
           <div
             className="w-full overflow-hidden rounded-lg cursor-pointer mb-2"
             onClick={handleClick}
@@ -55,7 +56,6 @@ export default function TemplateSlider() {
               className="w-full h-64 object-contain transition-opacity duration-700"
             />
           </div>
-
           <p className="text-xs text-gray-500 mb-3 leading-snug">
             Build a professional CV in minutes — completely free. Select your
             preferred design and get started right away. Click the link to

@@ -14,7 +14,6 @@ import {
   HouseDoorFill,
   GearFill,
   KeyFill,
-  ShieldLockFill,
   BoxArrowRight,
   PersonFill,
 } from "react-bootstrap-icons";
@@ -37,7 +36,7 @@ const AppHeader = () => {
 
   // TODO: get from auth context later
   // const applicantId = localStorage.getItem("applicant_id");
-   const applicantId = 78;
+  const applicantId = 78;
 
   const { correspondences = [], loading } = useCorrespondence(applicantId);
 
@@ -53,7 +52,7 @@ const AppHeader = () => {
 
     const totalUnread = correspondences.reduce(
       (sum, thread) => sum + (thread.applicant_unread_count || 0),
-      0
+      0,
     );
 
     setUnreadCount(totalUnread);
@@ -89,14 +88,35 @@ const AppHeader = () => {
           <Navbar.Toggle />
           <Navbar.Collapse>
             {/* ---------- CENTER MENU ---------- */}
-            <Nav className="mx-auto text-center">
-              <Nav.Link href="/" className="text-primary">Home</Nav.Link>
-              <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
-              <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
-              <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
-              <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
-              <Nav.Link href="/articles" className="text-primary">Articles</Nav.Link>
-              {isLoggedIn && <SubscriptionSection />}
+            <Nav className="mx-auto flex-wrap text-center">
+              <Nav.Link href="/" className="text-primary">
+                Home
+              </Nav.Link>
+              <Nav.Link href="/jobs" className="text-primary">
+                Find Jobs
+              </Nav.Link>
+              <Nav.Link href="/employers" className="text-primary">
+                Employers
+              </Nav.Link>
+              {!isLoggedIn && (
+                <Nav.Link href="/cv-builder" className="text-primary">
+                  CV Builder
+                </Nav.Link>
+              )}
+              <Nav.Link href="/salary-calculator" className="text-primary">
+                Salary Calculator
+              </Nav.Link>
+              <Nav.Link href="/pricelists" className="text-primary">
+                Pricing
+              </Nav.Link>
+
+              {!isLoggedIn && (
+                <Nav.Link href="/articles" className="text-primary">
+                  Articles
+                </Nav.Link>
+              )}
+
+              {isLoggedIn && <SubscriptionSection isLoggedIn={isLoggedIn} />}
             </Nav>
 
             {/* ---------- RIGHT ACTIONS ---------- */}
@@ -106,23 +126,30 @@ const AppHeader = () => {
                 <Dropdown
                   show={showNotifications}
                   onToggle={toggleNotifications}
+                  className="me-2"
                   align="end"
                 >
                   <Dropdown.Toggle
                     as="span"
-                    className="position-relative bg-transparent border-0 p-0"
+                    bsPrefix="notification-toggle"
+                    variant="light"
+                    id="dropdown-notifications"
+                    className="notification-toggle d-flex align-items-center justify-content-center position-relative border-0 bg-transparent p-0"
                     style={{ cursor: "pointer" }}
+                    size="lg"
                   >
-                    <Bell size={28} />
+                    <Bell size={28} className="text-dark" />
+
                     {unreadCount > 0 && (
                       <span
-                        className="position-absolute bg-danger text-white rounded-circle d-flex align-items-center justify-content-center"
+                        className="position-absolute rounded-circle bg-danger text-white d-flex justify-content-center align-items-center"
                         style={{
                           top: "-5px",
                           right: "-5px",
-                          width: 18,
-                          height: 18,
+                          width: "18px",
+                          height: "18px",
                           fontSize: "0.65rem",
+                          border: "2px solid white",
                         }}
                       >
                         {unreadCount > 99 ? "99+" : unreadCount}
@@ -153,7 +180,9 @@ const AppHeader = () => {
                               {!loading &&
                                 correspondences.map((thread) => {
                                   const lastMessage =
-                                    thread.messages?.[thread.messages.length - 1];
+                                    thread.messages?.[
+                                      thread.messages.length - 1
+                                    ];
 
                                   return (
                                     <ListGroup.Item
@@ -174,9 +203,9 @@ const AppHeader = () => {
                                             : thread.subject}
                                         </strong>
                                         <small className="text-muted">
-                                          {dayjs(
-                                            thread.last_message_at
-                                          ).format("MMM D, h:mm A")}
+                                          {dayjs(thread.last_message_at).format(
+                                            "MMM D, h:mm A",
+                                          )}
                                         </small>
                                       </div>
 
@@ -218,36 +247,70 @@ const AppHeader = () => {
               )}
 
               {/* 👤 Profile */}
-              <Nav className="ms-3">
+              <Nav className="ms-3 align-items-center">
                 {isLoggedIn ? (
                   <Dropdown align="end">
                     <Dropdown.Toggle
                       as="span"
-                      className="bg-transparent border-0"
-                      style={{ cursor: "pointer" }}
+                      bsPrefix="notification-toggle"
+                      id="profile-dropdown"
+                      className="d-flex align-items-center justify-content-center position-relative"
+                      style={{
+                        cursor: "pointer",
+                      }}
                     >
-                      <RxAvatar size={30} />
+                      <RxAvatar size={30} className="text-dark" />
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu style={{ width: 260 }}>
-                      <Dropdown.Item href="/jobseeker/dashboard">
-                        <HouseDoorFill className="me-2" /> Dashboard
+                    <Dropdown.Menu style={{ width: "300px" }}>
+                      <Dropdown.Item
+                        href="/jobseeker/dashboard"
+                        className="d-flex align-items-center"
+                      >
+                        <HouseDoorFill className="me-2" size={14} />
+                        <span>Dashboard</span>
                       </Dropdown.Item>
-                      <Dropdown.Item href="/jobseeker/profile-preview">
-                        <PersonFill className="me-2" /> My Profile
+
+                      <Dropdown.Item
+                        href="/jobseeker/profile-preview"
+                        className="d-flex align-items-center"
+                      >
+                        <PersonFill className="me-2" size={14} />
+                        <span>My Profile</span>
                       </Dropdown.Item>
-                      <Dropdown.Item href="/jobseeker/account-settings">
-                        <GearFill className="me-2" /> Settings
+
+                      <Dropdown.Item
+                        href="/jobseeker/account-settings"
+                        className="d-flex align-items-center"
+                      >
+                        <GearFill className="me-2" size={14} />
+                        <span> Settings</span>
                       </Dropdown.Item>
-                      <Dropdown.Item href="/jobseeker/change-password">
-                        <KeyFill className="me-2" /> Change Password
+
+                      <Dropdown.Item
+                        href="/jobseeker/change-password"
+                        className="d-flex align-items-center"
+                      >
+                        <KeyFill className="me-2" size={14} />
+                        <span>Change Password</span>
                       </Dropdown.Item>
+
+                      {/* <Dropdown.Item
+                        href="/jobseeker/Privacy-policy"
+                        className="d-flex align-items-center"
+                      >
+                        <ShieldLockFill className="me-2" size={14} />
+                        <span>Privacy Policy</span>
+                      </Dropdown.Item> */}
+
                       <Dropdown.Divider />
+
                       <Dropdown.Item
                         onClick={handleLogout}
-                        className="text-danger"
+                        className="d-flex align-items-center text-danger"
                       >
-                        <BoxArrowRight className="me-2" /> Logout
+                        <BoxArrowRight className="me-2" size={14} />
+                        <span>Logout</span>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -256,6 +319,7 @@ const AppHeader = () => {
                     <Nav.Link onClick={() => setShowRegisterModal(true)}>
                       Register
                     </Nav.Link>
+                    <span className="mx-2 d-none d-lg-inline">|</span>
                     <Nav.Link onClick={() => setShowLoginModal(true)}>
                       Login
                     </Nav.Link>

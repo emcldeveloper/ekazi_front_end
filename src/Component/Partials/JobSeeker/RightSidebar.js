@@ -9,6 +9,8 @@ const RightSideBar = () => {
   const navigate = useNavigate();
   const { data: employers = [] } = useEmployers({ page: 1, perPage: 10 });
 
+  console.log("Companies", employers);
+
   return (
     <div className="d-flex flex-column gap-3">
       {/* Templates */}
@@ -16,7 +18,7 @@ const RightSideBar = () => {
 
       {/* Featured Companies Section */}
       <Card className="shadow-sm">
-        <Card.Body>
+        <Card.Header className="p-0">
           <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-yellow-500 h-24 flex items-center justify-between px-8 rounded-t-lg shadow-md">
             <div>
               <h5 className="text-white text-2xl font-bold tracking-wide">
@@ -29,60 +31,64 @@ const RightSideBar = () => {
               <i className="fa-solid fa-building text-white text-lg"></i>
             </div>
           </div>
-
+        </Card.Header>
+        <Card.Body className="p-3">
           <div
             style={{
               maxHeight: "400px",
               overflowY: "auto",
-              paddingRight: "8px", // Prevents content from touching scrollbar
             }}
           >
             {employers.map((company) => (
               <div
                 key={company.id}
-                className="d-flex align-items-center gap-3 p-2 hover-shadow-sm rounded mb-2"
+                onClick={() =>
+                  navigate(`/featured/employer/details/${company.id}`)
+                }
+                className="d-flex align-items-center gap-3 p-2 rounded-3 mb-2 company-item"
                 style={{
+                  cursor: "pointer",
                   transition: "all 0.2s ease",
-                  ":hover": {
-                    backgroundColor: "#f8f9fa",
-                  },
                 }}
               >
+                {/* Logo */}
                 <div
-                  className="bg-light rounded-circle overflow-hidden"
-                  style={{ width: "60px", height: "60px" }}
+                  className="d-flex align-items-center justify-content-center bg-light rounded-3 overflow-hidden"
+                  style={{
+                    width: "90px",
+                    height: "90px",
+                    flexShrink: 0,
+                  }}
                 >
-                  <a href={`/featured/employer/details/${company.id}`}>
-                    <Image
-                      src={
-                        company.logo
-                          ? `https://api.ekazi.co.tz/${company.logo}`
-                          : "/employer.png"
-                      }
-                      alt={company.client_name}
-                      roundedCircle
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                        backgroundColor: "white",
-                      }}
-                    />
-                  </a>
+                  <Image
+                    src={
+                      company.logo
+                        ? `https://api.ekazi.co.tz/${company.logo}`
+                        : "/employer.png"
+                    }
+                    alt={company.client_name}
+                    style={{
+                      maxWidth: "80%",
+                      maxHeight: "80%",
+                      objectFit: "contain",
+                    }}
+                  />
                 </div>
+
+                {/* Company Info */}
                 <div className="flex-grow-1">
                   <h6
-                    className="mb-0 fw-semibold text-truncate"
-                    style={{ maxWidth: "200px", cursor: "pointer" }}
-                    onClick={() =>
-                      navigate(`/featured/employer/details/${company.id}`)
-                    }
+                    className="fw-semibold mb-1"
+                    style={{
+                      lineHeight: "1.4",
+                      wordBreak: "break-word",
+                    }}
                   >
-                    {company.client_name} msoft company
+                    {company.client_name}
                   </h6>
 
-                  {/* Optional job count */}
-                  {/* <small className="text-muted">12 Jobs</small> */}
+                  {/* Optional: Add jobs count later */}
+                  {/* <small className="text-muted">12 Jobs Available</small> */}
                 </div>
               </div>
             ))}
