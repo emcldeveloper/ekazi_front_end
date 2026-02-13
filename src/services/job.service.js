@@ -54,3 +54,19 @@ export const jobIncrementApi = async ({ job_id }) => {
   });
   return res.data;
 };
+
+// ---- Job Interview ----
+export const interviewResponseApi = async ({
+  id,
+  status,
+  reason,
+  reschedule_date,
+}) => {
+  const res = await api.post(`/applicant/interview/response`, {
+    id,
+    status,
+    reason,
+    reschedule_date,
+  });
+  return res.data;
+};

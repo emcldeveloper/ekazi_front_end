@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-import { Container, Card, Table, Badge, Button } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Table,
+  Badge,
+  Button,
+  Modal,
+  Row,
+  Col,
+} from "react-bootstrap";
 import {
   FaEye,
   FaTrashAlt,
@@ -12,16 +21,25 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { formatDate } from "../../utils/dateUtils";
-import ContractCell from "../Forms/Job/UploadContract";
 import JobDetailModal from "./JobDetailModel/JobModelDetail";
+import { useAppliedJobs, useInterviewResponse } from "../../hooks/useJobs";
 
-const AppliedJobsList = ({ applicant }) => {
-  const handleContractUpload = (jobId, file) => {
-    // Your API upload logic here
-    // Example: await uploadContractAPI(jobId, file);
-  };
+const AppliedJobsList = () => {
+  const { data: applications } = useAppliedJobs();
+
+  const { mutate: respondInterview, isPending } = useInterviewResponse();
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [interviewDetails, setInterviewDetails] = useState(null);
+  const [showRescheduleForm, setShowRescheduleForm] = useState(false);
+  const [showCancelForm, setShowCancelForm] = useState(false);
+  const [rescheduleReason, setRescheduleReason] = useState("");
+
+  const [rescheduleDate, setRescheduleDate] = useState("");
+  const [cancelReason, setCancelReason] = useState("");
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -40,7 +58,7 @@ const AppliedJobsList = ({ applicant }) => {
             <h4 className="m-0">My Job Applications</h4>
           </div>
           <Badge pill bg="light" text="dark">
-            {applicant?.length || 0} Applications
+            {applications?.length || 0} Applications
           </Badge>
         </Card.Header>
 
@@ -51,10 +69,14 @@ const AppliedJobsList = ({ applicant }) => {
                 <tr>
                   <th className="ps-4">Position & Company</th>
                   <th>
-                    <FaCalendarAlt className="me-1" /> Posted
+                    <div className="flex items-center">
+                      <FaCalendarAlt className="me-1" /> Posted
+                    </div>
                   </th>
                   <th>
-                    <FaCalendarAlt className="me-1" /> Applied
+                    <div className="flex items-center">
+                      <FaCalendarAlt className="me-1" /> Applied
+                    </div>
                   </th>
                   <th>Status</th>
                   {/* <th className="text-center">Documents</th> */}
@@ -62,11 +84,11 @@ const AppliedJobsList = ({ applicant }) => {
                 </tr>
               </thead>
               <tbody>
-                {applicant?.map((app, idx) => {
-                  const job = app.job || {};
-                  const client =
-                    job.client?.name || "Exact Manpower Consulting Ltd";
-                  const jobPosition = job.job_position?.position_name || "";
+                {applications?.map((app, idx) => {
+                  const job = app?.job;
+                  const client = job?.client?.client_name;
+                  const jobPosition =
+                    app?.job.job_position?.position_name || "";
                   const stage = app.status || "";
 
                   const getStatusBadge = () => {
@@ -79,7 +101,16 @@ const AppliedJobsList = ({ applicant }) => {
                           <Badge
                             bg="info"
                             className={`${baseClass} cursor-pointer`}
-                            // onClick={() => handleViewInterview(job.id, app.applicant_id)}
+                            onClick={() => {
+                              const interviewStage = app?.job?.job_stages?.find(
+                                (s) => s?.stage?.stage_name === "Interview",
+                              );
+
+                              setInterviewDetails(
+                                interviewStage?.interview_details || null,
+                              );
+                              setShowInterviewModal(true);
+                            }}
                           >
                             <FaUserTie className="me-1" /> {stage}
                           </Badge>
@@ -87,7 +118,7 @@ const AppliedJobsList = ({ applicant }) => {
                       case "Offer":
                         return (
                           <a
-                            href={`/applicant/offer/${app.applicant_id}/${job.id}/${app.stage.id}`}
+                            href={`/applications/offer/${app.applicant_id}/${job.id}/${app.stage.id}`}
                             className={`badge bg-success ${baseClass} text-white text-decoration-none`}
                           >
                             <FaCheckCircle className="me-1" /> {stage}
@@ -103,7 +134,7 @@ const AppliedJobsList = ({ applicant }) => {
                               window.previewContractForm(
                                 app.applicant_id,
                                 job.id,
-                                app.stage.id
+                                app.stage.id,
                               )
                             }
                           >
@@ -156,7 +187,7 @@ const AppliedJobsList = ({ applicant }) => {
                           >
                             <Button
                               variant="outline-secondary"
-                              href={`/applicant/cover-letter/download/${job.id}/${app.applicant_id}`}
+                              href={`/applications/cover-letter/download/${job.id}/${app.applicant_id}`}
                               target="_blank"
                             >
                               <FaFileDownload />
@@ -169,7 +200,7 @@ const AppliedJobsList = ({ applicant }) => {
                             >
                               <Button
                                 variant="outline-primary"
-                                href={`/applicant/view/contract/${job.applicant_contract.id}`}
+                                href={`/applications/view/contract/${job.applicant_contract.id}`}
                                 target="_blank"
                               >
                                 <FaFilePdf />
@@ -194,12 +225,12 @@ const AppliedJobsList = ({ applicant }) => {
                           </div>
 
                           <div
-                            href={`/applicant/job/cancel/${app.id}`}
+                            href={`/applications/job/cancel/${app.id}`}
                             className="d-flex align-items-center text-danger cursor-pointer"
                             onClick={(e) => {
                               if (
                                 !window.confirm(
-                                  `Cancel application for ${jobPosition}?`
+                                  `Cancel application for ${jobPosition}?`,
                                 )
                               ) {
                                 e.preventDefault();
@@ -220,16 +251,246 @@ const AppliedJobsList = ({ applicant }) => {
 
         <Card.Footer className="bg-light d-flex justify-content-between align-items-center">
           <div className="text-muted small">
-            Showing {applicant?.length || 0} applications
+            Showing {applications?.length || 0} applications
           </div>
           {/* Pagination would go here */}
         </Card.Footer>
       </Card>
+
       <JobDetailModal
         job={selectedJob}
         show={showModal}
         onHide={() => setShowModal(false)}
       />
+
+      {/* Interview Details Modal  */}
+      <Modal
+        show={showInterviewModal}
+        onHide={() => setShowInterviewModal(false)}
+        size="md"
+        centered
+        scrollable
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          {interviewDetails && (
+            <Row className="g-3">
+              {/* Header */}
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <h5 className="mb-1 fw-bold">Interview Details</h5>
+                <Badge
+                  bg={
+                    interviewDetails?.status === "Pending"
+                      ? "warning"
+                      : interviewDetails?.status === "Interested"
+                        ? "success"
+                        : interviewDetails?.status === "Reschedule"
+                          ? "primary"
+                          : "danger"
+                  }
+                  className="px-3 py-2 rounded-pill"
+                >
+                  {interviewDetails?.status || "Unknown"}
+                </Badge>
+              </div>
+
+              {/* LEFT LABELS */}
+              <Col md={6} className="fw-bold text-muted">
+                <p>Type</p>
+                <p>Duration</p>
+                <p>Link</p>
+                <p>Interview Date</p>
+
+                {interviewDetails?.reschedule_date && <p>Reschedule Date</p>}
+                {interviewDetails?.reason && <p>Reason</p>}
+              </Col>
+
+              {/* RIGHT VALUES */}
+              <Col md={6} className="text-end">
+                <p>{interviewDetails?.interview_type || "-"}</p>
+                <p>
+                  {interviewDetails?.duration
+                    ? `${interviewDetails.duration} mins`
+                    : "-"}
+                </p>
+
+                <p>
+                  {interviewDetails?.url ? (
+                    <a
+                      href={interviewDetails.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Join Interview
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </p>
+
+                <p>{interviewDetails?.interview_date || "Not scheduled"}</p>
+
+                {interviewDetails?.reschedule_date && (
+                  <p className="text-warning fw-semibold">
+                    {interviewDetails.reschedule_date}
+                  </p>
+                )}
+
+                {interviewDetails?.reason && (
+                  <p className="text-danger">{interviewDetails.reason}</p>
+                )}
+              </Col>
+
+              {/* RESCHEDULE FORM */}
+              {showRescheduleForm && (
+                <Col xs={12}>
+                  <div className="border rounded-3 p-3 bg-light">
+                    <h6 className="fw-semibold mb-2">Reschedule Interview</h6>
+
+                    <div className="mb-3">
+                      <label className="form-label small text-muted">
+                        New Interview Date
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        value={rescheduleDate}
+                        onChange={(e) => setRescheduleDate(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label small text-muted">
+                        Reason (optional)
+                      </label>
+                      <textarea
+                        rows={3}
+                        className="form-control"
+                        placeholder="Why are you rescheduling?"
+                        value={rescheduleReason}
+                        onChange={(e) => setRescheduleReason(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-primary btn-sm"
+                        disabled={isPending}
+                        onClick={() => {
+                          respondInterview({
+                            id: interviewDetails.id,
+                            status: "Reschedule",
+                            reason: rescheduleReason || null,
+                            reschedule_date: rescheduleDate,
+                          });
+
+                          setShowRescheduleForm(false);
+                          setRescheduleDate("");
+                          setRescheduleReason("");
+                        }}
+                      >
+                        {isPending ? "Submitting..." : "Submit"}
+                      </button>
+
+                      <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => setShowRescheduleForm(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </Col>
+              )}
+
+              {/* CANCEL FORM */}
+              {showCancelForm && (
+                <Col xs={12}>
+                  <div className="border rounded-3 p-3 bg-light">
+                    <h6 className="fw-semibold mb-2">Cancel Interview</h6>
+
+                    <textarea
+                      rows={3}
+                      className="form-control mb-3"
+                      placeholder="Reason (optional)"
+                      value={cancelReason}
+                      onChange={(e) => setCancelReason(e.target.value)}
+                    />
+
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-danger btn-sm"
+                        disabled={isPending}
+                        onClick={() => {
+                          respondInterview({
+                            id: interviewDetails.id,
+                            status: "Not Interested",
+                            reason: cancelReason || null,
+                            reschedule_date: null,
+                          });
+
+                          setShowCancelForm(false);
+                          setCancelReason("");
+                        }}
+                      >
+                        {isPending ? "Submitting..." : "Submit"}
+                      </button>
+
+                      <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => setShowCancelForm(false)}
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                </Col>
+              )}
+            </Row>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <div className="d-flex align-items-center gap-2">
+            <button
+              className="btn btn-outline-primary"
+              disabled={isPending}
+              onClick={() => {
+                setShowCancelForm(false);
+                setShowRescheduleForm(true);
+              }}
+            >
+              Reschedule
+            </button>
+
+            <button
+              className="btn btn-outline-success"
+              disabled={isPending}
+              onClick={() => {
+                respondInterview({
+                  id: interviewDetails.id,
+                  status: "Interested",
+                  reason: null,
+                  reschedule_date: null,
+                });
+              }}
+            >
+              {isPending ? "Submitting..." : "Interested"}
+            </button>
+
+            <button
+              className="btn btn-outline-danger"
+              disabled={isPending}
+              onClick={() => {
+                setShowRescheduleForm(false);
+                setShowCancelForm(true);
+              }}
+            >
+              Not interested
+            </button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

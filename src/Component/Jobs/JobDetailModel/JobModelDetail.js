@@ -3,7 +3,7 @@ import JobDetails from "../../../pages/home/components/JobDetails";
 
 const JobDetailModal = ({ job, show, onHide }) => {
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered>
+    <Modal show={show} onHide={onHide} size="lg" centered scrollable>
       {/* Modal content same as above */}
       <Modal.Header closeButton>
         <Modal.Title> Job Description</Modal.Title>

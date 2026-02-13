@@ -29,6 +29,7 @@ const JobDetails = ({ job }) => {
 
   // Use full job details if available
   const j = job;
+  console.log("Job", j);
 
   const isExpired = j?.dead_line ? new Date(j.dead_line) < new Date() : false;
 
