@@ -8,6 +8,7 @@ import {
   getJobMatchData,
   jobIncrementApi,
   interviewResponseApi,
+  offerResponseApi,
 } from "../services/job.service.js";
 import { jobEmailApplicationApi } from "../services/jobs/job-application.service.js";
 
@@ -91,6 +92,21 @@ export const useInterviewResponse = () => {
 
   return useMutation({
     mutationFn: interviewResponseApi,
+
+    onSuccess: () => {
+      // refresh applications list
+      queryClient.invalidateQueries({ queryKey: ["applied-jobs"] });
+      queryClient.invalidateQueries({ queryKey: ["job-detail"] });
+    },
+  });
+};
+
+// Offer response hook
+export const useOfferResponse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: offerResponseApi,
 
     onSuccess: () => {
       // refresh applications list

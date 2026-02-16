@@ -69,6 +69,7 @@ import { CVDataProvider } from "./context/CVDataContext";
 import SentCorrespondence from "./pages/MyApplicantion/SentCorrespondence";
 import ArticleResources from "./pages/JobSeeker/Resources/ArticleResources";
 import SingleArticle from "./pages/JobSeeker/Resources/SingleArticle";
+import JobOffers from "./Component/Jobs/JobOffers";
 
 function App() {
   const queryClient = new QueryClient({
@@ -152,6 +153,8 @@ function App() {
               <Route path="/jobseeker/saved-jobs" element={<SavedJob />} />
               <Route path="/jobseeker/job-match" element={<JobMatch />} />
               <Route path="/jobseeker/apply-job" element={<Applyjob />} />
+              <Route path="/jobseeker/job-offers" element={<JobOffers />} />
+
               <Route
                 path="/jobseeker/sample-selection"
                 element={<SampleTemplate />}

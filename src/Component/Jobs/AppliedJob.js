@@ -23,8 +23,11 @@ import {
 import { formatDate } from "../../utils/dateUtils";
 import JobDetailModal from "./JobDetailModel/JobModelDetail";
 import { useAppliedJobs, useInterviewResponse } from "../../hooks/useJobs";
+import { useNavigate } from "react-router-dom";
 
 const AppliedJobsList = () => {
+  const navigate = useNavigate();
+
   const { data: applications } = useAppliedJobs();
 
   const { mutate: respondInterview, isPending } = useInterviewResponse();
@@ -89,13 +92,21 @@ const AppliedJobsList = () => {
                   const client = job?.client?.client_name;
                   const jobPosition =
                     app?.job.job_position?.position_name || "";
-                  const stage = app.status || "";
+                  const applicationStatus = app.status || "";
+
+                  //  Job Offer
+                  const offerStage = job?.job_stages?.find(
+                    (stage) => stage?.stage?.stage_name === "Offer",
+                  );
+
+                  console.log("Offer Stage:", offerStage);
+                  console.log("Offer Details:", offerStage?.offer_details);
 
                   const getStatusBadge = () => {
                     const baseClass =
                       "rounded-pill py-1 px-3 d-inline-flex align-items-center";
 
-                    switch (stage) {
+                    switch (applicationStatus) {
                       case "Interview":
                         return (
                           <Badge
@@ -112,17 +123,26 @@ const AppliedJobsList = () => {
                               setShowInterviewModal(true);
                             }}
                           >
-                            <FaUserTie className="me-1" /> {stage}
+                            <FaUserTie className="me-1" /> {applicationStatus}
                           </Badge>
                         );
                       case "Offer":
+                        if (!offerStage) return null;
+
                         return (
-                          <a
-                            href={`/applications/offer/${app.applicant_id}/${job.id}/${app.stage.id}`}
-                            className={`badge bg-success ${baseClass} text-white text-decoration-none`}
+                          <div
+                            onClick={() =>
+                              navigate("/jobseeker/job-offers", {
+                                state: {
+                                  offers: offerStage?.offer_details,
+                                },
+                              })
+                            }
+                            className={`badge bg-success ${baseClass} text-white text-decoration-none cursor-pointer`}
                           >
-                            <FaCheckCircle className="me-1" /> {stage}
-                          </a>
+                            <FaCheckCircle className="me-1" />{" "}
+                            {applicationStatus}
+                          </div>
                         );
                       case "Employed":
                         return (
@@ -138,7 +158,8 @@ const AppliedJobsList = () => {
                               )
                             }
                           >
-                            <FaFileContract className="me-1" /> {stage}
+                            <FaFileContract className="me-1" />{" "}
+                            {applicationStatus}
                           </Button>
                         );
                       case "Screening":
@@ -150,7 +171,7 @@ const AppliedJobsList = () => {
                       default:
                         return (
                           <Badge bg="light" text="dark" className={baseClass}>
-                            {stage}
+                            {applicationStatus}
                           </Badge>
                         );
                     }

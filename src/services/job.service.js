@@ -70,3 +70,12 @@ export const interviewResponseApi = async ({
   });
   return res.data;
 };
+
+export const offerResponseApi = async ({ id, status, reason }) => {
+  const res = await api.post(`/applicant/offer/response`, {
+    id,
+    status,
+    reason,
+  });
+  return res.data;
+};
