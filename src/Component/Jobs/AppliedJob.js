@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { formatDate } from "../../utils/dateUtils";
 import JobDetailModal from "./JobDetailModel/JobModelDetail";
-import { useAppliedJobs } from "../../hooks/useJobs";
+import { useApplicationStages, useAppliedJobs } from "../../hooks/useJobs";
 import { useNavigate } from "react-router-dom";
 import InterviewDetailsModal from "./InterviewDetailsModal";
 
@@ -22,11 +22,21 @@ const AppliedJobsList = () => {
 
   const { data: applications } = useAppliedJobs();
 
+  const { data: stages } = useApplicationStages();
+
+  const [statusFilter, setStatusFilter] = useState("All");
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const [showInterviewModal, setShowInterviewModal] = useState(false);
   const [interviewDetails, setInterviewDetails] = useState(null);
+
+  const filteredApplications = applications?.filter((app) => {
+    if (statusFilter === "All") return true;
+
+    return app.status === statusFilter;
+  });
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -50,6 +60,27 @@ const AppliedJobsList = () => {
         </Card.Header>
 
         <Card.Body className="p-0">
+          {/* Filter */}
+          <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
+            <div className="fw-semibold">Filter by Stage</div>
+
+            <select
+              className="form-select w-auto"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="All">All</option>
+
+              {stages
+                ?.sort((a, b) => a.stage_number - b.stage_number)
+                .map((stage) => (
+                  <option key={stage.id} value={stage.stage_name}>
+                    {stage.stage_name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
           <div className="table-responsive">
             <Table hover className="mb-0 align-middle">
               <thead className="table-light">
@@ -71,7 +102,7 @@ const AppliedJobsList = () => {
                 </tr>
               </thead>
               <tbody>
-                {applications?.map((app, idx) => {
+                {filteredApplications?.map((app, idx) => {
                   const job = app?.job;
                   const client = job?.client?.client_name;
                   const jobPosition =
@@ -82,9 +113,6 @@ const AppliedJobsList = () => {
                   const offerStage = job?.job_stages?.find(
                     (stage) => stage?.stage?.stage_name === "Offer",
                   );
-
-                  console.log("Offer Stage:", offerStage);
-                  console.log("Offer Details:", offerStage?.offer_details);
 
                   const getStatusBadge = () => {
                     const baseClass =

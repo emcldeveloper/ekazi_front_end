@@ -9,6 +9,7 @@ import {
   jobIncrementApi,
   interviewResponseApi,
   offerResponseApi,
+  applicationStagesApi,
 } from "../services/job.service.js";
 import { jobEmailApplicationApi } from "../services/jobs/job-application.service.js";
 
@@ -113,5 +114,13 @@ export const useOfferResponse = () => {
       queryClient.invalidateQueries({ queryKey: ["applied-jobs"] });
       queryClient.invalidateQueries({ queryKey: ["job-detail"] });
     },
+  });
+};
+
+// APPLICATION STAGES
+export const useApplicationStages = () => {
+  return useQuery({
+    queryKey: ["application-stages"],
+    queryFn: () => applicationStagesApi(),
   });
 };

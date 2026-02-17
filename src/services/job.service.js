@@ -79,3 +79,8 @@ export const offerResponseApi = async ({ id, status, reason }) => {
   });
   return res.data;
 };
+
+export const applicationStagesApi = async () => {
+  const res = await api.get(`/job/stage`);
+  return res.data.data;
+};
