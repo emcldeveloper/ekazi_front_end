@@ -1,12 +1,14 @@
 import { Badge, Card, Col, Container, Modal, Table } from "react-bootstrap";
 import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 import { Eye } from "react-bootstrap-icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useOfferResponse } from "../../hooks/useJobs";
 
 const JobOffers = () => {
   const location = useLocation();
+  const rejectFormRef = useRef(null);
 
   const { mutate: respondOffer, isPending } = useOfferResponse();
 
@@ -22,37 +24,118 @@ const JobOffers = () => {
 
   const sortedOffers = [...offers].sort((a, b) => b.round - a.round);
 
+  const isActionable =
+    selectedOffer?.status !== "Accepted" &&
+    selectedOffer?.status !== "Rejected";
+
   const handleViewOffer = (offer) => {
     setSelectedOffer(offer);
     setIsOpenModal(true);
   };
 
-  const handleAcceptOffer = () => {
-    setIsOpenModal(false);
-
+  const handleAcceptOffer = async () => {
     if (!selectedOffer) return;
 
-    respondOffer({
-      id: selectedOffer?.id,
-      status: "Accepted",
-      reason: null,
-      negotiable: "",
+    const result = await Swal.fire({
+      title: "Accept Offer?",
+      text: "Are you sure you want to accept this job offer?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#198754",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, Accept",
     });
+
+    if (!result.isConfirmed) return;
+
+    respondOffer(
+      {
+        id: selectedOffer?.id,
+        status: "Accepted",
+        reason: null,
+        negotiable: "",
+      },
+      {
+        onSuccess: () => {
+          Swal.fire({
+            icon: "success",
+            title: "Offer Accepted!",
+            text: "You have successfully accepted the offer.",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+
+          setIsOpenModal(false);
+        },
+        onError: () => {
+          Swal.fire({
+            icon: "error",
+            title: "Failed",
+            text: "Something went wrong. Please try again.",
+          });
+        },
+      },
+    );
   };
 
-  const handleRejectOffer = () => {
+  const handleRejectOffer = async () => {
     if (!selectedOffer) return;
 
-    respondOffer({
-      id: selectedOffer?.id,
-      status: isNegotiable ? "Negotiable" : "Rejected",
-      reason: rescheduleReason || null,
+    if (!rescheduleReason && !isNegotiable) {
+      Swal.fire({
+        icon: "warning",
+        title: "Reason Required",
+        text: "Please provide a reason before submitting.",
+      });
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: isNegotiable ? "Negotiate Offer?" : "Reject Offer?",
+      text: isNegotiable
+        ? "Are you sure you want to negotiate this offer?"
+        : "Are you sure you want to reject this offer?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isNegotiable ? "#0dcaf0" : "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: isNegotiable ? "Yes, Negotiate" : "Yes, Reject",
     });
 
-    setIsOpenModal(false);
-    setShowRejectOffer(false);
-    setRescheduleReason("");
-    setIsNegotiable(false);
+    if (!result.isConfirmed) return;
+
+    respondOffer(
+      {
+        id: selectedOffer?.id,
+        status: isNegotiable ? "Negotiable" : "Rejected",
+        reason: rescheduleReason || null,
+      },
+      {
+        onSuccess: () => {
+          Swal.fire({
+            icon: "success",
+            title: isNegotiable ? "Negotiation Submitted" : "Offer Rejected",
+            text: isNegotiable
+              ? "Your negotiation request has been sent."
+              : "You have rejected the offer.",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+
+          setIsOpenModal(false);
+          setShowRejectOffer(false);
+          setRescheduleReason("");
+          setIsNegotiable(false);
+        },
+        onError: () => {
+          Swal.fire({
+            icon: "error",
+            title: "Failed",
+            text: "Something went wrong. Please try again.",
+          });
+        },
+      },
+    );
   };
 
   if (offers.length === 0) {
@@ -90,9 +173,6 @@ const JobOffers = () => {
                 ) : (
                   sortedOffers.map((offer) => {
                     const status = offer?.status;
-
-                    console.log("STATE:", offers);
-                    console.log("LOCATION STATE:", location.state?.offers);
 
                     return (
                       <tr key={offer.id}>
@@ -143,7 +223,10 @@ const JobOffers = () => {
 
         <Modal
           show={isModalOpen}
-          onHide={() => setIsOpenModal(false)}
+          onHide={() => {
+            setShowRejectOffer(false);
+            setIsOpenModal(false);
+          }}
           size="lg"
           centered
           scrollable
@@ -152,46 +235,81 @@ const JobOffers = () => {
           <Modal.Body>
             {selectedOffer && (
               <>
-                <p>
-                  <strong>Offer Round:</strong> {selectedOffer.round}
-                </p>
-                <p>
-                  <strong>Offer Description:</strong>{" "}
-                  {selectedOffer.description}
-                </p>
-                <p>
-                  <strong>Offered Salary:</strong> TZS{" "}
-                  {selectedOffer.salary?.toLocaleString()}
-                </p>
-                <p>
-                  <strong>Starting Date:</strong> {selectedOffer.starting_date}
-                </p>
-                <p>
-                  <strong>Duration:</strong> {selectedOffer.duration} Months
-                </p>
-                <p>
-                  <strong>Working Days:</strong> {selectedOffer.working_day}
-                </p>
-                <p>
-                  <strong>Working Hours:</strong> {selectedOffer.working_hour}
-                </p>
-                <p>
-                  <strong>Probation Period:</strong> {selectedOffer.probabition}{" "}
-                  Months
-                </p>
-                <p>
-                  <strong>Location:</strong>{" "}
-                  {selectedOffer.working_sub_location}
-                </p>
-                <p>
-                  <strong>Response Deadline:</strong> {selectedOffer.deadline}
-                </p>
+                <Table bordered hover responsive>
+                  <tbody>
+                    <tr>
+                      <th>Offer Description</th>
+                      <td>{selectedOffer.description}</td>
+                    </tr>
+
+                    <tr>
+                      <th>Offered Salary</th>
+                      <td>TZS {selectedOffer.salary?.toLocaleString()}</td>
+                    </tr>
+
+                    <tr>
+                      <th>Benefits</th>
+                      <td>
+                        {selectedOffer.benefits
+                          ?.map((b) => b?.benefit?.name)
+                          .join(" , ")}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>Location</th>
+                      <td>
+                        {selectedOffer.working_sub_location}{" "}
+                        {selectedOffer.region_of_working?.region_name},{" "}
+                        {selectedOffer.region_of_working?.country?.name}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>Starting Date</th>
+                      <td> {selectedOffer.starting_date}</td>
+                    </tr>
+
+                    <tr>
+                      <th>Duration</th>
+                      <td>{selectedOffer.duration} Months</td>
+                    </tr>
+
+                    <tr>
+                      <th>Working Days</th>
+                      <td>{selectedOffer.working_day} Days</td>
+                    </tr>
+
+                    <tr>
+                      <th>Working Hours</th>
+                      <td>{selectedOffer.working_hour} Hours</td>
+                    </tr>
+
+                    <tr>
+                      <th>Probation Period</th>
+                      <td>{selectedOffer.probabition} Months</td>
+                    </tr>
+
+                    <tr>
+                      <th>Recruitment Location</th>
+                      <td>
+                        {selectedOffer.region_of_recruitment?.region_name},{" "}
+                        {selectedOffer.region_of_recruitment?.country?.name}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>Response Deadline</th>
+                      <td>{selectedOffer.deadline}</td>
+                    </tr>
+                  </tbody>
+                </Table>
               </>
             )}
 
             {/* Reject form */}
             {showRejectForm && (
-              <Col xs={12}>
+              <Col xs={12} ref={rejectFormRef}>
                 <div className="border rounded-3 p-3 bg-light">
                   <div className="mb-3">
                     <label className="form-label ">
@@ -247,22 +365,36 @@ const JobOffers = () => {
             )}
           </Modal.Body>
           <Modal.Footer>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                disabled={isPending}
-                onClick={() => setShowRejectOffer(true)}
-                className="btn btn-outline-danger"
-              >
-                Reject
-              </button>
-              <button
-                disabled={isPending}
-                onClick={handleAcceptOffer}
-                className="btn btn-success"
-              >
-                {isPending ? "Accepting..." : "Accept"}
-              </button>
-            </div>
+            {isActionable ? (
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  disabled={isPending}
+                  onClick={() => {
+                    setShowRejectOffer(true);
+                    setTimeout(() => {
+                      rejectFormRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }, 100);
+                  }}
+                  className="btn btn-outline-danger"
+                >
+                  Reject
+                </button>
+                <button
+                  disabled={isPending}
+                  onClick={handleAcceptOffer}
+                  className="btn btn-success"
+                >
+                  {isPending ? "Accepting..." : "Accept"}
+                </button>
+              </div>
+            ) : (
+              <div className="w-100 text-center text-muted small">
+                This offer has already been {selectedOffer?.status}.
+              </div>
+            )}
           </Modal.Footer>
         </Modal>
       </Container>

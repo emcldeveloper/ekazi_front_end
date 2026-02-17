@@ -1,15 +1,6 @@
 import { useState } from "react";
 
-import {
-  Container,
-  Card,
-  Table,
-  Badge,
-  Button,
-  Modal,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Container, Card, Table, Badge, Button } from "react-bootstrap";
 import {
   FaEye,
   FaTrashAlt,
@@ -22,27 +13,20 @@ import {
 } from "react-icons/fa";
 import { formatDate } from "../../utils/dateUtils";
 import JobDetailModal from "./JobDetailModel/JobModelDetail";
-import { useAppliedJobs, useInterviewResponse } from "../../hooks/useJobs";
+import { useAppliedJobs } from "../../hooks/useJobs";
 import { useNavigate } from "react-router-dom";
+import InterviewDetailsModal from "./InterviewDetailsModal";
 
 const AppliedJobsList = () => {
   const navigate = useNavigate();
 
   const { data: applications } = useAppliedJobs();
 
-  const { mutate: respondInterview, isPending } = useInterviewResponse();
-
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const [showInterviewModal, setShowInterviewModal] = useState(false);
   const [interviewDetails, setInterviewDetails] = useState(null);
-  const [showRescheduleForm, setShowRescheduleForm] = useState(false);
-  const [showCancelForm, setShowCancelForm] = useState(false);
-  const [rescheduleReason, setRescheduleReason] = useState("");
-
-  const [rescheduleDate, setRescheduleDate] = useState("");
-  const [cancelReason, setCancelReason] = useState("");
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -201,41 +185,6 @@ const AppliedJobsList = () => {
 
                       <td>{getStatusBadge()}</td>
 
-                      {/* <td className="text-center">
-                        <ButtonGroup size="sm">
-                          <OverlayTrigger
-                            overlay={<Tooltip>Cover Letter</Tooltip>}
-                          >
-                            <Button
-                              variant="outline-secondary"
-                              href={`/applications/cover-letter/download/${job.id}/${app.applicant_id}`}
-                              target="_blank"
-                            >
-                              <FaFileDownload />
-                            </Button>
-                          </OverlayTrigger>
-
-                          {job.applicant_contract ? (
-                            <OverlayTrigger
-                              overlay={<Tooltip>View Contract</Tooltip>}
-                            >
-                              <Button
-                                variant="outline-primary"
-                                href={`/applications/view/contract/${job.applicant_contract.id}`}
-                                target="_blank"
-                              >
-                                <FaFilePdf />
-                              </Button>
-                            </OverlayTrigger>
-                          ) : (
-                            <ContractCell
-                              job={job}
-                              onUpload={handleContractUpload}
-                            />
-                          )}
-                        </ButtonGroup>
-                      </td> */}
-
                       <td>
                         <div className="d-flex align-items-center gap-2 small">
                           <div
@@ -285,233 +234,11 @@ const AppliedJobsList = () => {
       />
 
       {/* Interview Details Modal  */}
-      <Modal
+      <InterviewDetailsModal
         show={showInterviewModal}
         onHide={() => setShowInterviewModal(false)}
-        size="md"
-        centered
-        scrollable
-      >
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          {interviewDetails && (
-            <Row className="g-3">
-              {/* Header */}
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <h5 className="mb-1 fw-bold">Interview Details</h5>
-                <Badge
-                  bg={
-                    interviewDetails?.status === "Pending"
-                      ? "warning"
-                      : interviewDetails?.status === "Interested"
-                        ? "success"
-                        : interviewDetails?.status === "Reschedule"
-                          ? "primary"
-                          : "danger"
-                  }
-                  className="px-3 py-2 rounded-pill"
-                >
-                  {interviewDetails?.status || "Unknown"}
-                </Badge>
-              </div>
-
-              {/* LEFT LABELS */}
-              <Col md={6} className="fw-bold text-muted">
-                <p>Type</p>
-                <p>Duration</p>
-                <p>Link</p>
-                <p>Interview Date</p>
-
-                {interviewDetails?.reschedule_date && <p>Reschedule Date</p>}
-                {interviewDetails?.reason && <p>Reason</p>}
-              </Col>
-
-              {/* RIGHT VALUES */}
-              <Col md={6} className="text-end">
-                <p>{interviewDetails?.interview_type || "-"}</p>
-                <p>
-                  {interviewDetails?.duration
-                    ? `${interviewDetails.duration} mins`
-                    : "-"}
-                </p>
-
-                <p>
-                  {interviewDetails?.url ? (
-                    <a
-                      href={interviewDetails.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Join Interview
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </p>
-
-                <p>{interviewDetails?.interview_date || "Not scheduled"}</p>
-
-                {interviewDetails?.reschedule_date && (
-                  <p className="text-warning fw-semibold">
-                    {interviewDetails.reschedule_date}
-                  </p>
-                )}
-
-                {interviewDetails?.reason && (
-                  <p className="text-danger">{interviewDetails.reason}</p>
-                )}
-              </Col>
-
-              {/* RESCHEDULE FORM */}
-              {showRescheduleForm && (
-                <Col xs={12}>
-                  <div className="border rounded-3 p-3 bg-light">
-                    <h6 className="fw-semibold mb-2">Reschedule Interview</h6>
-
-                    <div className="mb-3">
-                      <label className="form-label small text-muted">
-                        New Interview Date
-                      </label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        value={rescheduleDate}
-                        onChange={(e) => setRescheduleDate(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small text-muted">
-                        Reason (optional)
-                      </label>
-                      <textarea
-                        rows={3}
-                        className="form-control"
-                        placeholder="Why are you rescheduling?"
-                        value={rescheduleReason}
-                        onChange={(e) => setRescheduleReason(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-primary btn-sm"
-                        disabled={isPending}
-                        onClick={() => {
-                          respondInterview({
-                            id: interviewDetails.id,
-                            status: "Reschedule",
-                            reason: rescheduleReason || null,
-                            reschedule_date: rescheduleDate,
-                          });
-
-                          setShowRescheduleForm(false);
-                          setRescheduleDate("");
-                          setRescheduleReason("");
-                        }}
-                      >
-                        {isPending ? "Submitting..." : "Submit"}
-                      </button>
-
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => setShowRescheduleForm(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </Col>
-              )}
-
-              {/* CANCEL FORM */}
-              {showCancelForm && (
-                <Col xs={12}>
-                  <div className="border rounded-3 p-3 bg-light">
-                    <h6 className="fw-semibold mb-2">Cancel Interview</h6>
-
-                    <textarea
-                      rows={3}
-                      className="form-control mb-3"
-                      placeholder="Reason (optional)"
-                      value={cancelReason}
-                      onChange={(e) => setCancelReason(e.target.value)}
-                    />
-
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-danger btn-sm"
-                        disabled={isPending}
-                        onClick={() => {
-                          respondInterview({
-                            id: interviewDetails.id,
-                            status: "Not Interested",
-                            reason: cancelReason || null,
-                            reschedule_date: null,
-                          });
-
-                          setShowCancelForm(false);
-                          setCancelReason("");
-                        }}
-                      >
-                        {isPending ? "Submitting..." : "Submit"}
-                      </button>
-
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => setShowCancelForm(false)}
-                      >
-                        Back
-                      </button>
-                    </div>
-                  </div>
-                </Col>
-              )}
-            </Row>
-          )}
-        </Modal.Body>
-
-        <Modal.Footer>
-          <div className="d-flex align-items-center gap-2">
-            <button
-              className="btn btn-outline-primary"
-              disabled={isPending}
-              onClick={() => {
-                setShowCancelForm(false);
-                setShowRescheduleForm(true);
-              }}
-            >
-              Reschedule
-            </button>
-
-            <button
-              className="btn btn-outline-success"
-              disabled={isPending}
-              onClick={() => {
-                respondInterview({
-                  id: interviewDetails.id,
-                  status: "Interested",
-                  reason: null,
-                  reschedule_date: null,
-                });
-              }}
-            >
-              {isPending ? "Submitting..." : "Interested"}
-            </button>
-
-            <button
-              className="btn btn-outline-danger"
-              disabled={isPending}
-              onClick={() => {
-                setShowRescheduleForm(false);
-                setShowCancelForm(true);
-              }}
-            >
-              Not interested
-            </button>
-          </div>
-        </Modal.Footer>
-      </Modal>
+        interviewDetails={interviewDetails}
+      />
     </Container>
   );
 };
