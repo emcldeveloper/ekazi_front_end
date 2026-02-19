@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Checkcompleteprofile from "../../../Component/Profile/Checkcomplete";
 import { useSaveJob } from "../../../hooks/useCandidates";
 
-const JobDetails = ({ job, appliedJobIds }) => {
+const JobDetails = ({ job, appliedJobIds = [] }) => {
   const navigate = useNavigate();
   const { mutate: saveJobMutate } = useSaveJob();
 
