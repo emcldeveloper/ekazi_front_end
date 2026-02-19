@@ -1,10 +1,20 @@
-import { Badge, Card, Col, Container, Modal, Table } from "react-bootstrap";
+import {
+  Badge,
+  Card,
+  Col,
+  Container,
+  Modal,
+  Tab,
+  Table,
+  Tabs,
+} from "react-bootstrap";
 import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Eye } from "react-bootstrap-icons";
 import { useRef, useState } from "react";
 import { useOfferResponse } from "../../hooks/useJobs";
+import CounterOffer from "./CounterOffer";
 
 const JobOffers = () => {
   const location = useLocation();
@@ -16,7 +26,6 @@ const JobOffers = () => {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [showRejectForm, setShowRejectOffer] = useState(false);
   const [rescheduleReason, setRescheduleReason] = useState("");
-  const [isNegotiable, setIsNegotiable] = useState(false);
 
   const offers = Array.isArray(location.state?.offers)
     ? location.state.offers
@@ -81,7 +90,7 @@ const JobOffers = () => {
   const handleRejectOffer = async () => {
     if (!selectedOffer) return;
 
-    if (!rescheduleReason && !isNegotiable) {
+    if (!rescheduleReason) {
       Swal.fire({
         icon: "warning",
         title: "Reason Required",
@@ -91,15 +100,13 @@ const JobOffers = () => {
     }
 
     const result = await Swal.fire({
-      title: isNegotiable ? "Negotiate Offer?" : "Reject Offer?",
-      text: isNegotiable
-        ? "Are you sure you want to negotiate this offer?"
-        : "Are you sure you want to reject this offer?",
+      title: "Reject Offer?",
+      text: "Are you sure you want to reject this offer?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: isNegotiable ? "#0dcaf0" : "#dc3545",
+      confirmButtonColor: "#dc3545",
       cancelButtonColor: "#6c757d",
-      confirmButtonText: isNegotiable ? "Yes, Negotiate" : "Yes, Reject",
+      confirmButtonText: "Yes, Reject",
     });
 
     if (!result.isConfirmed) return;
@@ -107,17 +114,15 @@ const JobOffers = () => {
     respondOffer(
       {
         id: selectedOffer?.id,
-        status: isNegotiable ? "Negotiable" : "Rejected",
+        status: "Rejected",
         reason: rescheduleReason || null,
       },
       {
         onSuccess: () => {
           Swal.fire({
             icon: "success",
-            title: isNegotiable ? "Negotiation Submitted" : "Offer Rejected",
-            text: isNegotiable
-              ? "Your negotiation request has been sent."
-              : "You have rejected the offer.",
+            title: "Offer Rejected",
+            text: "You have rejected the offer.",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -125,7 +130,6 @@ const JobOffers = () => {
           setIsOpenModal(false);
           setShowRejectOffer(false);
           setRescheduleReason("");
-          setIsNegotiable(false);
         },
         onError: () => {
           Swal.fire({
@@ -311,55 +315,59 @@ const JobOffers = () => {
             {showRejectForm && (
               <Col xs={12} ref={rejectFormRef}>
                 <div className="border rounded-3 p-3 bg-light">
-                  <div className="mb-3">
-                    <label className="form-label ">
-                      Reason <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      className="form-control small text-muted"
-                      placeholder="Why are you rejecting offer?"
-                      value={rescheduleReason}
-                      onChange={(e) => setRescheduleReason(e.target.value)}
-                    />
-                  </div>
+                  <Tabs
+                    defaultActiveKey="reject"
+                    id="uncontrolled-tab-example"
+                    className="mb-3"
+                  >
+                    <Tab eventKey="reject" title="Reject Offer">
+                      <div className="p-2">
+                        <div className="mb-3">
+                          <label className="form-label ">
+                            Reason <span className="text-red-500">*</span>
+                          </label>
+                          <textarea
+                            rows={3}
+                            className="form-control small text-muted"
+                            placeholder="Why are you rejecting offer?"
+                            value={rescheduleReason}
+                            onChange={(e) =>
+                              setRescheduleReason(e.target.value)
+                            }
+                          />
+                        </div>
 
-                  <div className="d-flex gap-2">
-                    <button
-                      className="btn btn-primary btn-sm"
-                      disabled={isPending}
-                      onClick={() => {
-                        handleRejectOffer();
-                        setShowRejectOffer(false);
-                        setRescheduleReason("");
-                      }}
-                    >
-                      {isPending ? "Submitting..." : "Submit"}
-                    </button>
+                        <div className="d-flex gap-2">
+                          <button
+                            className="btn btn-primary btn-sm"
+                            disabled={isPending}
+                            onClick={() => {
+                              handleRejectOffer();
+                              setShowRejectOffer(false);
+                              setRescheduleReason("");
+                            }}
+                          >
+                            {isPending ? "Submitting..." : "Submit"}
+                          </button>
 
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => setShowRejectOffer(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-
-                  <div className="form-check mb-3">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="renegotiateCheck"
-                      checked={isNegotiable}
-                      onChange={(e) => setIsNegotiable(e.target.checked)}
-                    />
-                    <label
-                      className="form-check-label small text-muted"
-                      htmlFor="renegotiateCheck"
-                    >
-                      I want to negotiate this offer
-                    </label>
-                  </div>
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => setShowRejectOffer(false)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </Tab>
+                    <Tab eventKey="counter" title="Counter Offer">
+                      <CounterOffer
+                        selectedOffer={selectedOffer}
+                        respondOffer={respondOffer}
+                        setIsOpenModal={setIsOpenModal}
+                        setShowRejectOffer={setShowRejectOffer}
+                      />
+                    </Tab>
+                  </Tabs>
                 </div>
               </Col>
             )}

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Checkcompleteprofile from "../../../Component/Profile/Checkcomplete";
 import { useSaveJob } from "../../../hooks/useCandidates";
 
-const JobDetails = ({ job }) => {
+const JobDetails = ({ job, appliedJobIds }) => {
   const navigate = useNavigate();
   const { mutate: saveJobMutate } = useSaveJob();
 
@@ -29,8 +29,8 @@ const JobDetails = ({ job }) => {
 
   // Use full job details if available
   const j = job;
-  console.log("Job", j);
 
+  const hasApplied = appliedJobIds.includes(j.id);
   const isExpired = j?.dead_line ? new Date(j.dead_line) < new Date() : false;
 
   const shareTitle = `Job Opening: ${
@@ -205,24 +205,36 @@ const JobDetails = ({ job }) => {
           </h6>
 
           <Row>
-            <Col md={3}>
-              <b>Report To:</b>
-            </Col>
-            <Col md={9}>{j.job_report_to?.report_to || "N/A"}</Col>
+            {j.job_report_to?.report_to && (
+              <>
+                <Col md={3}>
+                  <b>Report To:</b>
+                </Col>
+                <Col md={9}>{j.job_report_to?.report_to}</Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Supervision:</b>
-            </Col>
-            <Col md={9}>{j.job_report_to?.supervises || "N/A"}</Col>
+            {j.job_report_to?.supervises && (
+              <>
+                <Col md={3}>
+                  <b>Supervision:</b>
+                </Col>
+                <Col md={9}>{j.job_report_to?.supervises}</Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Interacts With:</b>
-            </Col>
-            <Col md={9}>{j.job_report_to?.interacts_with || "N/A"}</Col>
+            {j.job_report_to?.interacts_with && (
+              <>
+                <Col md={3}>
+                  <b>Interacts With:</b>
+                </Col>
+                <Col md={9}>{j.job_report_to?.interacts_with}</Col>
+              </>
+            )}
           </Row>
 
           <hr />
@@ -233,93 +245,127 @@ const JobDetails = ({ job }) => {
           </h6>
 
           <Row>
-            <Col md={3}>
-              <b>Education:</b>
-            </Col>
-            <Col md={9}>
-              {(j.job_education || []).map((edu, i) => (
-                <span key={i}>
-                  {i > 0 ? ", " : ""}
-                  {edu.education_level?.education_level} - {edu.major?.name}
-                </span>
-              ))}
-            </Col>
+            {j.job_education && (
+              <>
+                <Col md={3}>
+                  <b>Education:</b>
+                </Col>
+                <Col md={9}>
+                  {(j.job_education || []).map((edu, i) => (
+                    <span key={i}>
+                      {i > 0 ? ", " : ""}
+                      {edu.education_level?.education_level} - {edu.major?.name}
+                    </span>
+                  ))}
+                </Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Job Level:</b>
-            </Col>
-            <Col md={9}>{j.position_level?.position_name || "N/A"}</Col>
+            {j.position_level?.position_name && (
+              <>
+                <Col md={3}>
+                  <b>Job Level:</b>
+                </Col>
+                <Col md={9}>{j.position_level?.position_name}</Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Gender:</b>
-            </Col>
-            <Col md={9}>{j.job_gender?.gender_name || "N/A"}</Col>
+            {j.job_gender?.gender_name && (
+              <>
+                <Col md={3}>
+                  <b>Gender:</b>
+                </Col>
+                <Col md={9}>{j.job_gender?.gender_name}</Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Age:</b>
-            </Col>
-            <Col md={9}>
-              {j.applicant_min_age || j.applicant_max_age
-                ? `${j.applicant_min_age} - ${j.applicant_max_age} Years`
-                : "Not specified"}
-            </Col>
+            {j.applicant_min_age > 0 && j.applicant_max_age > 0 && (
+              <>
+                <Col md={3}>
+                  <b>Age:</b>
+                </Col>
+                <Col md={9}>
+                  {`${j.applicant_min_age} - ${j.applicant_max_age} Years`}
+                </Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Experience:</b>
-            </Col>
-            <Col md={9}>{j.years_experience || "N/A"}</Col>
+            {j.years_experience && (
+              <>
+                <Col md={3}>
+                  <b>Experience:</b>
+                </Col>
+                <Col md={9}>{j.years_experience} Years</Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Culture:</b>
-            </Col>
-            <Col md={9}>
-              {(j.job_culture || [])
-                .map((c) => c.culture?.culture_name)
-                .join(", ")}
-            </Col>
+            {j.job_culture && (
+              <>
+                <Col md={3}>
+                  <b>Culture:</b>
+                </Col>
+                <Col md={9}>
+                  {(j.job_culture || [])
+                    .map((c) => c.culture?.culture_name)
+                    .join(", ")}
+                </Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Knowledge:</b>
-            </Col>
-            <Col md={9}>
-              {(j.job_knowledge || [])
-                .map((k) => k.knowledge?.knowledge_name)
-                .join(", ")}
-            </Col>
+            {j.job_knowledge && (
+              <>
+                <Col md={3}>
+                  <b>Knowledge:</b>
+                </Col>
+                <Col md={9}>
+                  {(j.job_knowledge || [])
+                    .map((k) => k.knowledge?.knowledge_name)
+                    .join(", ")}
+                </Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Personality:</b>
-            </Col>
-            <Col md={9}>
-              {(j.job_personality || [])
-                .map((p) => p.personality?.personality_name)
-                .join(", ")}
-            </Col>
+            {j.job_personality && (
+              <>
+                <Col md={3}>
+                  <b>Personality:</b>
+                </Col>
+                <Col md={9}>
+                  {(j.job_personality || [])
+                    .map((p) => p.personality?.personality_name)
+                    .join(", ")}
+                </Col>
+              </>
+            )}
           </Row>
 
           <Row>
-            <Col md={3}>
-              <b>Languages:</b>
-            </Col>
-            <Col md={9}>
-              {(j.job_language || [])
-                .map((l) => l.language?.language_name)
-                .join(", ")}
-            </Col>
+            {j.job_language && (
+              <>
+                <Col md={3}>
+                  <b>Languages:</b>
+                </Col>
+                <Col md={9}>
+                  {(j.job_language || [])
+                    .map((l) => l.language?.language_name)
+                    .join(", ")}
+                </Col>
+              </>
+            )}
           </Row>
 
           <hr />
@@ -402,18 +448,21 @@ const JobDetails = ({ job }) => {
             </Col>
 
             <Col md="auto">
-              <Button
-                className="mr-2"
-                variant="primary"
-                size="md"
-                onClick={handleSaveJob}
-              >
-                Save Job
-              </Button>
-
-              <Button variant="primary" size="md" onClick={handleApply}>
-                Apply Now
-              </Button>
+              {isExpired ? null : hasApplied ? null : (
+                <>
+                  <Button
+                    className="mr-2"
+                    variant="primary"
+                    size="md"
+                    onClick={handleSaveJob}
+                  >
+                    Save Job
+                  </Button>
+                  <Button variant="primary" size="md" onClick={handleApply}>
+                    Apply Now
+                  </Button>
+                </>
+              )}
 
               {isLoggedIn && (
                 <Checkcompleteprofile

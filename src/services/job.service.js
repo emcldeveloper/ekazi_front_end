@@ -84,3 +84,15 @@ export const applicationStagesApi = async () => {
   const res = await api.get(`/job/stage`);
   return res.data.data;
 };
+
+// Counter offer
+export const counterOfferApi = async (data) => {
+  const res = await api.post(`/applicant/counter-offers`, data);
+  return res.data;
+};
+
+// Benefits
+export const getBenefitsApi = async () => {
+  const res = await api.get("/job/benefits");
+  return res.data.data;
+};

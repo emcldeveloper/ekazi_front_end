@@ -10,6 +10,8 @@ import {
   interviewResponseApi,
   offerResponseApi,
   applicationStagesApi,
+  counterOfferApi,
+  getBenefitsApi,
 } from "../services/job.service.js";
 import { jobEmailApplicationApi } from "../services/jobs/job-application.service.js";
 
@@ -117,10 +119,33 @@ export const useOfferResponse = () => {
   });
 };
 
+// Offer response hook
+export const useCounterOffer = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: counterOfferApi,
+
+    onSuccess: () => {
+      // refresh applications list
+      queryClient.invalidateQueries({ queryKey: ["applied-jobs"] });
+      queryClient.invalidateQueries({ queryKey: ["job-detail"] });
+      queryClient.invalidateQueries({ queryKey: ["job-offers"] });
+    },
+  });
+};
+
 // APPLICATION STAGES
 export const useApplicationStages = () => {
   return useQuery({
     queryKey: ["application-stages"],
     queryFn: () => applicationStagesApi(),
+  });
+};
+
+export const useBenefits = () => {
+  return useQuery({
+    queryKey: ["benefits"],
+    queryFn: getBenefitsApi,
   });
 };

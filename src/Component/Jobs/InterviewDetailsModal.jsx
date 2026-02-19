@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-import { Badge, Col, Modal, Row } from "react-bootstrap";
+import { Badge, Col, Modal, Row, Table } from "react-bootstrap";
 import { useInterviewResponse } from "../../hooks/useJobs";
 
 const InterviewDetailsModal = ({ interviewDetails, show, onHide }) => {
@@ -163,75 +163,84 @@ const InterviewDetailsModal = ({ interviewDetails, show, onHide }) => {
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered scrollable>
-      <Modal.Header closeButton></Modal.Header>
+      <Modal.Header closeButton>
+        <h5 className="fw-bold">Interview Details</h5>
+      </Modal.Header>
       <Modal.Body>
         {interviewDetails && (
           <Row className="g-3">
-            {/* Header */}
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <h5 className="mb-1 fw-bold">Interview Details</h5>
-              <Badge
-                bg={
-                  interviewDetails?.status === "Pending"
-                    ? "warning"
-                    : interviewDetails?.status === "Interested"
-                      ? "success"
-                      : interviewDetails?.status === "Reschedule"
-                        ? "primary"
-                        : "danger"
-                }
-                className="px-3 py-2 rounded-pill"
-              >
-                {interviewDetails?.status || "Unknown"}
-              </Badge>
-            </div>
+            <Table bordered hover responsive>
+              <tbody>
+                <tr>
+                  <th>Status</th>
+                  <td>
+                    <Badge
+                      bg={
+                        interviewDetails?.status === "Pending"
+                          ? "warning"
+                          : interviewDetails?.status === "Interested"
+                            ? "success"
+                            : interviewDetails?.status === "Reschedule"
+                              ? "primary"
+                              : "danger"
+                      }
+                      className="px-3 py-2 rounded-pill"
+                    >
+                      {interviewDetails?.status}
+                    </Badge>
+                  </td>
+                </tr>
 
-            {/* LEFT LABELS */}
-            <Col md={6} className="fw-bold text-muted">
-              <p>Type</p>
-              <p>Duration</p>
-              <p>Link</p>
-              <p>Interview Date</p>
+                <tr>
+                  <th>Type</th>
+                  <td>{interviewDetails?.interview_type || "-"}</td>
+                </tr>
+                <tr>
+                  <th>Duration</th>
+                  <td>
+                    {" "}
+                    {interviewDetails?.duration
+                      ? `${interviewDetails.duration} mins`
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Link</th>
+                  <td>
+                    {" "}
+                    {interviewDetails?.url ? (
+                      <a
+                        href={interviewDetails.url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Join Interview
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Interview Date</th>
+                  <td>{interviewDetails?.interview_date || "Not scheduled"}</td>
+                </tr>
 
-              {interviewDetails?.reschedule_date && <p>Reschedule Date</p>}
-              {interviewDetails?.reason && <p>Reason</p>}
-            </Col>
-
-            {/* RIGHT VALUES */}
-            <Col md={6} className="text-end">
-              <p>{interviewDetails?.interview_type || "-"}</p>
-              <p>
-                {interviewDetails?.duration
-                  ? `${interviewDetails.duration} mins`
-                  : "-"}
-              </p>
-
-              <p>
-                {interviewDetails?.url ? (
-                  <a
-                    href={interviewDetails.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Join Interview
-                  </a>
-                ) : (
-                  "-"
+                {interviewDetails?.reschedule_date && (
+                  <tr>
+                    <th>Reschedule Date</th>
+                    <td>{interviewDetails.reschedule_date}</td>
+                  </tr>
                 )}
-              </p>
 
-              <p>{interviewDetails?.interview_date || "Not scheduled"}</p>
-
-              {interviewDetails?.reschedule_date && (
-                <p className="text-warning fw-semibold">
-                  {interviewDetails.reschedule_date}
-                </p>
-              )}
-
-              {interviewDetails?.reason && (
-                <p className="text-danger">{interviewDetails.reason}</p>
-              )}
-            </Col>
+                {interviewDetails?.reason && (
+                  <tr>
+                    <th>Reason</th>
+                    <td>{interviewDetails.reason}</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
 
             {/* RESCHEDULE FORM */}
             {showRescheduleForm && (

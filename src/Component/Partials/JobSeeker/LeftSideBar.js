@@ -255,13 +255,13 @@ const LeftSideBar = ({ correspondences = [] }) => {
                 title: "My Application",
                 icon: <BriefcaseFill className="me-2" />,
                 items: [
+                  { name: "Applied Jobs", path: "/jobseeker/My-application" },
+                  { name: "Saved Jobs", path: "/jobseeker/saved-jobs" },
+                  { name: "Job Match", path: "/jobseeker/job-match" },
                   {
                     name: "Create Cover Letter",
                     path: "/jobseeker/cover-letter",
                   },
-                  { name: "My Applied Job", path: "/jobseeker/My-application" },
-                  { name: "Saved Jobs", path: "/jobseeker/saved-jobs" },
-                  { name: "Job Match", path: "/jobseeker/job-match" },
                 ],
               },
               {

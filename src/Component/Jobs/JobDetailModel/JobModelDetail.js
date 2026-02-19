@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap";
 import JobDetails from "../../../pages/home/components/JobDetails";
 
-const JobDetailModal = ({ job, show, onHide }) => {
+const JobDetailModal = ({ job, show, onHide, appliedJobIds }) => {
   return (
     <Modal show={show} onHide={onHide} size="lg" centered scrollable>
       {/* Modal content same as above */}
@@ -9,7 +9,7 @@ const JobDetailModal = ({ job, show, onHide }) => {
         <Modal.Title> Job Description</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <JobDetails job={job} />
+        <JobDetails job={job} appliedJobIds={appliedJobIds} />
       </Modal.Body>
       <Modal.Footer>
         <button className="btn btn-primary" onClick={onHide}>

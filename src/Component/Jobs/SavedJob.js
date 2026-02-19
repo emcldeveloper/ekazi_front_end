@@ -15,6 +15,8 @@ import { useGetSavedJobs } from "../../hooks/useCandidates";
 const SavedJobsList = () => {
   const { data: savedJobs = [] } = useGetSavedJobs();
 
+  console.log("Save Jobs", savedJobs);
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -49,7 +51,7 @@ const SavedJobsList = () => {
                   <th className="ps-4">Position & Company</th>
                   <th>Posted On</th>
                   <th>Deadline</th>
-                  <th className="text-center">Apply</th>
+                  <th className="text-center">Status</th>
                   <th className="text-center">Actions</th>
                 </tr>
               </thead>
@@ -72,6 +74,10 @@ const SavedJobsList = () => {
                   const postedOn = formatDate(job.publish_date);
                   const deadline = formatDate(job.dead_line);
 
+                  const isExpired = job?.dead_line
+                    ? new Date(job.dead_line) < new Date()
+                    : false;
+
                   return (
                     <tr key={idx}>
                       <td className="ps-4">
@@ -84,21 +90,23 @@ const SavedJobsList = () => {
                       <td>{deadline}</td>
 
                       <td className="text-center">
-                        <Button
-                          size="sm"
-                          variant="primary"
-                          href={`/jobs/${job.id}`}
-                        >
-                          Apply
-                        </Button>
+                        {isExpired ? (
+                          <Badge bg="secondary">Closed</Badge>
+                        ) : (
+                          <Badge bg="success">Open</Badge>
+                        )}
                       </td>
 
                       <td className="text-center">
-                        <Dropdown>
+                        <Dropdown align="end">
                           <Dropdown.Toggle
-                            variant="light"
-                            size="sm"
-                            className="px-2"
+                            as="span"
+                            bsPrefix="notification-toggle"
+                            id="profile-dropdown"
+                            className="d-flex align-items-center justify-content-center position-relative"
+                            style={{
+                              cursor: "pointer",
+                            }}
                           >
                             <FaEllipsisV />
                           </Dropdown.Toggle>
@@ -106,14 +114,14 @@ const SavedJobsList = () => {
                           <Dropdown.Menu>
                             <Dropdown.Item
                               onClick={() => handleJobClick(job)}
-                              className="d-flex align-items-center"
+                              className="d-flex align-items-center small"
                             >
                               <FaEye className="me-2" /> View Details
                             </Dropdown.Item>
 
                             <Dropdown.Divider />
 
-                            <Dropdown.Item className="d-flex align-items-center text-danger">
+                            <Dropdown.Item className="d-flex align-items-center small text-danger">
                               <FaTrashAlt className="me-2" /> Remove from Saved
                             </Dropdown.Item>
                           </Dropdown.Menu>
