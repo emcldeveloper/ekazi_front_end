@@ -106,9 +106,12 @@ const AppHeader = () => {
               <Nav.Link href="/salary-calculator" className="text-primary">
                 Salary Calculator
               </Nav.Link>
-              <Nav.Link href="/pricelists" className="text-primary">
-                Pricing
-              </Nav.Link>
+
+              {!isLoggedIn && (
+                <Nav.Link href="/pricelists" className="text-primary">
+                  Pricing
+                </Nav.Link>
+              )}
 
               {!isLoggedIn && (
                 <Nav.Link href="/articles" className="text-primary">

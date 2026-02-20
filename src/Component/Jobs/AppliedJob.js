@@ -14,9 +14,6 @@ import {
   FaBriefcase,
   FaCalendarAlt,
   FaUserTie,
-  FaFileContract,
-  FaSearch,
-  FaCheckCircle,
 } from "react-icons/fa";
 import { formatDate } from "../../utils/dateUtils";
 import JobDetailModal from "./JobDetailModel/JobModelDetail";

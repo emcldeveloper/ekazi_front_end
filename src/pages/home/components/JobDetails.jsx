@@ -394,18 +394,38 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
           <hr />
 
           {/* Location */}
-          <p>
-            <b>Location:</b> {j.job_addresses?.[0]?.sub_location || "N/A"},{" "}
-            {j.job_addresses?.[0]?.region?.region_name || ""}
-            <br />
-            <b>Country:</b>
-            {""}
-            {j.job_addresses?.[0]?.region?.country?.name || "N/A"}
-            <br />
-            <b>Industry:</b> {j.industry?.industry_name || "N/A"}
-            <br />
-            <b>Company:</b> {j.client?.client_name || "N/A"}
-          </p>
+          {j.job_addresses?.[0]?.sub_location && (
+            <p className="p-0 m-0">
+              <strong>Location:</strong> {j.job_addresses?.[0]?.sub_location}
+            </p>
+          )}
+
+          {j.job_addresses?.[0]?.region?.region_name && (
+            <p className="p-0 m-0">
+              <strong>Region:</strong>{" "}
+              {j.job_addresses?.[0]?.region?.region_name}
+            </p>
+          )}
+
+          {j.job_addresses?.[0]?.region?.country?.name && (
+            <p className="p-0 m-0">
+              <strong>Country:</strong>{" "}
+              {j.job_addresses?.[0]?.region?.country?.name}
+            </p>
+          )}
+
+          {j.industry?.industry_name && (
+            <p className="p-0 m-0">
+              <strong>Industry:</strong> {j.industry?.industry_name}{" "}
+            </p>
+          )}
+
+          {j.client?.client_name && (
+            <p className="p-0 m-0">
+              <strong>Company:</strong>
+              {j.client?.client_name}
+            </p>
+          )}
 
           {/* Social Share */}
           <Row className="mt-4 justify-content-between align-items-center">

@@ -74,7 +74,12 @@ const SavedJobsList = () => {
                   return (
                     <tr key={idx}>
                       <td className="ps-4">
-                        <div className="fw-semibold">{jobTitle}</div>
+                        <div
+                          onClick={() => handleJobClick(job)}
+                          className="job-link fw-semibold cursor-pointer"
+                        >
+                          {jobTitle}
+                        </div>
                         <div className="text-muted small">{company}</div>
                       </td>
 
@@ -114,8 +119,8 @@ const SavedJobsList = () => {
 
                             <Dropdown.Divider />
 
-                            <Dropdown.Item className="d-flex align-items-center small text-danger">
-                              <FaTrashAlt className="me-2" /> Remove from Saved
+                            <Dropdown.Item className="d-flex align-items-center small">
+                              <FaTrashAlt className="me-2" /> Delete
                             </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
@@ -141,6 +146,19 @@ const SavedJobsList = () => {
         show={showModal}
         onHide={() => setShowModal(false)}
       />
+
+      <style>
+        {`
+    .job-link {
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .job-link:hover {
+      text-decoration: underline;
+    }
+  `}
+      </style>
     </Container>
   );
 };

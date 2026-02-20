@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Row, Col, Card, Button, Modal, ProgressBar } from "react-bootstrap";
-import { FaBuilding } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-import { formatDistanceToNow } from "date-fns";
-import JobDetailModal from "../../Component/Jobs/JobDetailModel/JobModelDetail";
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import { Row, Col, Card, Button, Modal, ProgressBar } from "react-bootstrap";
 import { BsLightbulb } from "react-icons/bs";
+import { FaBuilding } from "react-icons/fa";
+import { formatDistanceToNow } from "date-fns";
+
+import JobDetailModal from "../../Component/Jobs/JobDetailModel/JobModelDetail";
+import "react-circular-progressbar/dist/styles.css";
 import useJob from "../../hooks/useJob";
 
 const MatchJobList = () => {
@@ -130,6 +129,7 @@ const MatchJobList = () => {
               </Button>
             </Modal.Footer>
           </Modal>
+
           {/* Recommended Jobs */}
           <Row className="align-items-center justify-content-between mb-3">
             <Col>
@@ -181,10 +181,13 @@ const MatchJobList = () => {
                       <FaBuilding className="me-2" />{" "}
                       {job.client?.client_name || "N/A"}
                     </div>
-                    <div className="text-muted mb-1">
-                      {job.job_addresses?.[0]?.region?.region_name || ""},{" "}
-                      {job.job_addresses?.[0]?.region?.country?.name || "N/A"}
-                    </div>
+
+                    {job.job_addresses?.[0]?.region?.region_name && (
+                      <div className="text-muted mb-1">
+                        {job.job_addresses?.[0]?.region?.region_name},{" "}
+                        {job.job_addresses?.[0]?.region?.country?.name}
+                      </div>
+                    )}
 
                     <small className="text-muted">
                       Posted:{" "}
@@ -194,17 +197,10 @@ const MatchJobList = () => {
                           })
                         : "Not specified"}
                     </small>
-
-                    {/* <p>{job.created_at ? new Date(job.created_at).toDateString() : 'Not specified'}</p> */}
                   </Col>
                 </Row>
               </Card.Body>
             </Card>
-            //   <JobDetailModal
-            //   job={selectedJob}
-            //   show={showModal}
-            //   onHide={() => setShowModal(false)}
-            // />
           ))}
         </Card.Body>
       </Card>

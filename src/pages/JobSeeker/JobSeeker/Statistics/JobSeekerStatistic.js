@@ -169,13 +169,16 @@ const JobSeekerStatistic = () => {
                       {job.job_position?.position_name || "Untitled"}
                     </h6>
                     <div className="text-muted d-flex align-items-center mb-1">
-                      <FaBuilding className="me-2" />{" "}
-                      {job.client?.client_name || "N/A"}
+                      <FaBuilding className="me-2" /> {job.client?.client_name}
                     </div>
-                    <div className="text-muted mb-1">
-                      {job.job_addresses?.[0]?.region?.region_name || ""},{" "}
-                      {job.job_addresses?.[0]?.region?.country?.name || ""}
-                    </div>
+
+                    {job.job_addresses?.[0]?.region?.region_name && (
+                      <div className="text-muted mb-1">
+                        {job.job_addresses?.[0]?.region?.region_name},{" "}
+                        {job.job_addresses?.[0]?.region?.country?.name}
+                      </div>
+                    )}
+
                     <small className="text-muted">
                       Posted{" "}
                       {job.publish_date

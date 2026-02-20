@@ -9,8 +9,6 @@ const RightSideBar = () => {
   const navigate = useNavigate();
   const { data: employers = [] } = useEmployers({ page: 1, perPage: 10 });
 
-  console.log("Companies", employers);
-
   return (
     <div className="d-flex flex-column gap-3">
       {/* Templates */}
@@ -42,9 +40,7 @@ const RightSideBar = () => {
             {employers.map((company) => (
               <div
                 key={company.id}
-                onClick={() =>
-                  navigate(`/featured/employer/details/${company.id}`)
-                }
+                onClick={() => navigate(`/employer/details/${company.id}`)}
                 className="d-flex align-items-center gap-3 p-2 rounded-3 mb-2 company-item"
                 style={{
                   cursor: "pointer",
