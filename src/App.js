@@ -103,8 +103,6 @@ function App() {
 
             <Route path="/employers" element={<Employer />} />
             <Route path="/employer/details" element={<EmployerDetails />} />
-            <Route path="/employers" element={<Employer />} />
-            <Route path="/employer/details" element={<EmployerDetails />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/pricelists" element={<PricePage />} />
             <Route path="/articles" element={<ArticlesPage />} />

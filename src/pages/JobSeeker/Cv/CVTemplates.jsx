@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import { FaDownload, FaPen } from "react-icons/fa";
 
-import { useCvProfile, useDownloadCv } from "../../../hooks/useCv";
+import { useCvProfile, useDownloadCv, useSaveCv } from "../../../hooks/useCv";
 import { sanitizeFileName } from "../../../utils/helpers";
 import { TEMPLATE_MAP } from "./data/templates";
 
@@ -14,11 +14,16 @@ const CVTemplates = () => {
 
   const applicantId = localStorage.getItem("applicantId");
 
+  // Fetching applicant cv data
   const { data: cvProfile } = useCvProfile(applicantId);
   const profile = cvProfile?.data?.applicant_profile?.[0];
   const applicantName = `${profile?.first_name ?? ""}${profile?.last_name ?? ""}`;
 
+  // Downloading cv
   const { mutate: downloadCv, isPending: isLoading } = useDownloadCv();
+
+  // Saving downloaded cv
+  const { mutate: saveCv } = useSaveCv();
 
   const location = useLocation();
 
@@ -28,8 +33,15 @@ const CVTemplates = () => {
 
   const SelectedTemplate = TEMPLATE_MAP[selectedTemplate];
 
+  // Handlers
   const handleDownload = () => {
     const safeName = sanitizeFileName(fileName || "My_CV");
+
+    saveCv({
+      template: selectedTemplate,
+      cv_name: safeName,
+      applicant_id: applicantId,
+    });
 
     downloadCv(
       {

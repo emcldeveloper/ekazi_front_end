@@ -29,7 +29,7 @@ export const getAppliedJobsApi = async ({ applicant_id }) => {
 // ---- Job Match ----
 export const getJobsMatchApi = async ({ applicant_id }) => {
   const res = await api.get(`/applicant/job_match`, {
-    params: { applicant_id },
+    params: { id: applicant_id },
   });
   return res.data;
 };

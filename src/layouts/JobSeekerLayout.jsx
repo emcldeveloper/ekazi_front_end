@@ -1,25 +1,16 @@
-// src/components/JobSeeker/Layouts/JobSeekerDashboardLayout.jsx
 import React, { useState } from "react";
-import { Container, Row, Col, Alert, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Alert } from "react-bootstrap";
 import LeftSideBar from "../Component/Partials/JobSeeker/LeftSideBar";
 import RightSidebar from "../Component/Partials/JobSeeker/RightSidebar";
 import AppFooter from "../Component/Partials/AppFooter";
 import AppHeader from "../Component/Partials/AppHeader";
 import { FaTimes } from "react-icons/fa";
-import {
-  useApplicantProfile,
-  useUpdateWelcomeNote,
-  useWelcomeNote,
-} from "../hooks/useCandidates";
-import ApplicantHeader from "../components/layouts/ApplicantHeader";
+import { useWelcomeNote } from "../hooks/useCandidates";
 
 const JobSeekerLayout = ({ children }) => {
   const { data } = useWelcomeNote();
-  // const { mutate } = useUpdateWelcomeNote();
-  // const { data: profile } = useApplicantProfile();
 
   const welcomeNote = data?.note_data?.note?.[0]?.official_notes?.note ?? "";
-  // const applicantId = profile?.data?.applicant_profile?.[0]?.id;
 
   const [showAlert, setShowAlert] = useState(true);
 
@@ -30,7 +21,6 @@ const JobSeekerLayout = ({ children }) => {
   return (
     <>
       <AppHeader />
-      {/* <ApplicantHeader /> */}
 
       <Container fluid>
         {welcomeNote && showAlert && (

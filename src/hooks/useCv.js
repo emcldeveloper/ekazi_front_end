@@ -3,11 +3,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createSubscriptionApi,
   cvBuilderApi,
+  deleteCvApi,
   generateCvPdf,
   getCvCountApi,
   getCvProfileApi,
+  getMyCvApi,
   getSubscriptionPlanApi,
   incrementCvCountApi,
+  saveCvApi,
 } from "../services/cv.service";
 import { formatMY } from "../utils/helpers";
 
@@ -30,6 +33,14 @@ export const useCvProfile = (uuid) =>
     queryFn: () => getCvProfileApi(uuid),
     enabled: !!uuid,
   });
+
+export const useMyCv = (applicantId) => {
+  return useQuery({
+    queryKey: ["my-cv", applicantId],
+    queryFn: () => getMyCvApi(applicantId),
+    enabled: !!applicantId,
+  });
+};
 
 /* -------------------- MUTATIONS -------------------- */
 
@@ -205,5 +216,31 @@ export function useCVNormalized(payload) {
 export const useDownloadCv = () => {
   return useMutation({
     mutationFn: generateCvPdf,
+  });
+};
+
+export const useSaveCv = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: saveCvApi,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-cv"] });
+      queryClient.invalidateQueries({ queryKey: ["my-cv"] });
+    },
+  });
+};
+
+export const useDeleteCv = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id) => deleteCvApi(id),
+
+    onSuccess: () => {
+      // Refetch CV list automatically
+      queryClient.invalidateQueries({ queryKey: ["my-cv"] });
+    },
   });
 };

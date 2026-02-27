@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import ApplicantCorrespondence from "../../Component/Profile/ApplicantCorrespondence";
-import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 import { Card } from "react-bootstrap";
 
-const Correspondence = () => {
-  const [correspondences, setCorrespondences] = useState([]);
+import ApplicantCorrespondence from "../../Component/Profile/ApplicantCorrespondence";
+import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 
+const Correspondence = () => {
   return (
-    <JobSeekerLayout2 correspondences={correspondences}>
+    <JobSeekerLayout2>
       <Card>
         <Card.Body>
-          <ApplicantCorrespondence setCorrespondences={setCorrespondences} />
+          <ApplicantCorrespondence />
         </Card.Body>
       </Card>
     </JobSeekerLayout2>

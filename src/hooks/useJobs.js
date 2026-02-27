@@ -41,9 +41,7 @@ export const useAppliedJobs = () => {
   });
 };
 
-export const useJobMatch = () => {
-  const applicant_id = localStorage.getItem("applicantId");
-
+export const useJobMatch = (applicant_id) => {
   return useQuery({
     queryKey: ["job-match", applicant_id],
     queryFn: () => getJobsMatchApi({ applicant_id }),

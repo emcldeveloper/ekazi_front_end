@@ -1,17 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import JobSeekerLayout2 from "../../../layouts/JobSeekerLayout2";
-import { Card } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { useArticleBySlug } from "../../../hooks/useArticles";
+import { useArticleBySlug, useCreateComment } from "../../../hooks/useArticles";
 import { FaEye } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useCvProfile } from "../../../hooks/useCv";
 
 const SingleArticle = () => {
   const { slug } = useParams();
 
+  const applicantId = localStorage.getItem("applicantId");
+  const { data: profile } = useCvProfile(applicantId);
+
+  const firstName = profile?.data?.applicant_profile?.first_name;
+  const lastName = profile?.data?.applicant_profile?.last_name;
+  const email = profile?.data?.applicant_profile?.email;
+  const fullName = `${firstName ?? ""} ${lastName ?? ""}`.trim();
+
   const { data, isPending: isLoading } = useArticleBySlug(slug);
   const article = data?.data;
+  const articleId = article?.id;
+
+  const { mutate, isPending } = useCreateComment(articleId);
+
+  const { register, handleSubmit, reset } = useForm();
+
+  const [showCommentForm, setShowCommentForm] = useState(false);
 
   const isHTML = /<\/?[a-z][\s\S]*>/i.test(article?.content);
+
+  const onSubmit = (formData) => {
+    const payload = {
+      ...formData,
+      name: fullName,
+      email: email,
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        reset();
+        setShowCommentForm(false);
+      },
+    });
+  };
 
   if (isLoading) {
     return (
@@ -67,6 +99,41 @@ const SingleArticle = () => {
             </div>
           </div>
         </Card.Body>
+        <Card.Footer>
+          {/* Comments Card */}
+          {showCommentForm ? (
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form.Group className="mb-3 w-100">
+                <Form.Label>Comment</Form.Label>
+                <Form.Control
+                  type="text"
+                  as="textarea"
+                  rows={5}
+                  {...register("comment", { required: true })}
+                />
+              </Form.Group>
+
+              <div className="d-flex gap-2">
+                <Button variant="primary" type="submit" disabled={isPending}>
+                  {isPending ? "Submitting..." : "Submit"}
+                </Button>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowCommentForm(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          ) : (
+            <Button
+              className="outline-primary"
+              onClick={() => setShowCommentForm(true)}
+            >
+              Add Comment
+            </Button>
+          )}
+        </Card.Footer>
       </Card>
     </JobSeekerLayout2>
   );

@@ -45,3 +45,32 @@ export const generateCvPdf = async ({ template, name, applicantId }) => {
 
   return response.data;
 };
+
+/**
+ * Save downloaded CVs
+ */
+export const saveCvApi = async ({ applicant_id, template, cv_name }) => {
+  const res = await api.post("/applicant/savedCv", {
+    applicant_id,
+    template,
+    cv_name,
+  });
+  return res.data;
+};
+
+/**
+ * Fetch downloaded CVs
+ */
+export const getMyCvApi = async (applicantId) => {
+  const res = await api.get(`/applicant/mycv/${applicantId}`);
+
+  return res.data;
+};
+
+/**
+ * Delete downloaded CVs
+ */
+export const deleteCvApi = async (id) => {
+  const res = await api.delete(`/applicant/deletecv/${id}`);
+  return res.data;
+};

@@ -149,8 +149,8 @@ const ApplicantPipeline = () => {
       Screening: 0,
       Interview: 0,
       Selected: 0,
-      Employee: 0,
-      Decline: 0,
+      Declined: 0,
+      Employed: 0,
     };
 
     filteredData.forEach((item) => {
@@ -275,12 +275,14 @@ const ApplicantPipeline = () => {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={chartData}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
+              <XAxis dataKey="name" interval={0} angle={-45} textAnchor="end" />
+              <YAxis allowDecimals={false} />
               <Tooltip />
-              <Legend />
 
               <Bar dataKey="value">
                 {chartData.map((_, i) => (

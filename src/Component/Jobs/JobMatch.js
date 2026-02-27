@@ -7,11 +7,15 @@ import { formatDistanceToNow } from "date-fns";
 
 import JobDetailModal from "../../Component/Jobs/JobDetailModel/JobModelDetail";
 import "react-circular-progressbar/dist/styles.css";
-import useJob from "../../hooks/useJob";
+import { useJobMatch } from "../../hooks/useJobs";
 
 const MatchJobList = () => {
   const navigate = useNavigate();
-  const { jobs } = useJob();
+
+  //  Job match
+  const applicant_id = localStorage.getItem("applicantId");
+  const { data: matchedJobs } = useJobMatch(applicant_id);
+  const jobs = matchedJobs?.matches ?? [];
 
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);

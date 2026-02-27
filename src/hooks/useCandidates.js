@@ -60,9 +60,7 @@ export const useApplicantPipeline = () => {
   });
 };
 
-export const useCompleteProfile = () => {
-  const applicant_id = localStorage.getItem("applicantId");
-
+export const useCompleteProfile = (applicant_id) => {
   return useQuery({
     queryKey: ["complete_profile", applicant_id],
     queryFn: () => fetchCompleteProfile(applicant_id),
@@ -80,9 +78,7 @@ export const useJobCompleteProfile = () => {
   });
 };
 
-export const usePrimaryData = () => {
-  const applicant_id = localStorage.getItem("applicantId");
-
+export const usePrimaryData = (applicant_id) => {
   return useQuery({
     queryKey: ["primary_data", applicant_id],
     queryFn: () => fetchPrimaryData(applicant_id),

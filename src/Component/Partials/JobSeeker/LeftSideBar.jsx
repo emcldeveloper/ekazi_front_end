@@ -6,7 +6,6 @@ import {
   ProgressBar,
   Accordion,
   ListGroup,
-  Badge,
   Modal,
 } from "react-bootstrap";
 import {
@@ -18,21 +17,32 @@ import {
   PeopleFill,
   InfoCircleFill,
 } from "react-bootstrap-icons";
-import ConsentFormModal from "../../Forms/JobSeeker/ConsertForm";
-import {
-  completeprofile,
-  primarydata,
-} from "../../../Api/Jobseeker/JobSeekerProfileApi";
 
-const LeftSideBar = ({ correspondences = [] }) => {
-  const [profileCompletion, setProfileCompletion] = useState(0);
-  const [dataprimary, setPrimaryData] = useState([]);
-  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
-  const [showConsentModal, setShowConsentModal] = useState(false);
+import {
+  useCompleteProfile,
+  usePrimaryData,
+} from "../../../hooks/useCandidates";
+import { useAllThreads } from "../../../hooks/candidates/useCorrespondence";
+
+const LeftSideBar = () => {
   const navigate = useNavigate();
   const applicant_id = localStorage.getItem("applicantId");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  // fetch profile completeness %
+  const { data: completePercentage } = useCompleteProfile(applicant_id);
+  const profileCompletion = Math.round(completePercentage);
+
+  // fetch primary data
+  const { data: dataprimary } = usePrimaryData(applicant_id);
+
+  // fetch correspondence count
+  const { data: notifications = [] } = useAllThreads(applicant_id);
+  const inboxCount = notifications.filter(
+    (notification) => notification.status === "closed",
+  ).length;
+
+  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   // Track online/offline
@@ -46,38 +56,6 @@ const LeftSideBar = ({ correspondences = [] }) => {
     };
   }, []);
 
-  // Fetch profile completion
-  useEffect(() => {
-    const fetchCompleteProfile = async () => {
-      try {
-        setLoading(true);
-        const data = await completeprofile(applicant_id);
-        setProfileCompletion(Math.round(data));
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-    fetchCompleteProfile();
-  }, [applicant_id]);
-
-  // Fetch primary profile data
-  useEffect(() => {
-    const fetchPrimaryData = async () => {
-      try {
-        setLoading(true);
-        const data = await primarydata(applicant_id);
-        setPrimaryData(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-    fetchPrimaryData();
-  }, [applicant_id]);
-
   const picture = dataprimary?.[0]?.picture
     ? `https://api.ekazi.co.tz/${dataprimary[0].picture}`
     : "https://api.ekazi.co.tz/uploads/picture/pre_photo.jpg";
@@ -85,16 +63,6 @@ const LeftSideBar = ({ correspondences = [] }) => {
   const backgroundPicture = dataprimary?.[0]?.background_picture
     ? `https://api.ekazi.co.tz/${dataprimary[0].background_picture}`
     : "https://api.ekazi.co.tz/svg/dotted.svg";
-
-  // Calculate Inbox count dynamically from correspondences
-  const inboxCount = correspondences.filter((c) => {
-    // console.log(c.visible_to_applicant); // log each value
-    return c.visible_to_applicant === true; // check if true
-  }).length;
-
-  const sentCount = correspondences.filter(
-    (c) => c.status === "accepted" || c.status === "rejected",
-  ).length;
 
   return (
     <div className="d-flex flex-column gap-2">
@@ -200,11 +168,6 @@ const LeftSideBar = ({ correspondences = [] }) => {
             </div>
           </div>
 
-          <ConsentFormModal
-            show={showConsentModal}
-            onClose={() => setShowConsentModal(false)}
-          />
-
           {/* Dashboard & Accordions */}
           <h6
             className="border-top pt-2 text-start fw-semibold d-flex align-items-center cursor-pointer"
@@ -225,7 +188,7 @@ const LeftSideBar = ({ correspondences = [] }) => {
                 icon: <FileEarmarkTextFill className="me-2" />,
                 items: [
                   { name: "Build Cv", path: "/jobseeker/sample-selection" },
-                  { name: "My Cv" },
+                  { name: "My Cv", path: "/jobseeker/my-resume" },
                   { name: "My subscription" },
                 ],
               },
@@ -239,15 +202,11 @@ const LeftSideBar = ({ correspondences = [] }) => {
                     path: "/jobseeker/employer-correspondence",
                     count: inboxCount,
                   },
-                  {
-                    name: "Sent",
-                    path: "/jobseeker/sent-correspondence",
-                    count: sentCount,
-                  },
-                  {
-                    name: "Consent Form",
-                    onClick: () => setShowConsentModal(true),
-                  },
+                  // {
+                  //   name: "Sent",
+                  //   path: "/jobseeker/sent-correspondence",
+                  //   count: sentCount,
+                  // },
                 ],
               },
               {

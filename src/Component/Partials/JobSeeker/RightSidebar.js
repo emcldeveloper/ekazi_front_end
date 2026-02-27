@@ -7,6 +7,8 @@ import TemplateSlider from "../../../pages/JobSeeker/Cv/components/TemplateSlide
 
 const RightSideBar = () => {
   const navigate = useNavigate();
+
+  // Fetch employers/recruiters
   const { data: employers = [] } = useEmployers({ page: 1, perPage: 10 });
 
   return (
@@ -40,7 +42,11 @@ const RightSideBar = () => {
             {employers.map((company) => (
               <div
                 key={company.id}
-                onClick={() => navigate(`/employer/details/${company.id}`)}
+                onClick={() =>
+                  navigate(`/employer/details`, {
+                    state: { client: company },
+                  })
+                }
                 className="d-flex align-items-center gap-3 p-2 rounded-3 mb-2 company-item"
                 style={{
                   cursor: "pointer",

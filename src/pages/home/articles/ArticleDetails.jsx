@@ -13,8 +13,8 @@ import { useArticleBySlug, useCreateComment } from "../../../hooks/useArticles";
 import MainLayout1 from "../../../layouts/MainLayout1";
 import { FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import RelatedArticles from "./RelatedArticles";
 import HotArticles from "./HotArticles";
+import { useState } from "react";
 
 const ArticleDetails = () => {
   const { slug } = useParams();
@@ -27,11 +27,16 @@ const ArticleDetails = () => {
 
   const { register, handleSubmit, reset } = useForm();
 
+  const [showCommentForm, setShowCommentForm] = useState(false);
+
   const isHTML = /<\/?[a-z][\s\S]*>/i.test(article?.content);
 
   const onSubmit = (formData) => {
     mutate(formData, {
-      onSuccess: () => reset(),
+      onSuccess: () => {
+        reset();
+        setShowCommentForm(false);
+      },
     });
   };
 
@@ -102,45 +107,67 @@ const ArticleDetails = () => {
             </Card>
 
             {/* Comments Card */}
-            <Card className="p-2">
-              <Card.Body>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="d-flex flex-col align-items-center justify-content-between gap-2 md:flex-row md:gap-4">
+            {showCommentForm ? (
+              <Card className="p-2">
+                <Card.Header>Add Your Comment</Card.Header>
+                <Card.Body>
+                  <Form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="d-flex flex-col align-items-center justify-content-between gap-2 md:flex-row md:gap-4">
+                      <Form.Group className="mb-3 w-100">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="e.g Juma Abdul"
+                          {...register("name", { required: true })}
+                        />
+                      </Form.Group>
+
+                      <Form.Group className="mb-3 w-100">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="example@mail.com"
+                          {...register("email", { required: true })}
+                        />
+                      </Form.Group>
+                    </div>
+
                     <Form.Group className="mb-3 w-100">
-                      <Form.Label>Name</Form.Label>
+                      <Form.Label>Comment</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="e.g Juma Abdul"
-                        {...register("name", { required: true })}
+                        as="textarea"
+                        rows={5}
+                        {...register("comment", { required: true })}
                       />
                     </Form.Group>
 
-                    <Form.Group className="mb-3 w-100">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        placeholder="example@mail.com"
-                        {...register("email", { required: true })}
-                      />
-                    </Form.Group>
-                  </div>
-
-                  <Form.Group className="mb-3 w-100">
-                    <Form.Label>Post Comment</Form.Label>
-                    <Form.Control
-                      type="text"
-                      as="textarea"
-                      rows={5}
-                      {...register("comment", { required: true })}
-                    />
-                  </Form.Group>
-
-                  <Button variant="primary" type="submit" disabled={isPending}>
-                    {isPending ? "Submitting..." : "Submit"}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
+                    <div className="d-flex gap-2">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={isPending}
+                      >
+                        {isPending ? "Submitting..." : "Submit"}
+                      </Button>
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => setShowCommentForm(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form>
+                </Card.Body>
+              </Card>
+            ) : (
+              <Button
+                className="outline-primary"
+                onClick={() => setShowCommentForm(true)}
+              >
+                Add Comment
+              </Button>
+            )}
           </Col>
           <Col md={4}>
             <h3 className="fw-bold mb-4" style={{ color: "#2E58A6" }}>

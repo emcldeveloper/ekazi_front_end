@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
-import { Trash } from "react-bootstrap-icons";
 import Swal from "sweetalert2";
 import { useDeleteJobFit } from "../../hooks/profile/useJobFit";
 import EditJobfitModal from "./EditJobfitModal";

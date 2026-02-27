@@ -10,16 +10,21 @@ import {
 } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+
 import JobDetailModal from "../../../../Component/Jobs/JobDetailModel/JobModelDetail";
 import ApplicantPipeline from "../../../../Component/Profile/ApplicantPipeline";
-import { useJobs } from "../../../../hooks/useJobs";
+import { useJobMatch } from "../../../../hooks/useJobs";
 import { DEFAULT_LOGO, IMG_BASE } from "../../../../helpers/img";
 import { useDashboardStatistics } from "../../../../hooks/useCandidates";
 
 const JobSeekerStatistic = () => {
-  const applicant_id = localStorage.getItem("applicant_id");
+  const applicant_id = localStorage.getItem("applicantId");
 
-  const { data: jobs = [] } = useJobs(10, 1);
+  // Fetch matched jobs
+  const { data: matchedJobs } = useJobMatch(applicant_id);
+  const jobs = matchedJobs?.matches ?? [];
+
+  // Fetch dashboard statistics
   const { data } = useDashboardStatistics(applicant_id);
 
   const dashboard = data?.statisticsdashboard || {
