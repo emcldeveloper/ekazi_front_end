@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import PageLoader from "../../widgets/pageLoader";
+import PageLoader from "../../components/pageLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Button } from "react-bootstrap";

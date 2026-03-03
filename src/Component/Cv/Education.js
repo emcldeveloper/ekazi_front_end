@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import StepProgress from "./Stepprogress";
-import PageLoader from "../../widgets/pageLoader";
+import PageLoader from "../../components/pageLoader";
 import { useCvProfile } from "../../hooks/useCv";
 
 const EducationsCv = () => {

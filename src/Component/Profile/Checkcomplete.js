@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { jobcompleteprofile } from "../../Api/Jobseeker/JobSeekerProfileApi";
 import { ModalSwitcher } from "./SwitchModal";
+import { useCompleteProfile } from "../../hooks/useCandidates";
 
 const Checkcompleteprofile = ({
   showProfileCompleteModal,
@@ -12,50 +12,27 @@ const Checkcompleteprofile = ({
   const navigate = useNavigate();
   const applicant_id = localStorage.getItem("applicantId");
 
+  const { data: completeCheck, isPending } = useCompleteProfile(applicant_id);
+
   const [missingFields, setMissingFields] = useState([]);
-  const [completecheck, setCompletecheck] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentField, setCurrentField] = useState(null);
 
-  // Modify your checkProfileCompletion function
-  const checkProfileCompletion = () => {
-    if (completecheck?.profilecheck?.length > 0) {
-      setMissingFields(completecheck.profilecheck);
-      setShowProfileCompleteModal(true);
-      setProfileComplete(false); // Notify parent component
-      return;
-    }
-    setProfileComplete(true); // Notify parent component
-    return true;
-  };
-
-  // Call this when component mounts
   useEffect(() => {
-    if (completecheck) {
-      checkProfileCompletion();
+    if (!completeCheck) return;
+
+    const missing = completeCheck.profilecheck || [];
+
+    if (missing.length > 0) {
+      setMissingFields(missing);
+      setShowProfileCompleteModal(true);
+      setProfileComplete(false);
+    } else {
+      setProfileComplete(true);
     }
-  }, [completecheck]);
+  }, [completeCheck]);
 
   const [refreshTrigger, setRefreshTrigger] = useState(false);
-
-  // Fetch profile completion status
-  useEffect(() => {
-    const fetchJobCompleteProfile = async () => {
-      try {
-        setLoading(true);
-        const data = await jobcompleteprofile(applicant_id);
-        setCompletecheck(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchJobCompleteProfile();
-  }, [refreshTrigger]);
 
   const [activeModal, setActiveModal] = useState(null);
   const [IsOpenModel, setIsModalOpen] = useState(false);
@@ -105,11 +82,11 @@ const Checkcompleteprofile = ({
                 <strong className="d-block mb-1">ACTION REQUIRED:</strong>
                 <p className="mb-0 small">
                   Your profile is{" "}
-                  {completecheck?.sections
+                  {completeCheck?.sections
                     ? Math.round(
-                        ((completecheck.sections.length -
+                        ((completeCheck.sections.length -
                           (missingFields?.length || 0)) /
-                          completecheck.sections.length) *
+                          completeCheck.sections.length) *
                           100,
                       )
                     : 0}
@@ -128,17 +105,17 @@ const Checkcompleteprofile = ({
                 height: "80px",
                 borderRadius: "50%",
                 background: `conic-gradient(#2E58A6 ${
-                  completecheck?.sections
-                    ? ((completecheck.sections.length -
+                  completeCheck?.sections
+                    ? ((completeCheck.sections.length -
                         (missingFields?.length || 0)) /
-                        completecheck.sections.length) *
+                        completeCheck.sections.length) *
                       100
                     : 0
                 }%, #f0f0f0 ${
-                  completecheck?.sections
-                    ? ((completecheck.sections.length -
+                  completeCheck?.sections
+                    ? ((completeCheck.sections.length -
                         (missingFields?.length || 0)) /
-                        completecheck.sections.length) *
+                        completeCheck.sections.length) *
                       100
                     : 0
                 }%)`,
@@ -163,11 +140,11 @@ const Checkcompleteprofile = ({
                   color: "#2E58A6",
                 }}
               >
-                {completecheck?.sections
+                {completeCheck?.sections
                   ? `${Math.round(
-                      ((completecheck.sections.length -
+                      ((completeCheck.sections.length -
                         (missingFields?.length || 0)) /
-                        completecheck.sections.length) *
+                        completeCheck.sections.length) *
                         100,
                     )}%`
                   : "0%"}
@@ -218,8 +195,8 @@ const Checkcompleteprofile = ({
                         style={{ fontSize: "1.1rem" }}
                       ></i>
                       <strong className="text-dark">
-                        {(completecheck?.sections &&
-                          completecheck.sections[
+                        {(completeCheck?.sections &&
+                          completeCheck.sections[
                             `applicant_${field?.toLowerCase()}`
                           ]) ||
                           field}
@@ -241,8 +218,8 @@ const Checkcompleteprofile = ({
                     <i className="fas fa-info-circle text-secondary me-2"></i>
                     Complete the{" "}
                     <span className="badge bg-warning text-dark mx-1">
-                      {(completecheck?.sections &&
-                        completecheck.sections[
+                      {(completeCheck?.sections &&
+                        completeCheck.sections[
                           `applicant_${field?.toLowerCase()}`
                         ]) ||
                         field}

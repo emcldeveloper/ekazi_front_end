@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Alert, Badge } from "react-bootstrap";
-import { getPackagePrice } from "../../Api/Universal/UniversalApi";
 import { usePackagePrice } from "../../hooks/useUniversal";
 
 const styles = {

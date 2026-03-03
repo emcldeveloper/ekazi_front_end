@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import MainLayout1 from "../../layouts/MainLayout1.js";
+import MainLayout1 from "../../layouts/MainLayout1";
 import { useVerifyAccount } from "../../hooks/useAuth.js";
 import { useResendVerification } from "../../hooks/useAuth.js";
 

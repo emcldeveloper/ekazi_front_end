@@ -8,13 +8,11 @@ import {
   fetchJobCompleteProfile,
   fetchPrimaryData,
   fetchFeaturedJobSeeker,
-  fetchSubscriptionStatus,
   fetchDashboardStatistics,
   fetchSavedJobs,
 
   // ========= MUTATIONS =========
   applyJobInternal,
-  createSubscription,
   uploadProfileImage,
   uploadBackgroundImage,
 
@@ -93,16 +91,6 @@ export const useFeaturedJobSeeker = () =>
     staleTime: 10 * 60 * 1000,
   });
 
-export const useSubscriptionStatus = () => {
-  const applicant_id = localStorage.getItem("applicantId");
-
-  return useQuery({
-    queryKey: ["subscription_status", applicant_id],
-    queryFn: () => fetchSubscriptionStatus(applicant_id),
-    enabled: !!applicant_id,
-  });
-};
-
 export const useDashboardStatistics = () => {
   const applicant_id = localStorage.getItem("applicantId");
 
@@ -150,17 +138,6 @@ export const useSaveJob = () => {
       // Invalidate any query that needs refreshing after saving a job
       qc.invalidateQueries({ queryKey: ["primary_data"] });
       qc.invalidateQueries({ queryKey: ["saved_jobs"] }); // Optional: refresh saved jobs
-    },
-  });
-};
-
-export const useCreateSubscription = () => {
-  const qc = useQueryClient();
-
-  return useMutation({
-    mutationFn: createSubscription,
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["subscription_status"] });
     },
   });
 };

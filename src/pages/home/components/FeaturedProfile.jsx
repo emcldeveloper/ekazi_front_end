@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
-import "./../../../App.css";
 
 import MainLayout1 from "../../../layouts/MainLayout1";
 import AdPlaceholder from "../../../Component/Ads/Vertical/AdPlaceholder";

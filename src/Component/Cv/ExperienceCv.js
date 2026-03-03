@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import PageLoader from "../../widgets/pageLoader";
+import PageLoader from "../../components/pageLoader";
 
 import {
   faBuilding,

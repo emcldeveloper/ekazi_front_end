@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import LeftSideBar from "../Component/Partials/JobSeeker/LeftSideBar";
 import RightSidebar from "../Component/Partials/JobSeeker/RightSidebar";
-import AppFooter from "../Component/Partials/AppFooter";
-import AppHeader from "../Component/Partials/AppHeader";
+import AppFooter from "./AppFooter";
+import AppHeader from "./AppHeader";
 import { FaTimes } from "react-icons/fa";
 import { useWelcomeNote } from "../hooks/useCandidates";
 

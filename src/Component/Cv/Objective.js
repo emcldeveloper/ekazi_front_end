@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import PageLoader from "../../widgets/pageLoader";
+import PageLoader from "../../components/pageLoader";
 import StepProgress from "./Stepprogress";
 import { useCvProfile } from "../../hooks/useCv";
 

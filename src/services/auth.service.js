@@ -1,17 +1,9 @@
 import api from "../lib/axios.js";
 
 export const loginUser = async ({ email, password }) => {
-  try {
-    const res = await api.post("/auth/login", { email, password });
-    return res.data;
-  } catch (error) {
-    // Laravel validation or error message handling
-    const message =
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      "Login failed";
-    throw new Error(message);
-  }
+  const res = await api.post("/auth/login", { email, password });
+
+  return res.data;
 };
 
 export const registerUser = async (formData) => {
@@ -31,7 +23,7 @@ export const registerUser = async (formData) => {
 
 export const verifyAccountRequest = async (verifyKey) => {
   const response = await api.get(
-    `/auth/verify?key=${encodeURIComponent(verifyKey)}`
+    `/auth/verify?key=${encodeURIComponent(verifyKey)}`,
   );
   return response.data;
 };
@@ -49,3 +41,17 @@ export const resetPasswordRequest = async (email) => {
   });
   return response.data;
 };
+
+export const userProfile = async (applicant_id) => {
+  const { data } = await api.get(`/applicant/primarydata/${applicant_id}`);
+  return data;
+};
+
+// export const userProfile = async () => {
+//   const { data } = await api.get("/auth/profile");
+//   return data;
+// };
+
+// export const logoutUser = async () => {
+//   await api.post("/auth/logout");
+// };

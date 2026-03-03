@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import ProfileImageModals from "../../components/profile/ProfileImageModals";
 import BackgroundImageModal from "../../components/profile/BackgroundImageModal";

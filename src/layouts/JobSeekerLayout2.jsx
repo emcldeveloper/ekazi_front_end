@@ -1,8 +1,8 @@
 import { Container, Row, Col } from "react-bootstrap";
 
 import LeftSideBar from "../Component/Partials/JobSeeker/LeftSideBar";
-import AppFooter from "../Component/Partials/AppFooter";
-import AppHeader from "../Component/Partials/AppHeader";
+import AppFooter from "./AppFooter";
+import AppHeader from "./AppHeader";
 
 const JobSeekerLayout2 = ({ children }) => {
   return (

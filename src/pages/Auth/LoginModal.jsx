@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Modal,
   Button,
@@ -12,18 +12,21 @@ import { FaGoogle, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useLogin, useResetPassword } from "../../hooks/useAuth.js";
 
-import { useNavigate } from "react-router-dom";
-
 const LoginModal = ({ show, onHide }) => {
-  const navigate = useNavigate();
-  const loginMutation = useLogin();
-  const [showCandidateForm, setShowCandidateForm] = React.useState(false);
-  const resetMutation = useResetPassword();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // login
+  const { mutate: loginUser, isPending, isError, error } = useLogin();
+
+  // reset password
+  const resetMutation = useResetPassword();
+
+  // Handlers
+  const [showCandidateForm, setShowCandidateForm] = useState(false);
 
   const handleUserChoice = (type) => {
     if (type === "candidate") setShowCandidateForm(true);
@@ -47,33 +50,12 @@ const LoginModal = ({ show, onHide }) => {
       },
     });
   };
+
   const onSubmit = (data) => {
-    loginMutation.mutate(data, {
-      onSuccess: (res) => {
-        localStorage.setItem("auth_token", res.access_token);
-        localStorage.setItem("user_id", res.user_id);
-        localStorage.setItem("role_id", res.role_id);
-        localStorage.setItem("verified", res.verified);
-        localStorage.setItem("applicantId", res.applicant_id);
-        localStorage.setItem("email", res.email);
-        localStorage.setItem("verify_key", res.verify_key);
-
-        const role = res?.role_id;
-
-        // Role-based navigation
-        if (role === 12) {
-          navigate("/jobseeker/dashboard");
-        } else if (role === 9) {
-          navigate("/employer/dashboard");
-        } else {
-          alert("Unknown role. Please contact support.");
-        }
-
+    loginUser(data, {
+      onSuccess: () => {
         setShowCandidateForm(false);
         onHide();
-      },
-      onError: (err) => {
-        console.error(err);
       },
     });
   };
@@ -134,9 +116,9 @@ const LoginModal = ({ show, onHide }) => {
 
           <Form onSubmit={handleSubmit(onSubmit)}>
             {/* Global Login Error */}
-            {loginMutation.isError && (
+            {isError && (
               <div className="text-danger text-center mb-3">
-                {loginMutation.error.message}
+                {error.message}
               </div>
             )}
 
@@ -171,9 +153,9 @@ const LoginModal = ({ show, onHide }) => {
               type="submit"
               className="text-light form-lg bntLogin mb-3 w-100"
               style={{ backgroundColor: "#D36314" }}
-              disabled={loginMutation.isPending}
+              disabled={isPending}
             >
-              {loginMutation.isPending ? (
+              {isPending ? (
                 <>
                   <Spinner animation="border" size="sm" className="me-2" />
                   Logging in...
@@ -225,7 +207,7 @@ const LoginModal = ({ show, onHide }) => {
                   className="px-3 py-1 rounded-pill"
                   onClick={() =>
                     handleResetPassword(
-                      document.querySelector('input[type="email"]').value
+                      document.querySelector('input[type="email"]').value,
                     )
                   }
                 >

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Badge, Image, Button } from "react-bootstrap";
-import useJobs from "../../hooks/Jobs/useJobs";
+
 import JobDetailModal from "../Jobs/JobDetailModel/JobModelDetail";
 import { formatDate } from "../../utils/dateUtils";
+import { useJobs } from "../../hooks/useJobs";
 
 const EmployerJobs = ({ client }) => {
-  const { jobs, loading, error } = useJobs();
+  const { jobs, isPending: isLoading, isError } = useJobs({ limit: 12, page: 1 });
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -28,9 +29,9 @@ const EmployerJobs = ({ client }) => {
     <div className="mt-4">
       <h4 className="text-primary mb-3">Jobs at {client.client_name}</h4>
 
-      {loading && <p>Loading jobs...</p>}
-      {error && <p className="text-danger">Error loading jobs.</p>}
-      {!loading && employerJobs.length === 0 && (
+      {isLoading && <p>Loading jobs...</p>}
+      {isError && <p className="text-danger">Error isLoading jobs.</p>}
+      {!isLoading && employerJobs.length === 0 && (
         <p className="text-muted">No job postings found for this employer.</p>
       )}
 

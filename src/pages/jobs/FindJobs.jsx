@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
-import MainLayout2 from "../../../layouts/MainLayout2";
-import FilterJobs from "../../../Component/Jobs/FilterJobs";
-import SideBarListJobs from "../../../Component/Jobs/SideBarListJobs";
-import JobDetails from "../../home/components/JobDetails";
-import JobSearchFilter from "../../jobs/components/JobSearchFilter";
+import FilterJobs from "../../Component/Jobs/FilterJobs";
+import MainLayout1 from "../../layouts/MainLayout1";
+import SideBarListJobs from "../../Component/Jobs/SideBarListJobs";
+import PageHeader from "../../Component/Pages/PageHeader";
+import JobDetails from "../home/components/JobDetails";
 
-const Jobs = () => {
+const FindJobs = () => {
   const location = useLocation();
 
   const [selectedJob, setSelectedJob] = useState(null);
@@ -35,9 +35,9 @@ const Jobs = () => {
   }, [location.search]);
 
   return (
-    <MainLayout2>
+    <MainLayout1>
+      <PageHeader title="Find Jobs" />
       <Container className="mt-4" style={{ minHeight: "100vh" }}>
-        <JobSearchFilter />
         {/* Filters */}
         <Row className="mb-4">
           <Col>
@@ -99,8 +99,8 @@ const Jobs = () => {
           </Col>
         </Row>
       </Container>
-    </MainLayout2>
+    </MainLayout1>
   );
 };
 
-export default Jobs;
+export default FindJobs;

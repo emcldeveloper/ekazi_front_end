@@ -1,21 +1,24 @@
-import React, { useContext } from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import { UniversalContext } from "../../context/UniversalContext";
 import toTitleCase from "../../utils/toTitleCase";
+import {
+  useCountries,
+  useIndustry,
+  usePositionLevel,
+  useRegions,
+} from "../../hooks/useUniversal";
+import { useEducationLevels } from "../../hooks/profile/useEducation";
 
 const JobSeekerFilterForm = ({
   filters,
   setFilters,
   handleInputChange,
-  clearFilters
+  clearFilters,
 }) => {
-  const {
-    countries = [],
-    regions = [],
-    industries = [],
-    positionLevels = [],
-    educationLevels = [],
-  } = useContext(UniversalContext);
+  const { data: countries } = useCountries();
+  const { data: regions } = useRegions();
+  const { data: industries } = useIndustry();
+  const { data: positionLevels } = usePositionLevel();
+  const { data: educationLevels } = useEducationLevels();
 
   return (
     <div

@@ -51,14 +51,7 @@ export const fetchPrimaryData = async (applicant_id) => {
 
 export const fetchFeaturedJobSeeker = async () => {
   const res = await api.get(`/applicant/feacture-candidate`);
-  return res.data.data;
-};
-
-export const fetchSubscriptionStatus = async (applicant_id) => {
-  const res = await api.get(
-    `/applicant/accountsubscriptionStatus/${applicant_id}`,
-  );
-  return res.data?.verification_status ?? null;
+  return res.data.data.data;
 };
 
 export const fetchDashboardStatistics = async (applicant_id) => {
@@ -117,11 +110,6 @@ export const createSoftware = async (data) => {
 
 export const createExperience = async (data) => {
   const res = await api.post("/applicant/experiencestore", data);
-  return res.data;
-};
-
-export const createSubscription = async (data) => {
-  const res = await api.post("/applicant/accountsubscription", data);
   return res.data;
 };
 
