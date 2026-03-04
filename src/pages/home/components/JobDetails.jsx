@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 import Checkcompleteprofile from "../../../Component/Profile/Checkcomplete";
 import { useSaveJob } from "../../../hooks/useCandidates";
+import { DEFAULT_LOGO, IMG_BASE } from "../../../helpers/img";
 
 const JobDetails = ({ job, appliedJobIds = [] }) => {
   const navigate = useNavigate();
@@ -180,12 +181,11 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
           <Row className="my-3">
             <Col md={3}>
               <img
-                src={
-                  `https://api.ekazi.co.tz/${j.client?.logo}` ||
-                  "default-logo.png"
-                }
-                alt={j.client?.client_name || "Company Logo"}
+                src={`${IMG_BASE}${job.client?.logo || ""}`}
+                alt={job.client?.client_name || "Company Logo"}
+                className="img-fluid object-fit-cover"
                 style={{ maxWidth: 120, maxHeight: 75 }}
+                onError={(e) => (e.target.src = DEFAULT_LOGO)}
               />
             </Col>
 

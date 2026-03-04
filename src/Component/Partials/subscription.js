@@ -8,7 +8,7 @@ import {
   useSubscriptionStatus,
 } from "../../hooks/useSubscriptions";
 
-const SubscriptionSection = ({ isLoggedIn }) => {
+const SubscriptionSection = () => {
   const applicant_id = localStorage.getItem("applicantId");
 
   const [showSubscription, setShowSubscription] = useState(false);
@@ -62,31 +62,29 @@ const SubscriptionSection = ({ isLoggedIn }) => {
 
   return (
     <>
-      {isLoggedIn && (
-        <Nav.Link
-          onClick={handleSubscriptionOpen}
-          className="upgrade-btn ms-lg-3 my-2 my-lg-0"
-          style={{
-            background: "linear-gradient(90deg, #D36314, #FF8C00)",
-            color: "#fff",
-            fontWeight: "500",
-            borderRadius: "18px",
-            padding: "6px 14px",
-            fontSize: "12px",
-            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.15)",
-            textTransform: "capitalize",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            transition: "all 0.3s ease",
-          }}
-          onMouseOver={(e) => (e.target.style.opacity = "0.9")}
-          onMouseOut={(e) => (e.target.style.opacity = "1")}
-        >
-          <FaUserCircle style={{ fontSize: "13px" }} />
-          Upgrade
-        </Nav.Link>
-      )}
+      <Nav.Link
+        onClick={handleSubscriptionOpen}
+        className="upgrade-btn ms-lg-3 my-2 my-lg-0"
+        style={{
+          background: "linear-gradient(90deg, #D36314, #FF8C00)",
+          color: "#fff",
+          fontWeight: "500",
+          borderRadius: "18px",
+          padding: "6px 14px",
+          fontSize: "12px",
+          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.15)",
+          textTransform: "capitalize",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          transition: "all 0.3s ease",
+        }}
+        onMouseOver={(e) => (e.target.style.opacity = "0.9")}
+        onMouseOut={(e) => (e.target.style.opacity = "1")}
+      >
+        <FaUserCircle style={{ fontSize: "13px" }} />
+        Upgrade
+      </Nav.Link>
 
       {/* Subscription Modal */}
       <Modal show={showSubscription} onHide={handleSubscriptionClose} centered>

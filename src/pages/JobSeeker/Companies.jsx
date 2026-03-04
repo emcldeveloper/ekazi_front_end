@@ -5,7 +5,7 @@ import MainLayout2 from "../../layouts/MainLayout2.jsx";
 import { useEmployers } from "../../hooks/useEmployer.js";
 import EmployerFilter from "../../Component/Employer/EmployerFilter.js";
 import AllEmployerList from "../../Component/Employer/AllEmployerList.js";
-import AdPlaceholder from "../../Component/Ads/Vertical/AdPlaceholder.js";
+import AdPlaceholder from "../../components/ads/AdPlaceholder.jsx";
 
 const Companies = () => {
   const [filters, setFilters] = useState({

@@ -4,7 +4,7 @@ import PageHeader from "../../Component/Pages/PageHeader.js";
 import { Row, Col, Container } from "react-bootstrap";
 import EmployerFilter from "../../Component/Employer/EmployerFilter.js";
 import AllEmployerList from "../../Component/Employer/AllEmployerList.js";
-import AdPlaceholder from "../../Component/Ads/Vertical/AdPlaceholder.js";
+import AdPlaceholder from "../ads/AdPlaceholder.jsx";
 import { useEmployers } from "../../hooks/useEmployer.js";
 
 const Employer = () => {

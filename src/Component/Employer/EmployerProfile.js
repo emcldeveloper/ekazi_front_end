@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import EmployerProfileCard from "./EmployerProfileCard";
 import AboutEmployer from "./AboutEmployer";
 import EmployerJobs from "./EmployerJobs";
-import AdPlaceholder from "../Ads/Vertical/AdPlaceholder";
+import AdPlaceholder from "../../components/ads/AdPlaceholder";
 
 const EmployerProfile = () => {
   const location = useLocation();

@@ -23,6 +23,7 @@ import {
   usePrimaryData,
 } from "../../../hooks/useCandidates";
 import { useAllThreads } from "../../../hooks/candidates/useCorrespondence";
+import { FaUserAlt, FaUserPlus } from "react-icons/fa";
 
 const LeftSideBar = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const LeftSideBar = () => {
 
   return (
     <div className="d-flex flex-column gap-2">
-      <Card className="shadow-sm">
+      <Card className="shadow-sm ">
         <div style={{ position: "relative" }}>
           {/* Cover Image */}
           <div
@@ -169,18 +170,23 @@ const LeftSideBar = () => {
           </div>
 
           {/* Dashboard & Accordions */}
-          <h6
-            className="border-top pt-2 text-start fw-semibold d-flex align-items-center cursor-pointer"
-            onClick={() => navigate("/jobseeker/dashboard")}
-          >
-            <BarChartFill className="me-2" /> Dashboard
-          </h6>
-
           <Accordion
             flush
             className="text-start mb-1"
             style={{ maxHeight: "300px", overflowY: "auto" }}
           >
+            <Accordion.Item
+              className="d-flex align-items-center pl-5 py-2.5 cursor-pointer"
+              onClick={() => navigate("/jobseeker/dashboard")}
+            >
+              <BarChartFill className="me-2" /> Dashboard
+            </Accordion.Item>
+            <Accordion.Item
+              className="d-flex align-items-center pl-5 py-2.5 cursor-pointer"
+              onClick={() => navigate("/jobseeker/profile-preview")}
+            >
+              <FaUserAlt className="me-2" /> Profile
+            </Accordion.Item>
             {[
               {
                 key: "0",
@@ -195,7 +201,7 @@ const LeftSideBar = () => {
               {
                 key: "1",
                 title: "My Correspondence",
-                icon: <PersonFill className="me-2" />,
+                icon: <FaUserPlus className="me-2" />,
                 items: [
                   {
                     name: "Inbox",

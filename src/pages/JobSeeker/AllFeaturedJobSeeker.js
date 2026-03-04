@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import AllFeaturedCandidate from "../../Component/FeatureCandidate/AllFeaturedCandidate";
 import MainLayout1 from "../../layouts/MainLayout1";
 import PageHeader from "../../Component/Pages/PageHeader";
-import AdPlaceholder from "../../Component/Ads/Vertical/AdPlaceholder";
+import AdPlaceholder from "../../components/ads/AdPlaceholder";
 
 const AllFeaturedJobSeeker = () => {
   useEffect(() => {

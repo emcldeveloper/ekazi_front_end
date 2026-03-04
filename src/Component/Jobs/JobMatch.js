@@ -8,6 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 import JobDetailModal from "../../Component/Jobs/JobDetailModel/JobModelDetail";
 import "react-circular-progressbar/dist/styles.css";
 import { useJobMatch } from "../../hooks/useJobs";
+import { DEFAULT_LOGO, IMG_BASE } from "../../helpers/img";
 
 const MatchJobList = () => {
   const navigate = useNavigate();
@@ -157,22 +158,10 @@ const MatchJobList = () => {
                       style={{ width: "100%", height: "100%" }}
                     >
                       <img
-                        src={
-                          job.client?.logo
-                            ? `https://api.ekazi.co.tz/${job.client.logo}`
-                            : "/default-logo.png"
-                        }
-                        alt={job.client?.name || "Company Logo"}
-                        className="img-fluid h-100 w-100 object-fit-cover"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          display: "block",
-                        }}
-                        onError={(e) => {
-                          e.target.src = "/default-logo.png";
-                        }}
+                        src={`${IMG_BASE}${job.client?.logo || ""}`}
+                        alt={job.client?.client_name || "Company Logo"}
+                        className="img-fluid w-100 h-100 object-fit-cover"
+                        onError={(e) => (e.target.src = DEFAULT_LOGO)}
                       />
                     </div>
                   </Col>

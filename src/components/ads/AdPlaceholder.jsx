@@ -1,6 +1,8 @@
-import React from "react";
-
-const AdPlaceholder = ({ width = "100%", height = "300px", label = "Ad Space" }) => {
+const AdPlaceholder = ({
+  width = "100%",
+  height = "300px",
+  label = "Ad Space",
+}) => {
   return (
     <div
       style={{

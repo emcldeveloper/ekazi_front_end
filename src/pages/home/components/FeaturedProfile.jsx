@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
 
 import MainLayout1 from "../../../layouts/MainLayout1";
-import AdPlaceholder from "../../../Component/Ads/Vertical/AdPlaceholder";
+import AdPlaceholder from "../../../components/ads/AdPlaceholder";
 import PersonalDetails from "./featured-candidates/PersonalDetails";
 import About from "./featured-candidates/About";
 import Experience from "./featured-candidates/Experience";

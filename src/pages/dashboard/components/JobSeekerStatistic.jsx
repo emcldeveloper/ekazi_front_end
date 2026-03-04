@@ -159,13 +159,10 @@ const JobSeekerStatistic = () => {
                       style={{ width: "100%", height: "100%" }}
                     >
                       <img
-                        src={
-                          job.client?.logo
-                            ? `${IMG_BASE}${job.client.logo}`
-                            : DEFAULT_LOGO
-                        }
+                        src={`${IMG_BASE}${job.client?.logo || ""}`}
                         alt={job.client?.client_name || "Company Logo"}
                         className="img-fluid h-100 w-100 object-fit-cover"
+                        onError={(e) => (e.target.src = DEFAULT_LOGO)}
                       />
                     </div>
                   </Col>

@@ -68,7 +68,7 @@ const PriceList = () => {
     <section style={styles.section}>
       <Row className="mb-4">
         <Col>
-          <h2 style={styles.heading}>Employer Subscription Plans</h2>
+          <h2 style={styles.heading}>Subscription Plans</h2>
 
           {error && (
             <Alert
