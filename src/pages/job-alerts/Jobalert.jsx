@@ -1,6 +1,6 @@
 import { Card, Button } from "react-bootstrap";
 import { useState } from "react";
-import CreateJobAlertModal from "../../Forms/JobSeeker/Jobalertmodel";
+import CreateJobAlertModal from "../../Component/Forms/JobSeeker/Jobalertmodel";
 
 const JobAlertsSection = ({ subscription }) => {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -17,15 +17,16 @@ const JobAlertsSection = ({ subscription }) => {
           <p className="text-muted small mb-3">
             Get notified when new jobs match your profile.
           </p>
-       <Button
-          
+          <Button
             className="w-100"
             onClick={handleOpen}
-            style={{ backgroundColor: "rgb(211, 99, 20)", color: "rgb(255, 255, 255)" }}
-            >
+            style={{
+              backgroundColor: "rgb(211, 99, 20)",
+              color: "rgb(255, 255, 255)",
+            }}
+          >
             Create Job Alert
-            </Button>
-
+          </Button>
         </Card.Body>
       </Card>
 

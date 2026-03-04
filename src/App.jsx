@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Home from "./pages/home/Home";
 
-import Correspondence from "./pages/MyApplicantion/Correspondence";
+import Correspondence from "./pages/correspondence/Correspondence";
 
 import JobMatch from "./pages/MyApplicantion/JobMatch";
 import JobPreview from "./pages/home/components/JobPreview";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ApplicantCorrespondence from "../../Component/Profile/ApplicantCorrespondence";
+import ApplicantCorrespondence from "../correspondence/ApplicantCorrespondence";
 import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 
@@ -8,7 +8,7 @@ const SentCorrespondence = () => {
 
   // Filter only rejected correspondences
   const rejectedCorrespondences = correspondences.filter(
-    (c) => c.status === "rejected"
+    (c) => c.status === "rejected",
   );
 
   return (

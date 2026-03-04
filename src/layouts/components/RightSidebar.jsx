@@ -1,9 +1,9 @@
 import { Card, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-import JobAlertsSection from "./Jobalert";
-import { useEmployers } from "../../../hooks/useEmployer";
-import TemplateSlider from "../../../pages/JobSeeker/Cv/components/TemplateSlider";
+import JobAlertsSection from "../../pages/job-alerts/Jobalert";
+import { useEmployers } from "../../hooks/useEmployer";
+import TemplateSlider from "../../pages/JobSeeker/Cv/components/TemplateSlider";
 
 const RightSideBar = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const RightSideBar = () => {
               <div
                 key={company.id}
                 onClick={() =>
-                  navigate(`/employer/details`, {
+                  navigate(`/jobseeker/employer/details`, {
                     state: { client: company },
                   })
                 }

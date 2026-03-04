@@ -8,7 +8,7 @@ export const createSubscriptionApi = async (payload) => {
 
 export const getSubscriptionApi = async (applicant_id) => {
   const res = await api.get(
-    `applicant/accountsubscriptionStatus/${applicant_id}`,
+    `/applicant/accountsubscriptionStatus/${applicant_id}`,
   );
 
   return res.data;

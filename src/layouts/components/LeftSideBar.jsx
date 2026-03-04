@@ -18,11 +18,8 @@ import {
   InfoCircleFill,
 } from "react-bootstrap-icons";
 
-import {
-  useCompleteProfile,
-  usePrimaryData,
-} from "../../../hooks/useCandidates";
-import { useAllThreads } from "../../../hooks/candidates/useCorrespondence";
+import { useCompleteProfile, usePrimaryData } from "../../hooks/useCandidates";
+import { useAllThreads } from "../../hooks/candidates/useCorrespondence";
 import { FaUserAlt, FaUserPlus } from "react-icons/fa";
 
 const LeftSideBar = () => {

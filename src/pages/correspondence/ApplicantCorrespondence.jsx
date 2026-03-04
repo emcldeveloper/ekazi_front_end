@@ -17,9 +17,12 @@ import {
   useDeleteThread,
 } from "../../hooks/candidates/useCorrespondence";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ApplicantCorrespondence = () => {
   const applicantId = localStorage.getItem("applicantId");
+
+  const navigate = useNavigate();
 
   // fetching all correspondences
   const { data: correspondences = [], isPending: isLoading } =
@@ -143,8 +146,11 @@ const ApplicantCorrespondence = () => {
         <Col md={8}>
           <Card className="border-0">
             <Card.Header>
-              <h5 className="mb-0">
-                {activeCorrespondence?.subject || "Select a message"}
+              <h5
+                className="mb-0 cursor-pointer underline"
+                onClick={() => navigate("/jobseeker/My-application")}
+              >
+                {activeCorrespondence?.subject}
               </h5>
             </Card.Header>
 

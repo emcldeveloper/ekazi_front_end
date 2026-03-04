@@ -92,8 +92,9 @@ const JobPreview = () => {
       <Container className="py-4">
         <Breadcrumb className="custom-breadcrumb">
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="/jobs">Jobs</Breadcrumb.Item>
           <Breadcrumb.Item active className="text-black">
-            {job.job_position?.position_name || "Untitled Job"}
+            {job.job_position?.position_name}
           </Breadcrumb.Item>
         </Breadcrumb>
 

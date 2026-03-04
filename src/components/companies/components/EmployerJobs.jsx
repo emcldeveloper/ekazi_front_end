@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Badge, Image, Button } from "react-bootstrap";
 
-import JobDetailModal from "../Jobs/JobDetailModel/JobModelDetail";
-import { formatDate } from "../../utils/dateUtils";
-import { useJobs } from "../../hooks/useJobs";
+import JobDetailModal from "../../../Component/Jobs/JobDetailModel/JobModelDetail";
+import { formatDate } from "../../../utils/dateUtils";
+import { useJobs } from "../../../hooks/useJobs";
 
 const EmployerJobs = ({ client }) => {
-  const { jobs, isPending: isLoading, isError } = useJobs({ limit: 12, page: 1 });
+  const {
+    jobs,
+    isPending: isLoading,
+    isError,
+  } = useJobs({ limit: 12, page: 1 });
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
 

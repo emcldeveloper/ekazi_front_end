@@ -8,10 +8,10 @@ import {
   FaEnvelope,
   FaGlobe,
 } from "react-icons/fa";
-import JoinModal from "../Forms/Employer/Contants/JoinModal";
-import MessageModal from "../Forms/Employer/Contants/MessageModal";
-import RateModal from "../Forms/Employer/Contants/RateModal";
-import { DEFAULT_LOGO, IMG_BASE } from "../../helpers/img";
+import JoinModal from "../../../Component/Forms/Employer/Contants/JoinModal";
+import MessageModal from "../../../Component/Forms/Employer/Contants/MessageModal";
+import RateModal from "../../../Component/Forms/Employer/Contants/RateModal";
+import { DEFAULT_LOGO, IMG_BASE } from "../../../helpers/img";
 
 const EmployerProfileCard = ({ client, isAuthenticated }) => {
   const [showJoin, setShowJoin] = useState(false);

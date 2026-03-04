@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-import ApplicantCorrespondence from "../../Component/Profile/ApplicantCorrespondence";
+import ApplicantCorrespondence from "./ApplicantCorrespondence";
 import JobSeekerLayout2 from "../../layouts/JobSeekerLayout2";
 
 const Correspondence = () => {

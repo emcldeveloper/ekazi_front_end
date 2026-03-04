@@ -17,7 +17,11 @@ const SubscriptionSection = () => {
   const [paymentCode, setPaymentCode] = useState("");
   const fullName = "Halidi Selemani";
 
+  // get subscription status
   const { data: subscriptionData } = useSubscriptionStatus(applicant_id);
+  const subscriptionStatus = subscriptionData?.verification_status;
+
+  // create subscription
   const { mutateAsync: createSubscription, isPending } =
     useCreateSubscription();
 

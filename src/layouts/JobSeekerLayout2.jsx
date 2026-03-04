@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
 
-import LeftSideBar from "../Component/Partials/JobSeeker/LeftSideBar";
+import LeftSideBar from "./components/LeftSideBar";
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
 

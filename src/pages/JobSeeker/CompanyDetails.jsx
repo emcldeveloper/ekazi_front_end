@@ -1,4 +1,4 @@
-import EmployerProfile from "../../Component/Employer/EmployerProfile";
+import EmployerProfile from "../../components/companies/components/EmployerProfile";
 import MainLayout2 from "../../layouts/MainLayout2";
 
 const CompanyDetails = () => {

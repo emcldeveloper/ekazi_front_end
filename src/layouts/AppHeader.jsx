@@ -21,7 +21,7 @@ import { Bell } from "react-bootstrap-icons";
 import { RxAvatar } from "react-icons/rx";
 import dayjs from "dayjs";
 
-import SubscriptionSection from "../Component/Partials/subscription";
+import SubscriptionSection from "../pages/subscriptions/Subscription";
 import { useAllThreads } from "../hooks/candidates/useCorrespondence";
 
 const AppHeader = () => {

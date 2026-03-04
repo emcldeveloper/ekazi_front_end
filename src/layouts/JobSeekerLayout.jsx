@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Alert } from "react-bootstrap";
-import LeftSideBar from "../Component/Partials/JobSeeker/LeftSideBar";
-import RightSidebar from "../Component/Partials/JobSeeker/RightSidebar";
+import LeftSideBar from "./components/LeftSideBar";
+import RightSidebar from "./components/RightSidebar";
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
 import { FaTimes } from "react-icons/fa";

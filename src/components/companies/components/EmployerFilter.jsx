@@ -1,7 +1,7 @@
 import { Card, Form, Button } from "react-bootstrap";
-import toTitleCase from "../../utils/toTitleCase";
-import { useCountries, useIndustry } from "../../hooks/useUniversal";
-import { useJobCountByRegion } from "../../hooks/useJobCategories";
+import toTitleCase from "../../../utils/toTitleCase";
+import { useCountries, useIndustry } from "../../../hooks/useUniversal";
+import { useJobCountByRegion } from "../../../hooks/useJobCategories";
 
 const EmployerFilter = ({ filters, onChange, onReset }) => {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -52,7 +52,7 @@ const EmployerFilter = ({ filters, onChange, onReset }) => {
           industries,
           "name",
           "industry_name",
-          "industry"
+          "industry",
         )}
 
         {renderSelect(
@@ -61,7 +61,7 @@ const EmployerFilter = ({ filters, onChange, onReset }) => {
           countries,
           "name",
           "name",
-          "country"
+          "country",
         )}
 
         {renderSelect(
@@ -70,7 +70,7 @@ const EmployerFilter = ({ filters, onChange, onReset }) => {
           regions,
           "name",
           "region_name",
-          "region"
+          "region",
         )}
 
         <div className="mb-3">

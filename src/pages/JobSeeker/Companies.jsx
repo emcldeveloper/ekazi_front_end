@@ -3,8 +3,8 @@ import { Row, Col, Container } from "react-bootstrap";
 
 import MainLayout2 from "../../layouts/MainLayout2.jsx";
 import { useEmployers } from "../../hooks/useEmployer.js";
-import EmployerFilter from "../../Component/Employer/EmployerFilter.js";
-import AllEmployerList from "../../Component/Employer/AllEmployerList.js";
+import EmployerFilter from "../../components/companies/components/EmployerFilter.jsx";
+import AllEmployerList from "../../components/companies/components/AllEmployerList.jsx";
 import AdPlaceholder from "../../components/ads/AdPlaceholder.jsx";
 
 const Companies = () => {
