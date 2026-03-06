@@ -73,7 +73,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="animate__animated animate__fadeInLeft mt-6 text-lg text-gray-600">
+          <p className="animate__animated animate__fadeInLeft mt-3 text-lg text-gray-600">
             Set your career in motion with Ekazi. Discover opportunities,
             connect with employers, and build your future.
           </p>
@@ -145,7 +145,7 @@ export default function HeroSection() {
         {/* RIGHT IMAGE */}
         <div className="hidden lg:flex justify-center lg:justify-end">
           <img
-            src="/images/hero-1.png"
+            src="/images/hero-1-short-2.png"
             alt="Professional woman"
             className="w-[380px] lg:w-[400px] object-contain"
           />

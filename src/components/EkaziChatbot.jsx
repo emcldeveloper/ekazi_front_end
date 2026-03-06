@@ -126,13 +126,6 @@ export default function EkaziChatbot() {
     setIsLoading(true);
 
     try {
-      // ── BACKEND CALL ──────────────────────────────────
-      // In production, replace this URL with your own API route:
-      //   const res = await fetch("/api/chat", { ... })
-      //
-      // For now this calls Claude directly (dev/testing only).
-      // NEVER ship an API key in frontend code to production!
-      // ──────────────────────────────────────────────────
       const res = await fetch(
         "https://api.restaurant.faharii.com/api/v1/chatbot",
         {
@@ -172,26 +165,31 @@ export default function EkaziChatbot() {
     <>
       {/* ── CHAT WINDOW ─────────────────────────────── */}
       <div
-        className={`fixed bottom-24 right-6 w-[370px] h-[560px] bg-gray-950 rounded-2xl border border-white/8 shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 origin-bottom-right ${
-          isOpen
-            ? "opacity-100 scale-100 pointer-events-auto"
-            : "opacity-0 scale-90 pointer-events-none"
-        }`}
+        className={`fixed bottom-24 right-6  w-[92vw] sm:w-[380px] 
+  h-[min(520px,calc(100vh-120px))] bg-gray-950 rounded-2xl border border-white/8 shadow-2xl flex flex-col overflow-hidden z-[9999] transition-all duration-300 origin-bottom-right ${
+    isOpen
+      ? "opacity-100 scale-100 pointer-events-auto"
+      : "opacity-0 scale-90 pointer-events-none"
+  }`}
         style={{
           boxShadow:
             "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(22,163,74,0.12)",
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3.5 bg-gradient-to-r from-green-900 to-green-800 border-b border-white/5 flex-shrink-0">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-300 flex items-center justify-center text-white font-black text-base flex-shrink-0">
-            EK
+        <div className="flex items-center gap-3 px-4 py-3.5 bg-Blue border-b border-white/5 flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-white font-black text-base flex-shrink-0">
+            <img
+              src="/logo.png"
+              alt="Ekazi Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <h3 className="text-white font-bold text-sm leading-tight">
               Ekazi Assistant
             </h3>
-            <p className="text-green-300 text-xs flex items-center gap-1.5 mt-0.5">
+            <p className="text-green-300 text-xs flex items-center gap-1.5 mt-0.5 m-0">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
               Online · Ready to help
             </p>
@@ -240,7 +238,7 @@ export default function EkaziChatbot() {
         )}
 
         {/* Input */}
-        <div className="flex items-end gap-2 px-3 pb-4 pt-2 border-t border-white/5 bg-gray-900 flex-shrink-0">
+        <div className="flex items-end gap-2 p-3 border-t border-white/5 bg-gray-900 flex-shrink-0">
           <textarea
             ref={inputRef}
             value={input}
@@ -248,7 +246,7 @@ export default function EkaziChatbot() {
             onKeyDown={handleKeyDown}
             placeholder="Ask me anything about Ekazi..."
             rows={1}
-            className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-green-700 resize-none max-h-24 leading-relaxed transition-colors"
+            className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-green-700 resize-none max-h-24 leading-relaxed transition-colors"
             style={{ scrollbarWidth: "none" }}
           />
           <button
@@ -271,16 +269,12 @@ export default function EkaziChatbot() {
             </svg>
           </button>
         </div>
-
-        <p className="text-center text-xs text-gray-700 pb-2.5 flex-shrink-0">
-          Powered by Claude AI · Ekazi Support
-        </p>
       </div>
 
       {/* ── LAUNCHER BUTTON ─────────────────────────── */}
       <button
         onClick={() => setIsOpen((o) => !o)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 shadow-xl shadow-green-900/50 flex items-center justify-center z-50 transition-all hover:scale-110 active:scale-95"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 shadow-xl shadow-green-900/50 flex items-center justify-center z-[9999] transition-all hover:scale-110 active:scale-95"
         aria-label="Open Ekazi chat support"
       >
         {/* Pulse ring */}
