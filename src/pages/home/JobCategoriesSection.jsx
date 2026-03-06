@@ -7,7 +7,7 @@ import Locations from "./components/categories/Locations";
 
 const JobCategoriesSection = () => {
   return (
-    <Container fluid className="my-5 p-4 bg-white">
+    <Container fluid className="py-5 p-4 bg-white">
       <h2 className="text-center fw-bold" style={{ color: "#2E58A6" }}>
         Job Categories
       </h2>

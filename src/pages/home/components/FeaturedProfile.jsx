@@ -32,6 +32,9 @@ const FeaturedProfile = () => {
         <Container className="py-4">
           <Breadcrumb className="custom-breadcrumb">
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+            <Breadcrumb.Item href="/featured-jobseeker">
+              Featured Candidates
+            </Breadcrumb.Item>
             <Breadcrumb.Item active className="text-black">
               Candidate Profile
             </Breadcrumb.Item>

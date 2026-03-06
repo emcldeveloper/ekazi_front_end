@@ -29,7 +29,7 @@ import IntroductionData from "./pages/JobSeeker/Cv/Introduction";
 import ObjectDetail from "./pages/JobSeeker/Cv/Objective";
 import EducationCv from "./pages/JobSeeker/Cv/Education";
 import AboutPage from "./pages/AboutPage";
-import PricePage from "./pages/PricePage";
+import PricePage from "./pages/pricing/PricePage";
 import ExperinceCv from "./pages/JobSeeker/Cv/Experience";
 import SkillsCv from "./pages/JobSeeker/Cv/Skills";
 import LanguageCv from "./pages/JobSeeker/Cv/Language";
@@ -70,6 +70,8 @@ import Jobs from "./pages/JobSeeker/Jobs/Jobs";
 import Calculator from "./pages/JobSeeker/Calculator";
 import Companies from "./pages/JobSeeker/Companies";
 import CompanyDetails from "./pages/JobSeeker/CompanyDetails";
+import JobsPage from "./pages/home/JobsPage";
+import EkaziChatbot from "./components/EkaziChatbot";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -82,6 +84,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      {/* chatbot */}
+      <EkaziChatbot />
+
       <CVDataProvider>
         <BrowserRouter>
           {/* <ScrollToTop /> */}
@@ -97,7 +102,7 @@ function App() {
             <Route path="/cv-builder" element={<CvBuilder />} />
             <Route path="/salary-calculator" element={<SalaryCalculator />} />
 
-            <Route path="/jobs" element={<FindJobs />} />
+            <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:jobSlug" element={<JobPreview />} />
             <Route path="/apply-job-email" element={<ApplyJobEmail />} />
 

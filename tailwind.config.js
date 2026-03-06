@@ -8,6 +8,8 @@ module.exports = {
         secondary: "#D36314",
         darkShadow: "#3C414F",
         dark: "#111729",
+        Blue: "#1756a5",
+        Orange: "#d36415",
       },
       animation: {
         marquee: "marquee 10s linear infinite",

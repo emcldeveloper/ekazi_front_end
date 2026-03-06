@@ -7,12 +7,17 @@ const FeaturedEmployers = ({ jobCompanies }) => {
   const safeCompanies = Array.isArray(jobCompanies) ? jobCompanies : [];
 
   // Duplicate array for scrolling effect
-  const employers = [...safeCompanies, ...safeCompanies];
+  const employers = [
+    ...safeCompanies,
+    ...safeCompanies,
+    ...safeCompanies,
+    ...safeCompanies,
+  ];
 
   return (
-    <Col md={12} className="bg-white p-4">
+    <Col md={12} className=" p-4">
       <h2 className="text-center fw-bold mb-4" style={{ color: "#2E58A6" }}>
-        Employers
+        Featured Employers
       </h2>
 
       <div className="position-relative overflow-hidden w-100">
@@ -36,8 +41,8 @@ const FeaturedEmployers = ({ jobCompanies }) => {
                         alt={employer.client_name || "Employer"}
                         roundedCircle
                         style={{
-                          width: "50px",
-                          height: "50px",
+                          width: "120px",
+                          height: "120px",
                           objectFit: "contain",
                           backgroundColor: "white",
                         }}
@@ -51,7 +56,7 @@ const FeaturedEmployers = ({ jobCompanies }) => {
         </div>
       </div>
 
-      <div className="d-flex justify-content-center mt-4">
+      {/* <div className="d-flex justify-content-center mt-4">
         <Button
           href="/employer/find"
           style={{ backgroundColor: "#D36314", borderColor: "#D36314" }}
@@ -59,7 +64,7 @@ const FeaturedEmployers = ({ jobCompanies }) => {
         >
           Browse All
         </Button>
-      </div>
+      </div> */}
 
       <style>{`
         .employer-scroll {

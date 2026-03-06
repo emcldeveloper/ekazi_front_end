@@ -19,9 +19,9 @@ const Home = () => {
     <div style={{ backgroundColor: "#DFE3E2" }}>
       <MainLayout1>
         <HeroSection />
-        <JobSearchSection />
+        {/* <JobSearchSection /> */}
+        {/* <StatisticsSection /> */}
         <BannerSection />
-        <StatisticsSection />
         <FeaturedEmployerSection />
         <JobCategoriesSection />
         <FeaturedJobsSection />

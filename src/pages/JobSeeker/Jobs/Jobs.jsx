@@ -6,7 +6,7 @@ import MainLayout2 from "../../../layouts/MainLayout2";
 import FilterJobs from "../../../Component/Jobs/FilterJobs";
 import SideBarListJobs from "../../../Component/Jobs/SideBarListJobs";
 import JobDetails from "../../home/components/JobDetails";
-import JobSearchFilter from "../../jobs/components/JobSearchFilter";
+import JobSearchFilter from "../../../components/jobs/JobSearchFilter";
 
 const Jobs = () => {
   const location = useLocation();

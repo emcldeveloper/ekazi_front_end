@@ -17,9 +17,9 @@ const AppFooter = () => {
   const handleCloseMap = () => setShowMap(false);
 
   return (
-    <section className="bg-light w-100">
+    <section className="bg-Blue text-white w-100">
       <Container className="p-4">
-        <Row className="my-5">
+        {/* <Row className="my-5">
           <Col md={4} className="text-center">
             <div className="d-flex flex-col align-items-center">
               <FaCheckCircle color="#D36314" size={32} className="mb-4" />
@@ -47,102 +47,109 @@ const AppFooter = () => {
               </p>
             </div>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row className="mt-4 justify-content-center">
+        <div className="my-4 grid md:grid-cols-4 gap-8 md:gap-20">
           {/* Logo & Social Links */}
-          <Col md={3}>
+          <div>
             <img
-              src="/logo.png"
+              src="/logos/ekazi-white.png"
               alt="eKazi Logo"
               style={{ maxWidth: "120px", marginBottom: "10px" }}
             />
-            <p className="mb-2 text-muted">
-              © {currentYear}.
-              <a href="https://ekazi.co.tz/" className="text-primary ms-1">
-                eKazi.co.tz
-              </a>
+            <p className="mb-4 text-gray-300">
+              ekazi is An Online Recruitment Management Platform Designed for
+              Employers/Recruiters, Job Seekers and Freelancers.
             </p>
             <div className="d-flex gap-3">
               <a
                 href="https://facebook.com/eKazi.co.tz"
-                className="text-primary"
+                className=" text-white"
                 title="Facebook"
               >
                 <BsFacebook size={20} />
               </a>
-              <a
+              {/* <a
                 href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
-                className="text-primary"
+                className="text-white"
                 alt="LinkedIn"
               >
                 <BsLinkedin size={20} />
-              </a>
+              </a> */}
               <a
                 href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
-                className="text-primary"
+                className="text-white"
                 alt="Twitter"
               >
                 <BsTwitter size={20} />
               </a>
               <a
                 href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
-                className="text-primary"
+                className="text-white"
                 title="Twitter"
               >
                 <BsInstagram size={20} />
               </a>
             </div>
-          </Col>
+          </div>
 
           {/* Job Seeker Links */}
-          <Col md={3}>
+          <div>
             <h6 className="fw-bold">Job seeker</h6>
             {[
               ["Jobs", "/jobs"],
+              ["Employers", "/employers"],
               ["CV builder", "/cv-builder"],
-              ["Companies", "/employers"],
+              ["Salary Calculator", "/salary-calculator"],
               ["Login", "/login"],
               ["Register", "/register"],
             ].map(([label, link]) => (
               <div key={label}>
-                <a href={link} alt={label} className="text-primary">
+                <a
+                  href={link}
+                  alt={label}
+                  className="text-gray-300 text-decoration-none"
+                >
                   {label}
                 </a>
               </div>
             ))}
-          </Col>
+          </div>
 
           {/* Employer Links */}
-          <Col md={3}>
+          <div>
             <h6 className="fw-bold">Employer</h6>
             {[
               ["Post a job", "/login"],
-              ["Find talents", "/candidates"],
+              ["Featured candidates", "/featured-jobseeker"],
               ["Login", "/login"],
               ["Register", "/register"],
             ].map(([label, link]) => (
               <div key={label}>
-                <a href={link} alt={label} className="text-primary">
+                <a
+                  href={link}
+                  alt={label}
+                  className="text-gray-300 text-decoration-none"
+                >
                   {label}
                 </a>
               </div>
             ))}
-          </Col>
+          </div>
 
           {/* Information Links */}
-          <Col md={3}>
+          <div>
             <h6 className="fw-bold">Company</h6>
 
-            <a href="/about" className="text-primary">
+            <a href="/about" className="text-gray-300 text-decoration-none">
               About us
             </a>
 
             {/* View Map Button */}
             <div className="my-2">
               <span
-                className="text-primary"
-                style={{ cursor: "pointer", textDecoration: "underline" }}
+                className="text-gray-300"
+                style={{ cursor: "pointer" }}
                 onClick={handleOpenMap}
               >
                 View Map
@@ -153,14 +160,14 @@ const AppFooter = () => {
             <div>
               <span
                 onClick={handleOpenModal}
-                className="text-primary"
-                style={{ cursor: "pointer", textDecoration: "underline" }}
+                className="text-white"
+                style={{ cursor: "pointer" }}
               >
                 Contact
               </span>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
 
         {/* Modals */}
         <ContactModal show={showModal} handleClose={handleCloseModal} />
@@ -168,10 +175,18 @@ const AppFooter = () => {
       </Container>
 
       {/* Copyright */}
-      <div className="bg-[#1E65A6] w-100 p-4 text-center">
-        <p className="m-0 text-white">
-          {`© ${currentYear}. All rights reserved.`}
-        </p>
+      <div className="bg-[#1E65A6] w-100 p-4 flex flex-col md:flex-row justify-between items-center">
+        <div>
+          <p className=" text-white text-sm">
+            {`© ${currentYear}. All rights reserved.`}
+          </p>
+        </div>
+
+        <div className="flex items-center text-sm gap-3">
+          <p>Terms & Conditions</p>
+          <p>|</p>
+          <p>Privacy Policy</p>
+        </div>
       </div>
     </section>
   );

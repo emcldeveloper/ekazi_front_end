@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
 import AllFeaturedCandidate from "../../Component/FeatureCandidate/AllFeaturedCandidate";
 import MainLayout1 from "../../layouts/MainLayout1";
 import PageHeader from "../../Component/Pages/PageHeader";
@@ -12,11 +12,17 @@ const AllFeaturedJobSeeker = () => {
 
   return (
     <MainLayout1>
-      <PageHeader title="All Featured Job Seekers" />
       <div style={{ backgroundColor: "#cccccc", paddingBottom: "20px" }}>
         {" "}
         {/* Set background color here */}
-        <Container>
+        <Container className="py-4">
+          <Breadcrumb className="custom-breadcrumb">
+            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+            <Breadcrumb.Item active className="text-black">
+              Featured Candidates
+            </Breadcrumb.Item>
+          </Breadcrumb>
+
           <Row>
             {/* Main Content: Candidates list */}
             <Col md={9}>

@@ -2,8 +2,7 @@ import React from "react";
 import { Card, Button, Col, Row } from "react-bootstrap";
 import { FaEye, FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { DEFAULT_LOGO, IMG_BASE } from "../../../helpers/img";
-// import { DEFAULT_LOGO, IMG_BASE } from "../../helpers/img";
+import { DEFAULT_LOGO, IMG_BASE } from "../../../../helpers/img";
 
 // Slugify utility
 const slugify = (text) =>

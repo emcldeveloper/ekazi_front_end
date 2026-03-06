@@ -7,7 +7,7 @@ const FeaturedEmployerSection = () => {
   const { data: jobCompanies, isLoading, isError, error } = useEmployers(1, 20);
 
   return (
-    <Container className="my-5">
+    <Container fluid className="bg-white py-5">
       {isError && <Alert variant="danger">{error?.message}</Alert>}
 
       {isLoading ? (

@@ -56,7 +56,7 @@ const SearchModalForm = ({
   };
 
   return (
-    <Modal show={showModal} onHide={handleClose} size="lg" centered>
+    <Modal show={showModal} onHide={handleClose} size="lg" centered scrollable>
       <Modal.Header closeButton>
         <Modal.Title>Search Results</Modal.Title>
       </Modal.Header>
@@ -137,10 +137,10 @@ const SearchModalForm = ({
                         >
                           {new Date(job.dead_line) < new Date()
                             ? `Expired: ${new Date(
-                                job.dead_line
+                                job.dead_line,
                               ).toLocaleDateString()}`
                             : `Deadline: ${new Date(
-                                job.dead_line
+                                job.dead_line,
                               ).toLocaleDateString()}`}
                         </div>
                       </div>
