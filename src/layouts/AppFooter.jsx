@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import { FaCheckCircle } from "react-icons/fa";
-import { BsFacebook, BsLinkedin, BsTwitter, BsInstagram } from "react-icons/bs";
+import { Container } from "react-bootstrap";
+import {
+  BsFacebook,
+  BsLinkedin,
+  BsInstagram,
+  BsWhatsapp,
+} from "react-icons/bs";
 
 import ContactModal from "../Component/Pages/ContactModal";
 import MapModal from "../Component/Pages/MapModal";
@@ -19,36 +23,6 @@ const AppFooter = () => {
   return (
     <section className="bg-Blue text-white w-100">
       <Container className="p-4">
-        {/* <Row className="my-5">
-          <Col md={4} className="text-center">
-            <div className="d-flex flex-col align-items-center">
-              <FaCheckCircle color="#D36314" size={32} className="mb-4" />
-              <h6 className="text-primary font-bold">Hire Candidate</h6>
-              <p className="text-primary">
-                Find the potential candidate from eKazi
-              </p>
-            </div>
-          </Col>
-
-          <Col md={4} className="text-center">
-            <div className="d-flex flex-col align-items-center">
-              <FaCheckCircle color="#D36314" size={32} className="mb-4" />
-              <h6 className="text-primary font-bold">Get Hired</h6>
-              <p className="text-primary">Receive new jobs directly</p>
-            </div>
-          </Col>
-
-          <Col md={4} className="text-center">
-            <div className="d-flex flex-col align-items-center">
-              <FaCheckCircle color="#D36314" size={32} className="mb-4" />
-              <h6 className="text-primary font-bold">Explore Careers</h6>
-              <p className="text-primary">
-                See personalized job and career recommendations
-              </p>
-            </div>
-          </Col>
-        </Row> */}
-
         <div className="my-4 grid md:grid-cols-4 gap-8 md:gap-20">
           {/* Logo & Social Links */}
           <div>
@@ -66,27 +40,35 @@ const AppFooter = () => {
                 href="https://facebook.com/eKazi.co.tz"
                 className=" text-white"
                 title="Facebook"
+                target="_blank"
+                rel="noreferrer"
               >
                 <BsFacebook size={20} />
               </a>
-              {/* <a
-                href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
+              <a
+                href="https://www.linkedin.com/company/ekazi-online-recruitment-platform/"
                 className="text-white"
                 alt="LinkedIn"
+                target="_blank"
+                rel="noreferrer"
               >
                 <BsLinkedin size={20} />
-              </a> */}
+              </a>
               <a
-                href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
+                href="https://whatsapp.com/channel/0029VayXx2m0VycFOUT7wI1K"
                 className="text-white"
-                alt="Twitter"
+                alt="WhatsApp"
+                target="_blank"
+                rel="noreferrer"
               >
-                <BsTwitter size={20} />
+                <BsWhatsapp size={20} />
               </a>
               <a
                 href="https://www.instagram.com/ekazi.co.tz?igsh=M2VyNW5keTlnbHFn"
                 className="text-white"
-                title="Twitter"
+                alt="Instagram"
+                target="_blank"
+                rel="noreferrer"
               >
                 <BsInstagram size={20} />
               </a>
@@ -101,8 +83,8 @@ const AppFooter = () => {
               ["Employers", "/employers"],
               ["CV builder", "/cv-builder"],
               ["Salary Calculator", "/salary-calculator"],
-              ["Login", "/login"],
-              ["Register", "/register"],
+              ["View applications", "/login"],
+              ["Job alerts", "/login"],
             ].map(([label, link]) => (
               <div key={label}>
                 <a
@@ -122,8 +104,8 @@ const AppFooter = () => {
             {[
               ["Post a job", "/login"],
               ["Featured candidates", "/featured-jobseeker"],
-              ["Login", "/login"],
-              ["Register", "/register"],
+              ["Applicant tracking", "/login"],
+              ["Search resume", "/login"],
             ].map(([label, link]) => (
               <div key={label}>
                 <a

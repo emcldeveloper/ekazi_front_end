@@ -14,6 +14,7 @@ const Category = () => {
       <h4 className="mb-4">Industries with Job Listings</h4>
 
       {isLoading && <p>Loading...</p>}
+
       {isError && <p>Error loading industries.</p>}
 
       {!isLoading && industryCounts?.length === 0 && (
@@ -23,7 +24,7 @@ const Category = () => {
       {!isLoading && industryCounts?.length > 0 && (
         <div className="row">
           {industryCounts.map((industry) => {
-            const formattedName = industry.industry_name
+            const formattedName = industry?.industry_name
               .toLowerCase()
               .split(" ")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -39,7 +40,7 @@ const Category = () => {
                 </span>
 
                 <Link
-                  to={`/jobs?industry=${industry.id}`}
+                  to={`/jobs?industry=${encodeURIComponent(industry.industry_name)}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedName}

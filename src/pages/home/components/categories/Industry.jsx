@@ -9,6 +9,7 @@ const Industries = () => {
       <h4 className="mb-4">Jobs by Industry</h4>
 
       {isLoading && <p>Loading...</p>}
+
       {isError && <p>Error loading industries.</p>}
 
       {!isLoading && categories?.length === 0 && <p>No industries found.</p>}
@@ -32,7 +33,7 @@ const Industries = () => {
                 </span>
 
                 <Link
-                  to={`/jobs?industry=${category.category_id}`}
+                  to={`/jobs?industry=${encodeURIComponent(category.category_name)}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedCategoryName}

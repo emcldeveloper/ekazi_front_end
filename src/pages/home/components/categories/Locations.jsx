@@ -10,6 +10,7 @@ const Locations = () => {
       <h4 className="mb-4">Jobs by Location</h4>
 
       {isLoading && <p>Loading...</p>}
+
       {isError && <p>Error loading locations.</p>}
 
       {!isLoading && regions?.length === 0 && <p>No job locations found.</p>}
@@ -33,7 +34,7 @@ const Locations = () => {
                 </span>
 
                 <Link
-                  to={`/jobs?region=${region.region_id}`}
+                  to={`/jobs?region=${encodeURIComponent(region.region_name)}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedRegionName}

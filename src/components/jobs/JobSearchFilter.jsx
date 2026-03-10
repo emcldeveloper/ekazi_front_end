@@ -1,13 +1,12 @@
 import { useState } from "react";
 import {
-  useCountries,
   useIndustry,
   useJobTypes,
   usePositionLevel,
   useRegions,
 } from "../../hooks/useUniversal";
 
-const JobFilters = ({ onFilterChange }) => {
+const JobFilters = ({ onFilterChange, initialFilters }) => {
   const { data: industries } = useIndustry();
   const { data: jobTypesData } = useJobTypes();
   const { data: regions } = useRegions();
@@ -16,7 +15,7 @@ const JobFilters = ({ onFilterChange }) => {
   const tanzaniaRegions = regions?.filter((region) => region.country_id === 1);
 
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
+  const [industry, setIndustry] = useState(initialFilters?.industry || "All");
   const [jobTypes, setJobTypes] = useState([]);
   const [positionLevelsSelected, setPositionLevelsSelected] = useState([]);
   const [location, setLocation] = useState("");
@@ -41,7 +40,7 @@ const JobFilters = ({ onFilterChange }) => {
 
     triggerFilters({
       search,
-      category,
+      industry,
       jobTypes: key === "jobTypes" ? updated : jobTypes,
       positionLevels:
         key === "positionLevels" ? updated : positionLevelsSelected,
@@ -54,16 +53,16 @@ const JobFilters = ({ onFilterChange }) => {
 
     triggerFilters({
       search: value,
-      category,
+      industry,
       jobTypes,
-      positionLevels,
+      positionLevels: positionLevelsSelected,
       location,
     });
   };
 
   const clearFilters = () => {
     setSearch("");
-    setCategory("All");
+    setIndustry("All");
     setJobTypes([]);
     setPositionLevelsSelected([]);
     setLocation("");
@@ -71,7 +70,7 @@ const JobFilters = ({ onFilterChange }) => {
 
     triggerFilters({
       search: "",
-      category: "All",
+      industry: "All",
       jobTypes: [],
       positionLevels: [],
       location: "",
@@ -80,19 +79,19 @@ const JobFilters = ({ onFilterChange }) => {
 
   return (
     <div className="w-full mb-4">
-      <div className="flex items-center gap-4 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 max-w-7xl mx-auto">
         {/* Industry */}
         <select
-          value={category}
+          value={industry}
           onChange={(e) => {
             const value = e.target.value;
-            setCategory(value);
+            setIndustry(value);
 
             triggerFilters({
               search,
-              category: value,
+              industry: value,
               jobTypes,
-              positionLevels,
+              positionLevels: positionLevelsSelected,
               location,
             });
           }}
@@ -141,7 +140,10 @@ const JobFilters = ({ onFilterChange }) => {
               <p className="font-semibold mb-3">Job Type</p>
 
               {jobTypesData?.map((type) => (
-                <label key={type.id} className="flex gap-2 mb-2">
+                <label
+                  key={type.id}
+                  className="flex items-center gap-2 mb-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     onChange={() =>
@@ -163,7 +165,10 @@ const JobFilters = ({ onFilterChange }) => {
               <p className="font-semibold mb-3">Experience</p>
 
               {positionLevels?.map((level) => (
-                <label key={level.id} className="flex gap-2 mb-2">
+                <label
+                  key={level.id}
+                  className="flex items-center gap-2 mb-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     onChange={() =>
@@ -192,9 +197,9 @@ const JobFilters = ({ onFilterChange }) => {
 
                   triggerFilters({
                     search,
-                    category,
+                    industry,
                     jobTypes,
-                    positionLevels,
+                    positionLevels: positionLevelsSelected,
                     location: value,
                   });
                 }}

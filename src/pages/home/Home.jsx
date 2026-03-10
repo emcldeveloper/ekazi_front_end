@@ -1,7 +1,5 @@
 import MainLayout1 from "../../layouts/MainLayout1";
 import HeroSection from "./HeroSection";
-import JobSearchSection from "./JobSearchSection";
-import StatisticsSection from "./StatisticsSection";
 import JobCategoriesSection from "./JobCategoriesSection";
 import FeaturedEmployerSection from "./FeaturedEmployerSection";
 import BannerSection from "./BannerSection";
@@ -19,8 +17,6 @@ const Home = () => {
     <div style={{ backgroundColor: "#DFE3E2" }}>
       <MainLayout1>
         <HeroSection />
-        {/* <JobSearchSection /> */}
-        {/* <StatisticsSection /> */}
         <BannerSection />
         <FeaturedEmployerSection />
         <JobCategoriesSection />

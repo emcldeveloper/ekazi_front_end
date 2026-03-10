@@ -2,19 +2,39 @@ import { Alert, Button, Container, Row, Spinner } from "react-bootstrap";
 import MainLayout1 from "../../layouts/MainLayout1";
 import useJob from "../../hooks/useJob";
 import JobCard from "./components/jobs/JobCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JobFilters from "../../components/jobs/JobSearchFilter";
+import { useSearchParams } from "react-router-dom";
 
 const JobsPage = () => {
+  const [searchParams] = useSearchParams();
+
+  // jobs fetch
   const { jobs, loading, error, hasMore, loadMore, loadingMore } = useJob();
-  console.log("JobsPage:", jobs);
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    industry: searchParams.get("industry") || "All",
+    region: searchParams.get("region") || "",
+  });
 
+  // update filters when URL search params change
+  useEffect(() => {
+    const industry = searchParams.get("industry");
+    const region = searchParams.get("region");
+
+    setFilters((prev) => ({
+      ...prev,
+      industry: industry || "All",
+      location: region || "",
+    }));
+  }, [searchParams]);
+
+  // handle filter changes from the JobFilters component
   const handleFilterChange = (filterValues) => {
     setFilters(filterValues);
   };
 
+  // client-side filtering of jobs based on selected filters
   const filteredJobs = jobs.filter((job) => {
     const search = filters.search?.toLowerCase() || "";
 
@@ -25,12 +45,13 @@ const JobsPage = () => {
       return false;
     }
 
-    if (
-      filters.category &&
-      filters.category !== "All" &&
-      job.industry?.industry_name !== filters.category
-    ) {
-      return false;
+    if (filters.industry && filters.industry !== "All") {
+      const jobIndustry = job.industry?.industry_name?.toLowerCase() || "";
+      const selectedIndustry = filters.industry.toLowerCase();
+
+      if (!jobIndustry.includes(selectedIndustry)) {
+        return false;
+      }
     }
 
     if (
@@ -62,13 +83,23 @@ const JobsPage = () => {
   return (
     <MainLayout1>
       <Container className="my-5">
-        <JobFilters onFilterChange={handleFilterChange} />{" "}
+        <JobFilters
+          onFilterChange={handleFilterChange}
+          initialFilters={filters}
+        />
+
         {error && <Alert variant="danger">{error.message}</Alert>}
+
         <Row>
           {filteredJobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </Row>
+        {!loading && filteredJobs.length === 0 && (
+          <div className="text-center my-4">
+            <Alert variant="info">No jobs match the selected filters.</Alert>
+          </div>
+        )}
         {/* Initial Loading */}
         {loading && (
           <div className="text-center my-3">
