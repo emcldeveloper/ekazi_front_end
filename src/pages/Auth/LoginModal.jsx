@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Modal,
-  Button,
-  Form,
-  Row,
-  Col,
-  Spinner,
-  Container,
-} from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
 import { FaGoogle, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useLogin, useResetPassword } from "../../hooks/useAuth.js";
@@ -97,22 +89,23 @@ const LoginModal = ({ show, onHide }) => {
         show={showCandidateForm}
         onHide={() => setShowCandidateForm(false)}
         centered
+        scrollable
       >
         <Modal.Header closeButton>
           <Modal.Title as="h5" className="modal-title">
-            JobSeeker Login
+            Login as job seeker
           </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <Container className="d-flex justify-content-center mb-3">
-            <span
-              className="bg-light text-dark text-center px-4 py-2"
+          <div className="d-flex justify-content-center mb-3">
+            <p
+              className=" text-Blue text-center font-semibold"
               style={{ fontSize: "20px", borderRadius: "5px" }}
             >
-              Welcome to eKazi Portal
-            </span>
-          </Container>
+              Welcome to ekazi portal
+            </p>
+          </div>
 
           <Form onSubmit={handleSubmit(onSubmit)}>
             {/* Global Login Error */}
@@ -148,11 +141,24 @@ const LoginModal = ({ show, onHide }) => {
               )}
             </Form.Group>
 
+            <div className="text-right">
+              <p
+                className="text-Blue font-semibold text-sm cursor-pointer hover:text-underline"
+                onClick={() =>
+                  handleResetPassword(
+                    document.querySelector('input[type="email"]').value,
+                  )
+                }
+              >
+                Forgot your password?
+              </p>
+            </div>
+
             {/* SUBMIT BUTTON */}
             <Button
               type="submit"
-              className="text-light form-lg bntLogin mb-3 w-100"
-              style={{ backgroundColor: "#D36314" }}
+              className="text-white font-semibold mb-3 w-100"
+              style={{ backgroundColor: "#D36314", border: "none" }}
               disabled={isPending}
             >
               {isPending ? (
@@ -164,74 +170,34 @@ const LoginModal = ({ show, onHide }) => {
                 "Login"
               )}
             </Button>
-
-            <hr />
-
-            {/* SOCIAL LOGIN */}
-            <div className="text-center mb-3">
-              <span className="d-block mb-2">Sign in with:</span>
-
-              <Button
-                href="/login/linkedin-openid"
-                className="btn-sm me-2 text-white"
-                style={{ backgroundColor: "#00acee" }}
-              >
-                <FaLinkedin />
-              </Button>
-
-              <Button
-                href="/login/google"
-                className="btn-sm me-2 text-white"
-                style={{ backgroundColor: "#db4437" }}
-              >
-                <FaGoogle />
-              </Button>
-
-              <Button
-                href="/login/twitter"
-                className="btn-sm text-white"
-                style={{ backgroundColor: "#1da1f2" }}
-              >
-                <FaTwitter />
-              </Button>
-            </div>
-
-            <hr />
-
-            {/* BOTTOM OPTIONS */}
-            <Row className="text-center py-3">
-              <Col md={6} className="mb-3">
-                <p className="mb-2 text-muted">Forgot your password?</p>
-                <Button
-                  variant="outline-primary"
-                  className="px-3 py-1 rounded-pill"
-                  onClick={() =>
-                    handleResetPassword(
-                      document.querySelector('input[type="email"]').value,
-                    )
-                  }
-                >
-                  Reset Password
-                </Button>
-              </Col>
-
-              <Col md={6} className="mb-3">
-                <p className="mb-2 text-muted">
-                  New to <strong>eKazi</strong>?
-                </p>
-
-                <Button
-                  variant="outline-primary"
-                  className="px-3 py-1 rounded-pill"
-                  onClick={() => setShowCandidateForm(false)}
-                >
-                  Register
-                </Button>
-              </Col>
-            </Row>
-
-            <hr />
           </Form>
+
+          {/* SOCIAL LOGIN */}
+          <p className="d-block text-center text-muted mb-4">
+            or continue with
+          </p>
+          <div className="flex items-center gap-4 mb-3">
+            <button className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border border-blue-100 text-Blue hover:bg-blue-100 transition">
+              <FaLinkedin size={18} /> Linkedin
+            </button>
+
+            <button className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border border-blue-100 text-Blue hover:bg-blue-100 transition">
+              <FaGoogle size={18} /> Google
+            </button>
+          </div>
+
+          {/* BOTTOM OPTIONS */}
+          <div className="text-center py-3">
+            <p className="mb-2 text-muted">
+              don't have ekazi account?{" "}
+              <span
+                onClick={() => setShowCandidateForm(false)}
+                className="text-Blue font-semibold hover:text-underline cursor-pointer"
+              >
+                Register
+              </span>
+            </p>
+          </div>
         </Modal.Body>
       </Modal>
     </>
