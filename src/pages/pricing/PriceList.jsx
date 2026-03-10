@@ -10,7 +10,7 @@ const Pricing = () => {
     <div className="w-full min-h-screen bg-gray-100  py-5 px-6">
       <div className="max-w-6xl mx-auto text-center">
         {/* Heading */}
-        <h1 className="text-4xl font-semibold text-gray-900 mb-6">
+        <h1 className="text-4xl font-semibold text-Blue mb-6">
           Our Pricing Plans
         </h1>
 

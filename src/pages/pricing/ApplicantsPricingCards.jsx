@@ -55,7 +55,7 @@ export default function ApplicantsPricingCards() {
           hover:shadow-xl hover:-translate-y-1 transition duration-300"
         >
           {/* Plan Name */}
-          <h3 className="text-xl font-semibold text-gray-900">{plan.name}</h3>
+          <h3 className="text-xl font-semibold text-Orange">{plan.name}</h3>
 
           {/* Price */}
           <div className="mt-4">

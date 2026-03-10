@@ -2,23 +2,23 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
 
-import MainLayout1 from "../../../layouts/MainLayout1";
-import AdPlaceholder from "../../../components/ads/AdPlaceholder";
-import PersonalDetails from "./featured-candidates/PersonalDetails";
-import About from "./featured-candidates/About";
-import Experience from "./featured-candidates/Experience";
-import Education from "./featured-candidates/Education";
-import Language from "./featured-candidates/Language";
-import Culture from "./featured-candidates/Culture";
-import Personality from "./featured-candidates/Personality";
-import Skills from "./featured-candidates/Skills";
-import SoftwareandTools from "./featured-candidates/SoftwaerAndTools";
-import Proficiency from "./featured-candidates/Proficiency";
-import Training from "./featured-candidates/Training";
-import JobFit from "./featured-candidates/JobFit";
-import ProfileAssessment from "./featured-candidates/ProfileAsse";
+import MainLayout1 from "../../layouts/MainLayout1";
+import AdPlaceholder from "../../components/ads/AdPlaceholder";
+import PersonalDetails from "./components/PersonalDetails";
+import About from "./components/About";
+import Experience from "./components/Experience";
+import Education from "./components/Education";
+import Language from "./components/Language";
+import Culture from "./components/Culture";
+import Personality from "./components/Personality";
+import Skills from "./components/Skills";
+import SoftwareandTools from "./components/SoftwaerAndTools";
+import Proficiency from "./components/Proficiency";
+import Training from "./components/Training";
+import JobFit from "./components/JobFit";
+import ProfileAssessment from "./components/ProfileAsse";
 
-const FeaturedProfile = () => {
+const CandidateProfile = () => {
   const { state } = useLocation();
   const candidate = state?.candidate;
 
@@ -32,7 +32,7 @@ const FeaturedProfile = () => {
         <Container className="py-4">
           <Breadcrumb className="custom-breadcrumb">
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="/featured-jobseeker">
+            <Breadcrumb.Item href="/candidates">
               Featured Candidates
             </Breadcrumb.Item>
             <Breadcrumb.Item active className="text-black">
@@ -83,4 +83,4 @@ const FeaturedProfile = () => {
   );
 };
 
-export default FeaturedProfile;
+export default CandidateProfile;

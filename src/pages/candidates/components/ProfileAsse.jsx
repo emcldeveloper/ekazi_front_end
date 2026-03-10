@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaEye, FaStar, FaRegStar } from "react-icons/fa";
 import { Row, Col, Container } from "react-bootstrap";
-import { useCreateRating } from "../../../../hooks/useRatings";
+import { useCreateRating } from "../../../hooks/useRatings";
 
 const ProfileAssessment = ({ candidate }) => {
   const { mutate } = useCreateRating();

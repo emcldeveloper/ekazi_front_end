@@ -20,11 +20,11 @@ Language: Respond in the same language the user writes in — support both Engli
 If you don't know a specific Ekazi detail (e.g. exact pricing), say so honestly and suggest visiting ekazi.co.tz or contacting Ekazi support.`;
 
 const QUICK_REPLIES = [
-  "How do I post a job?",
-  "How do I apply for jobs?",
-  "How do I create an account?",
-  "Is Ekazi free to use?",
-  "How do I reset my password?",
+  // "How do I post a job?",
+  // "How do I apply for jobs?",
+  // "How do I create an account?",
+  // "Is Ekazi free to use?",
+  // "How do I reset my password?",
 ];
 
 // ─────────────────────────────────────────────
@@ -274,7 +274,7 @@ export default function EkaziChatbot() {
       {/* ── LAUNCHER BUTTON ─────────────────────────── */}
       <button
         onClick={() => setIsOpen((o) => !o)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 shadow-xl shadow-green-900/50 flex items-center justify-center z-[9999] transition-all hover:scale-110 active:scale-95"
+        className="fixed bottom-10 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 shadow-xl shadow-green-900/50 flex items-center justify-center z-[9999] transition-all hover:scale-110 active:scale-95"
         aria-label="Open Ekazi chat support"
       >
         {/* Pulse ring */}

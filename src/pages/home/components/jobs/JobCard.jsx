@@ -43,8 +43,8 @@ const JobCard = ({ job }) => {
   const jobUrl = `/jobs/${jobSlug}`;
 
   return (
-    <Col md={4} className="mb-2">
-      <Card style={{ backgroundColor: "#fff" }}>
+    <Col md={4} className="mb-4">
+      <Card className="h-100 shadow-md rounded-lg hover-shadow">
         <Card.Body>
           {/* Top Row: Logo + Job Type */}
           <div className="d-flex justify-content-between align-items-center mb-3">

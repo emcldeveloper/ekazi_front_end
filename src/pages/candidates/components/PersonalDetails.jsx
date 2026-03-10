@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
-import { IMG_BASE } from "../../../../helpers/img";
+import { IMG_BASE } from "../../../helpers/img";
 
 const defaultImage = "/pre_profile/pre_photo.jpg";
 

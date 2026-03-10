@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
-import { Row, Container, Spinner, Alert, Button } from "react-bootstrap";
-import FeatureCandidate from "./components/FeatureCandidate.jsx";
+import { Row, Container, Spinner, Alert, Button, Col } from "react-bootstrap";
+
 import { useFeaturedJobSeeker } from "../../hooks/useCandidates.js";
+import CandidateCard from "../candidates/CandidateCard.jsx";
 
 const FeaturedCandidateSection = () => {
   const { data, isLoading, isError, error } = useFeaturedJobSeeker();
 
-  const candidates = Array.isArray(data) ? data : data?.data ?? [];
+  const candidates = Array.isArray(data) ? data : (data?.data ?? []);
 
   return (
     <Container className="my-5">
@@ -32,13 +33,15 @@ const FeaturedCandidateSection = () => {
       {!isLoading && !isError && (
         <Row>
           {candidates.slice(0, 9).map((candidate) => (
-            <FeatureCandidate key={candidate.id} candidate={candidate} />
+            <Col key={candidate.id} md={4} className="mb-4">
+              <CandidateCard candidate={candidate} />
+            </Col>
           ))}
         </Row>
       )}
 
       <div className="text-center mt-4">
-        <Link to="/featured-jobseeker" style={{ textDecoration: "none" }}>
+        <Link to="/candidates" style={{ textDecoration: "none" }}>
           <Button variant="primary" className="btn-md">
             Browse All
           </Button>

@@ -78,7 +78,7 @@ export default function EmployersPricingCards() {
           hover:shadow-xl transition duration-300"
         >
           {/* Title */}
-          <h3 className="text-xl font-semibold text-gray-900">{plan.title}</h3>
+          <h3 className="text-xl font-semibold text-Orange">{plan.title}</h3>
 
           {/* Price */}
           <div className="mt-3 mb-2">

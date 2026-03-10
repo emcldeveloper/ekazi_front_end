@@ -157,17 +157,19 @@ const AppFooter = () => {
       </Container>
 
       {/* Copyright */}
-      <div className="bg-[#1E65A6] w-100 p-4 flex flex-col md:flex-row justify-between items-center">
-        <div>
-          <p className=" text-white text-sm">
-            {`© ${currentYear}. All rights reserved.`}
-          </p>
-        </div>
+      <div className="bg-[#1E65A6] w-100 p-4 ">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+          <div>
+            <p className=" text-white text-sm">
+              {`© ${currentYear}. All rights reserved.`}
+            </p>
+          </div>
 
-        <div className="flex items-center text-sm gap-3">
-          <p>Terms & Conditions</p>
-          <p>|</p>
-          <p>Privacy Policy</p>
+          <div className="flex items-center text-sm gap-3">
+            <p>Terms & Conditions</p>
+            <p>|</p>
+            <p>Privacy Policy</p>
+          </div>
         </div>
       </div>
     </section>

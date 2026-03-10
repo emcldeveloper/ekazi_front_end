@@ -10,12 +10,10 @@ import JobPreview from "./pages/home/components/JobPreview";
 
 import MyProfile from "./pages/JobSeeker/MyProfile";
 import CvBuilder from "./pages/CvBuilder";
-import FeaturedProfile from "./pages/home/components/FeaturedProfile";
 import SampleTemplate from "./pages/JobSeeker/Cv/SampleTemplate";
 import AppliedJob from "./pages/JobSeeker/JobSeeker/MyApplication";
 import SavedJob from "./pages/JobSeeker/Jobs/SavedJob";
 import SavedSearchJob from "./pages/JobSeeker/Jobs/SavedSearchJob";
-import AllFeaturedJobSeeker from "./pages/JobSeeker/AllFeaturedJobSeeker";
 import MyAccount from "./pages/JobSeeker/MyAccount";
 import ChangePassword from "./pages/JobSeeker/Auth/ChangePassword";
 import Privatepolicy from "./pages/JobSeeker/PrivatePolicy";
@@ -72,6 +70,9 @@ import Companies from "./pages/JobSeeker/Companies";
 import CompanyDetails from "./pages/JobSeeker/CompanyDetails";
 import JobsPage from "./pages/home/JobsPage";
 import EkaziChatbot from "./components/EkaziChatbot";
+import ScrollToTop from "./components/ScrollToTop";
+import FeaturedCandidates from "./pages/candidates/FeaturedCandidates";
+import CandidateProfile from "./pages/candidates/CandidateProfile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,7 +90,7 @@ function App() {
 
       <CVDataProvider>
         <BrowserRouter>
-          {/* <ScrollToTop /> */}
+          <ScrollToTop />
 
           <Routes>
             {/* Account verification  here */}
@@ -105,23 +106,14 @@ function App() {
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:jobSlug" element={<JobPreview />} />
             <Route path="/apply-job-email" element={<ApplyJobEmail />} />
-
+            <Route path="/candidates" element={<FeaturedCandidates />} />
+            <Route path="/candidates/:slug" element={<CandidateProfile />} />
             <Route path="/employers" element={<Employer />} />
             <Route path="/employer/details" element={<EmployerDetails />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/pricelists" element={<PricePage />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:slug" element={<ArticleDetails />} />
-
-            <Route
-              path="/job-seeker-profile/:slug"
-              element={<FeaturedProfile />}
-            />
-
-            <Route
-              path="/featured-jobseeker"
-              element={<AllFeaturedJobSeeker />}
-            />
 
             {/* Protected Routes */}
             {/* Jobseeker */}
