@@ -118,7 +118,7 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
             {/* Views */}
             <div className="flex flex-col items-center">
               <FaEye className="text-Orange" />
-              <div className="text-sm text-Blue mt-1">Views</div>
+              <div className="text-sm mt-1">Views</div>
               <div className="text-sm">{j.statistic?.job_views ?? 0}</div>
             </div>
 
