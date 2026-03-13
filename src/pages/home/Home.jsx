@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import MainLayout1 from "../../layouts/MainLayout1";
 import HeroSection from "./HeroSection";
 import JobCategoriesSection from "./JobCategoriesSection";
@@ -6,7 +8,6 @@ import BannerSection from "./BannerSection";
 import FeaturedJobsSection from "./FeaturedJobsSection";
 import FeaturedCandidateSection from "./FeaturedCandidateSection";
 import ArticlesSection from "./articles/ArticlesSection";
-import { useEffect } from "react";
 
 const Home = () => {
   useEffect(() => {

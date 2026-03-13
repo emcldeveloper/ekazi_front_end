@@ -28,6 +28,7 @@ import Template6 from "../../../../templates/template6";
 import Template7 from "../../../../templates/template7";
 import Template9 from "../../../../templates/template9";
 import Template8 from "../../../../templates/template8";
+import Template40 from "../../../../templates/template40";
 
 // template registry
 export const TEMPLATE_MAP = {
@@ -61,6 +62,7 @@ export const TEMPLATE_MAP = {
   // template28: Template28,
   // template29: Template29,
   // template30: Template30,
+  template40: Template40,
 };
 
 export const TEMPLATES = [
@@ -267,11 +269,11 @@ export const TEMPLATES = [
   //   image: "/templates/Template29.png",
   //   component: Template29,
   // },
-  // {
-  //   id: 30,
-  //   key: "template30",
-  //   name: "Template 30",
-  //   image: "/templates/Template30.png",
-  //   component: Template30,
-  // },
+  {
+    id: 40,
+    key: "template40",
+    name: "Template 40",
+    image: "/templates/Template30.png",
+    component: Template40,
+  },
 ];

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Row,
   Container,
@@ -9,19 +9,20 @@ import {
   Card,
 } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
+import { ArrowRight } from "lucide-react";
 
 import { useArticles } from "../../../hooks/useArticles.js";
-import ArticlesList from "./ArticlesList.jsx";
 
 const ArticlesSection = () => {
+  const navigate = useNavigate();
   const { data, isLoading, isError, error } = useArticles();
 
   const articles = Array.isArray(data) ? data : (data?.data ?? []);
 
   return (
     <section className="bg-white w-full">
-      <Container className="py-5">
-        <h2 className="text-center font-bold mb-4" style={{ color: "#2E58A6" }}>
+      <Container className="py-10">
+        <h2 className="text-center text-3xl font-semibold text-Blue mb-10">
           Articles
         </h2>
 
@@ -43,8 +44,6 @@ const ArticlesSection = () => {
         {!isLoading && !isError && (
           <Row className="g-4">
             {articles.slice(0, 6).map((article) => {
-              const isHTML = /<\/?[a-z][\s\S]*>/i.test(article?.content);
-
               return (
                 <Col md={4}>
                   <Card className="shadow-sm d-flex flex-column flex-grow-1 h-full border-0 rounded-lg">
@@ -134,12 +133,13 @@ const ArticlesSection = () => {
           </Row>
         )}
 
-        <div className="text-center mt-4">
-          <Link to="/articles" style={{ textDecoration: "none" }}>
-            <Button variant="primary" className="btn-md">
-              View All
-            </Button>
-          </Link>
+        <div className="flex justify-center my-4">
+          <button
+            onClick={() => navigate("/articles")}
+            className="flex items-center gap-2 px-4 py-2 bg-Blue text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            View All <ArrowRight size={18} />
+          </button>
         </div>
       </Container>
     </section>

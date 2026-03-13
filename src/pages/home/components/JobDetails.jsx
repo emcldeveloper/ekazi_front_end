@@ -114,66 +114,62 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
       <Card>
         <Card.Body>
           {/* Top Info Section */}
-          <Row className="text-center mb-3">
-            <Col md={2}>
-              <div className="d-flex flex-column align-items-center">
-                <FaEye size={24} color="#D36314" />
-                <div style={{ fontSize: 16, marginTop: 4 }}>Views</div>
-                <div>{j.statistic?.job_views ?? 0}</div>
-              </div>
-            </Col>
+          <div className="grid grid-cols-5 text-center mb-3 gap-2 md:gap-4">
+            {/* Views */}
+            <div className="flex flex-col items-center">
+              <FaEye className="text-Orange" />
+              <div className="text-sm text-Blue mt-1">Views</div>
+              <div className="text-sm">{j.statistic?.job_views ?? 0}</div>
+            </div>
 
-            <Col md={2}>
-              <div className="d-flex flex-column align-items-center">
-                <FaUsers size={24} color="#D36314" />
-                <div style={{ fontSize: 16, marginTop: 4 }}>Applicants</div>
-                <div>
-                  {j.applied_count > 0
-                    ? j.applied_count
-                    : j.indirect_applicant_count ||
-                      j.indirect_applicant?.length}
-                </div>
+            {/* Applicants */}
+            <div className="flex flex-col items-center">
+              <FaUsers className="text-Orange" />
+              <div className="text-sm mt-1">Applicants</div>
+              <div className="text-sm">
+                {j.applied_count > 0
+                  ? j.applied_count
+                  : j.indirect_applicant_count ||
+                    j.indirect_applicant?.length ||
+                    0}
               </div>
-            </Col>
+            </div>
 
-            <Col md={2}>
-              <div className="d-flex flex-column align-items-center">
-                <FaBriefcase size={24} color="#D36314" />
-                <div style={{ fontSize: 16, marginTop: 4 }}>Job Type</div>
-                <div>{j.job_type?.type_name ?? "N/A"}</div>
+            {/* Job Type */}
+            <div className="flex flex-col items-center">
+              <FaBriefcase className="text-Orange" />
+              <div className="text-sm mt-1">Job Type</div>
+              <div className="text-sm">{j.job_type?.type_name ?? "N/A"}</div>
+            </div>
+
+            {/* Salary */}
+            <div className="flex flex-col items-center">
+              <FaMoneyBill className="text-Orange" />
+              <div className="text-sm mt-1">Salary</div>
+              <div className="text-sm">
+                {j.entry_salary || j.exit_salary
+                  ? `${j.entry_salary ?? 0} - ${j.exit_salary}`
+                  : "Negotiable"}
               </div>
-            </Col>
+            </div>
 
-            <Col md={2}>
-              <div className="d-flex flex-column align-items-center">
-                <FaMoneyBill size={24} color="#D36314" />
-                <div style={{ fontSize: 16, marginTop: 4 }}>Salary</div>
-                <div>
-                  {j.entry_salary || j.exit_salary
-                    ? `${j.entry_salary ?? 0} - ${j.exit_salary}`
-                    : "Negotiable"}
-                </div>
-              </div>
-            </Col>
-
-            <Col md={4}>
-              <div className="d-flex flex-column align-items-center">
-                <FaCalendar size={24} color="#D36314" />
-                <div style={{ fontSize: 16, marginTop: 4 }}>Deadline</div>
-                <div>
-                  {j.dead_line ? (
-                    isExpired ? (
-                      <span style={{ color: "red" }}>Expired</span>
-                    ) : (
-                      new Date(j.dead_line).toDateString()
-                    )
+            {/* Deadline */}
+            <div className="flex flex-col items-center">
+              <FaCalendar className="text-Orange" />
+              <div className="text-sm mt-1">Deadline</div>
+              <div className="text-sm">
+                {j.dead_line ? (
+                  isExpired ? (
+                    <span className="text-red-500">Expired</span>
                   ) : (
-                    "Not specified"
-                  )}
-                </div>
+                    new Date(j.dead_line).toDateString()
+                  )
+                ) : (
+                  "Not specified"
+                )}
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
 
           <hr />
 

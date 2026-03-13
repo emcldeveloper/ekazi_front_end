@@ -8,10 +8,9 @@ import Locations from "./components/categories/Locations";
 const JobCategoriesSection = () => {
   return (
     <Container fluid className="py-5 p-4 bg-white">
-      <h2 className="text-center fw-bold" style={{ color: "#2E58A6" }}>
+      <h2 className="text-center text-3xl font-semibold text-Blue mb-10">
         Job Categories
       </h2>
-      <br />
 
       <Container>
         <Tabs

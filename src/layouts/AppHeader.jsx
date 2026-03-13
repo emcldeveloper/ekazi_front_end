@@ -1,298 +1,94 @@
-import { useState, useEffect } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Card,
-  ListGroup,
-  Button,
-  Dropdown,
-  Tab,
-  Tabs,
-} from "react-bootstrap";
-import {
-  HouseDoorFill,
-  GearFill,
-  KeyFill,
-  BoxArrowRight,
-  PersonFill,
-} from "react-bootstrap-icons";
-import { Bell } from "react-bootstrap-icons";
-import { RxAvatar } from "react-icons/rx";
-import dayjs from "dayjs";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 import SubscriptionSection from "../pages/subscriptions/Subscription";
-import { useAllThreads } from "../hooks/candidates/useCorrespondence";
+import UserDropdown from "./components/UserDropdown";
+import NotificationDropdown from "./components/NotificationDropdown";
 
 const AppHeader = () => {
-  const applicant_id = localStorage.getItem("applicantId");
+  const [mobileMenu, setMobileMenu] = useState(false);
 
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const navItems = [
+    { name: "Home", path: "/jobseeker/dashboard" },
+    { name: "Find Jobs", path: "/jobseeker/jobs" },
+    { name: "Employers", path: "/jobseeker/employers" },
+    {
+      name: "Salary Calculator",
+      path: "/jobseeker/calculator",
+    },
+  ];
 
-  const { data: correspondences = [], isPending: loading } =
-    useAllThreads(applicant_id);
-
-  const sortedThreads = [...correspondences].sort(
-    (a, b) => new Date(b.last_message_at) - new Date(a.last_message_at),
-  );
-
-  /* ---------------- UNREAD COUNT ---------------- */
-  useEffect(() => {
-    if (!Array.isArray(correspondences)) return;
-
-    const closedCount = correspondences.filter(
-      (thread) => thread.status === "closed",
-    ).length;
-
-    setUnreadCount(closedCount);
-  }, [correspondences]);
-
-  /* ---------------- ACTIONS ---------------- */
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/";
-  };
-
-  const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
-  };
-
-  /* ---------------- RENDER ---------------- */
   return (
-    <section className="w-full">
-      <Navbar
-        expand="lg"
-        sticky="top"
-        style={{
-          zIndex: 1020,
-          backgroundColor: "#DFE3E2",
-          boxShadow: "0 2px 4px rgba(0,0,0,.1)",
-        }}
-      >
-        <Container>
-          <Navbar.Brand href="/">
+    <header className="w-full bg-[#DFE3E2] shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-2">
+        <div className="flex items-center justify-between h-16">
+          {/* LOGO */}
+          <NavLink to="/">
             <img src="/logo.png" alt="eKazi" className="w-24 md:w-32" />
-          </Navbar.Brand>
+          </NavLink>
 
-          {/* ---------- RIGHT ACTIONS ---------- */}
-          <div className="d-flex align-items-center gap-1 mr-2 ms-auto order-lg-2">
-            {/* 🔔 Notifications */}
-            <Dropdown
-              show={showNotifications}
-              onToggle={toggleNotifications}
-              className="me-2"
-              align="end"
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navItems.map((item) => {
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `relative flex items-center gap-1 text-base text-decoration-none font-medium text-Blue
+                     after:absolute after:left-0 after:-bottom-1 after:h-[2px]
+                     after:w-0 after:bg-Orange after:transition-all
+                     hover:after:w-full
+                     ${isActive ? "after:w-1/2" : ""}`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              );
+            })}
+
+            <SubscriptionSection />
+          </nav>
+
+          {/* RIGHT ACTIONS */}
+          <div className="flex items-center gap-4">
+            <NotificationDropdown />
+            <UserDropdown />
+
+            {/* MOBILE MENU */}
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileMenu(!mobileMenu)}
             >
-              <Dropdown.Toggle
-                as="span"
-                bsPrefix="notification-toggle"
-                variant="light"
-                id="dropdown-notifications"
-                className="notification-toggle d-flex align-items-center justify-content-center position-relative border-0 bg-transparent p-0"
-                style={{ cursor: "pointer" }}
-                size="lg"
-              >
-                <Bell size={28} className="text-dark" />
-
-                {unreadCount > 0 && (
-                  <span
-                    className="position-absolute rounded-circle bg-danger text-white d-flex justify-content-center align-items-center"
-                    style={{
-                      top: "-5px",
-                      right: "-5px",
-                      width: "18px",
-                      height: "18px",
-                      fontSize: "0.65rem",
-                      border: "2px solid white",
-                    }}
-                  >
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </span>
-                )}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu className="p-0 w-[280px] md:w-80">
-                <Card className="border-0">
-                  <Card.Header>
-                    <strong>Notifications</strong>
-                  </Card.Header>
-
-                  <Card.Body className="p-0">
-                    <Tabs defaultActiveKey="updates" className="px-2">
-                      <Tab eventKey="updates" title="Updates">
-                        <ListGroup variant="flush">
-                          {loading && (
-                            <div className="text-center py-2">Loading…</div>
-                          )}
-
-                          {!loading && correspondences.length === 0 && (
-                            <div className="text-center text-muted py-2">
-                              No notifications
-                            </div>
-                          )}
-
-                          {!loading &&
-                            sortedThreads.slice(0, 5).map((thread) => {
-                              const lastMessage =
-                                thread.messages?.[thread.messages.length - 1];
-
-                              return (
-                                <ListGroup.Item
-                                  key={thread.id}
-                                  action
-                                  href="/jobseeker/employer-correspondence"
-                                  style={{
-                                    backgroundColor:
-                                      thread.applicant_unread_count > 0
-                                        ? "#FFF3CD"
-                                        : "transparent",
-                                  }}
-                                >
-                                  <div className="d-flex justify-content-between">
-                                    <strong>
-                                      {thread.subject.length > 30
-                                        ? thread.subject.slice(0, 30) + "…"
-                                        : thread.subject}
-                                    </strong>
-                                    <small className="text-muted">
-                                      {dayjs(thread.last_message_at).format(
-                                        "MMM D, h:mm A",
-                                      )}
-                                    </small>
-                                  </div>
-
-                                  <small className="d-block text-truncate">
-                                    {lastMessage?.message || "No message"}
-                                  </small>
-
-                                  {thread.applicant_unread_count > 0 && (
-                                    <span className="badge bg-danger mt-1">
-                                      Unread
-                                    </span>
-                                  )}
-                                </ListGroup.Item>
-                              );
-                            })}
-                        </ListGroup>
-                      </Tab>
-
-                      <Tab eventKey="chats" title="Chats">
-                        <div className="text-center text-muted py-3">
-                          No chats yet
-                        </div>
-                      </Tab>
-                    </Tabs>
-                  </Card.Body>
-
-                  <Card.Footer className="text-center">
-                    <Button
-                      variant="link"
-                      size="sm"
-                      href="/jobseeker/employer-correspondence"
-                    >
-                      View all
-                    </Button>
-                  </Card.Footer>
-                </Card>
-              </Dropdown.Menu>
-            </Dropdown>
-
-            {/* 👤 Profile */}
-            <Dropdown align="end">
-              <Dropdown.Toggle
-                as="span"
-                bsPrefix="notification-toggle"
-                id="profile-dropdown"
-                className="d-flex align-items-center justify-content-center position-relative"
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                <RxAvatar size={30} className="text-dark" />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ width: "300px" }}>
-                <Dropdown.Item
-                  href="/jobseeker/dashboard"
-                  className="d-flex align-items-center"
-                >
-                  <HouseDoorFill className="me-2" size={14} />
-                  <span>Dashboard</span>
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  href="/jobseeker/profile-preview"
-                  className="d-flex align-items-center"
-                >
-                  <PersonFill className="me-2" size={14} />
-                  <span>My Profile</span>
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  href="/jobseeker/account-settings"
-                  className="d-flex align-items-center"
-                >
-                  <GearFill className="me-2" size={14} />
-                  <span> Settings</span>
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  href="/jobseeker/change-password"
-                  className="d-flex align-items-center"
-                >
-                  <KeyFill className="me-2" size={14} />
-                  <span>Change Password</span>
-                </Dropdown.Item>
-
-                {/* <Dropdown.Item
-                        href="/jobseeker/Privacy-policy"
-                        className="d-flex align-items-center"
-                      >
-                        <ShieldLockFill className="me-2" size={14} />
-                        <span>Privacy Policy</span>
-                      </Dropdown.Item> */}
-
-                <Dropdown.Divider />
-
-                <Dropdown.Item
-                  onClick={handleLogout}
-                  className="d-flex align-items-center text-danger"
-                >
-                  <BoxArrowRight className="me-2" size={14} />
-                  <span>Logout</span>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+              {mobileMenu ? (
+                <X size={24} className="text-Orange" />
+              ) : (
+                <Menu size={24} className="text-Blue" />
+              )}
+            </button>
           </div>
+        </div>
+      </div>
 
-          <Navbar.Toggle />
-
-          <Navbar.Collapse id="main-navbar" className="order-lg-1">
-            {/* ---------- CENTER MENU ---------- */}
-            <Nav className="mx-auto flex-wrap text-center">
-              <Nav.Link href="/jobseeker/dashboard" className="text-primary">
-                Home
-              </Nav.Link>
-
-              <Nav.Link href="/jobseeker/jobs" className="text-primary">
-                Find Jobs
-              </Nav.Link>
-
-              <Nav.Link href="/jobseeker/employers" className="text-primary">
-                Employers
-              </Nav.Link>
-
-              <Nav.Link href="/jobseeker/calculator" className="text-primary">
-                Salary Calculator
-              </Nav.Link>
-
-              <SubscriptionSection />
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </section>
+      {/* MOBILE NAV */}
+      {mobileMenu && (
+        <div className="lg:hidden bg-white border-t border-gray-200">
+          <div className="flex flex-col px-6 py-4 space-y-4">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={() => setMobileMenu(false)}
+                className="text-Blue text-decoration-none font-medium"
+              >
+                {item.name}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+      )}
+    </header>
   );
 };
 

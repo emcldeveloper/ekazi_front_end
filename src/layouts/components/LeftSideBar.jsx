@@ -12,7 +12,6 @@ import {
   BarChartFill,
   FileEarmarkTextFill,
   BriefcaseFill,
-  PersonFill,
   BookFill,
   PeopleFill,
   InfoCircleFill,

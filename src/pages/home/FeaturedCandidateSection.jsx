@@ -1,17 +1,18 @@
-import { Link } from "react-router-dom";
-import { Row, Container, Spinner, Alert, Button, Col } from "react-bootstrap";
+import { Row, Container, Spinner, Alert, Col } from "react-bootstrap";
 
 import { useFeaturedJobSeeker } from "../../hooks/useCandidates.js";
 import CandidateCard from "../candidates/CandidateCard.jsx";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedCandidateSection = () => {
+  const navigate = useNavigate();
   const { data, isLoading, isError, error } = useFeaturedJobSeeker();
-
   const candidates = Array.isArray(data) ? data : (data?.data ?? []);
 
   return (
-    <Container className="my-5">
-      <h2 className="text-center font-bold mb-4" style={{ color: "#2E58A6" }}>
+    <Container className="my-10">
+      <h2 className="text-center text-3xl font-semibold text-Blue mb-10">
         Featured Candidates
       </h2>
 
@@ -40,12 +41,13 @@ const FeaturedCandidateSection = () => {
         </Row>
       )}
 
-      <div className="text-center mt-4">
-        <Link to="/candidates" style={{ textDecoration: "none" }}>
-          <Button variant="primary" className="btn-md">
-            Browse All
-          </Button>
-        </Link>
+      <div className="flex justify-center my-4">
+        <button
+          onClick={() => navigate("/candidates")}
+          className="flex items-center gap-2 px-4 py-2 bg-Blue text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Browse All <ArrowRight size={18} />
+        </button>
       </div>
     </Container>
   );

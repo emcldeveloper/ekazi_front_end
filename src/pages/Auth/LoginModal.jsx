@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
-import { FaGoogle, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
+import { FaGoogle, FaLinkedin } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useLogin, useResetPassword } from "../../hooks/useAuth.js";
 
@@ -8,6 +8,7 @@ const LoginModal = ({ show, onHide }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -47,6 +48,7 @@ const LoginModal = ({ show, onHide }) => {
     loginUser(data, {
       onSuccess: () => {
         setShowCandidateForm(false);
+        reset();
         onHide();
       },
     });
@@ -103,7 +105,7 @@ const LoginModal = ({ show, onHide }) => {
               className=" text-Blue text-center font-semibold"
               style={{ fontSize: "20px", borderRadius: "5px" }}
             >
-              Welcome to ekazi portal
+              Welcome back to ekazi portal
             </p>
           </div>
 
@@ -189,12 +191,12 @@ const LoginModal = ({ show, onHide }) => {
           {/* BOTTOM OPTIONS */}
           <div className="text-center py-3">
             <p className="mb-2 text-muted">
-              don't have ekazi account?{" "}
+              Don't have ekazi account?{" "}
               <span
                 onClick={() => setShowCandidateForm(false)}
-                className="text-Blue font-semibold hover:text-underline cursor-pointer"
+                className="text-Blue font-semibold underline cursor-pointer"
               >
-                Register
+                register
               </span>
             </p>
           </div>

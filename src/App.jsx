@@ -63,7 +63,6 @@ import Employer from "./components/companies/Employer";
 import EmployerDetails from "./components/companies/EmployerDetails";
 import ProtectedRoutes from "./layouts/ProtectedRoutes";
 import Dashboard from "./pages/dashboard/Dashboard";
-import FindJobs from "./pages/jobs/FindJobs";
 import Jobs from "./pages/JobSeeker/Jobs/Jobs";
 import Calculator from "./pages/JobSeeker/Calculator";
 import Companies from "./pages/JobSeeker/Companies";

@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Modal, Button, Form, Col, Row, InputGroup } from "react-bootstrap";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle, FaLinkedin } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
 
 import SocialLogin from "./SocialLogin";
@@ -58,13 +58,13 @@ const RegisterModal = ({ show, onHide }) => {
   const maritalStatusOptions = mapOptions(
     maritalStatuses,
     "id",
-    "marital_status"
+    "marital_status",
   );
   const countryOptions = mapOptions(countries);
   const educationLevelOptions = mapOptions(
     educationLevels,
     "id",
-    "education_level"
+    "education_level",
   );
   const courseOptions = mapOptions(courses, "id", "course_name");
   const majorOptions = mapOptions(majors);
@@ -217,12 +217,22 @@ const RegisterModal = ({ show, onHide }) => {
         show={showCandidateForm}
         onHide={() => setShowCandidateForm(false)}
         centered
+        scrollable
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Candidate Registration</Modal.Title>
+          <Modal.Title as={"h5"}>Register as Job Seeker</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div className="d-flex justify-content-center mb-3">
+            <p
+              className=" text-Blue text-center font-semibold"
+              style={{ fontSize: "20px", borderRadius: "5px" }}
+            >
+              Welcome to ekazi portal
+            </p>
+          </div>
+
           <Form onSubmit={handleSubmit(onSubmit)}>
             {/* API Error */}
             {registerMutation.isError && registerMutation.error?.message && (
@@ -235,12 +245,13 @@ const RegisterModal = ({ show, onHide }) => {
               PERSONAL INFORMATION
             ------------------------------------------------*/}
             <section className="mb-4">
-              <h5>Personal Information</h5>
               <Row>
                 {/* First Name */}
-                <Col md={4}>
+                <Col md={6}>
                   <Form.Group className="mb-3" controlId="firstname">
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      First Name
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       {...register("firstname", {
@@ -254,18 +265,12 @@ const RegisterModal = ({ show, onHide }) => {
                   </Form.Group>
                 </Col>
 
-                {/* Middle Name */}
-                <Col md={4}>
-                  <Form.Group className="mb-3" controlId="middlename">
-                    <Form.Label>Middle Name</Form.Label>
-                    <Form.Control type="text" {...register("middlename")} />
-                  </Form.Group>
-                </Col>
-
                 {/* Last Name */}
-                <Col md={4}>
+                <Col md={6}>
                   <Form.Group className="mb-3" controlId="lastname">
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Last Name
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       {...register("lastname", {
@@ -282,9 +287,11 @@ const RegisterModal = ({ show, onHide }) => {
 
               {/* DOB, Gender, Marital Status */}
               <Row>
-                <Col md={4}>
+                <Col md={6}>
                   <Form.Group className="mb-3" controlId="dob">
-                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Date of Birth
+                    </Form.Label>
                     <Form.Control
                       type="date"
                       {...register("dob", {
@@ -299,9 +306,11 @@ const RegisterModal = ({ show, onHide }) => {
                 </Col>
 
                 {/* Gender */}
-                <Col md={4}>
+                <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Gender</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Gender
+                    </Form.Label>
                     <Controller
                       name="gender"
                       control={control}
@@ -312,7 +321,7 @@ const RegisterModal = ({ show, onHide }) => {
                             options={genderOptions}
                             value={
                               genderOptions.find(
-                                (o) => o.value === field.value
+                                (o) => o.value === field.value,
                               ) || null
                             }
                             onChange={(opt) => field.onChange(opt?.value || "")}
@@ -329,9 +338,11 @@ const RegisterModal = ({ show, onHide }) => {
                 </Col>
 
                 {/* Marital Status */}
-                <Col md={4}>
+                <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Marital Status</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Marital Status
+                    </Form.Label>
                     <Controller
                       name="maritalStatus"
                       control={control}
@@ -341,7 +352,7 @@ const RegisterModal = ({ show, onHide }) => {
                             options={maritalStatusOptions}
                             value={
                               maritalStatusOptions.find(
-                                (o) => o.value === field.value
+                                (o) => o.value === field.value,
                               ) || null
                             }
                             onChange={(opt) => field.onChange(opt?.value || "")}
@@ -355,14 +366,84 @@ const RegisterModal = ({ show, onHide }) => {
             </section>
 
             {/* ------------------------------------------------
+              ADDRESS
+            ------------------------------------------------*/}
+            <section className="mb-4">
+              <Row>
+                {/* Country */}
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Country
+                    </Form.Label>
+                    <Controller
+                      name="country"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          options={countryOptions}
+                          value={
+                            countryOptions.find(
+                              (o) => o.value === field.value,
+                            ) || null
+                          }
+                          onChange={(opt) => {
+                            field.onChange(opt?.value || "");
+                            setValue("region_id", ""); // reset region
+                          }}
+                        />
+                      )}
+                    />
+                  </Form.Group>
+                </Col>
+
+                {/* Region */}
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Region
+                    </Form.Label>
+                    <Controller
+                      name="region_id"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          isDisabled={!selectedCountry}
+                          options={regionOptions}
+                          value={
+                            regionOptions.find(
+                              (o) => o.value === field.value,
+                            ) || null
+                          }
+                          onChange={(opt) => field.onChange(opt?.value || "")}
+                        />
+                      )}
+                    />
+                  </Form.Group>
+                </Col>
+
+                {/* Address */}
+                <Col md={4}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Address
+                    </Form.Label>
+                    <Form.Control type="text" {...register("address")} />
+                  </Form.Group>
+                </Col>
+              </Row>
+            </section>
+
+            {/* ------------------------------------------------
               CONTACT
             ------------------------------------------------*/}
             <section className="mb-4">
-              <h5>Contact Details</h5>
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Email
+                    </Form.Label>
                     <Form.Control
                       type="email"
                       {...register("email", { required: "Email is required" })}
@@ -376,7 +457,9 @@ const RegisterModal = ({ show, onHide }) => {
 
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Phone</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Phone
+                    </Form.Label>
                     <Form.Control
                       type="tel"
                       placeholder="+255 123 456 789"
@@ -397,7 +480,9 @@ const RegisterModal = ({ show, onHide }) => {
                 {/* Password */}
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Password
+                    </Form.Label>
                     <InputGroup>
                       <Form.Control
                         type={showPassword ? "text" : "password"}
@@ -427,7 +512,9 @@ const RegisterModal = ({ show, onHide }) => {
                 {/* Confirm Password */}
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Confirm Password
+                    </Form.Label>
                     <InputGroup>
                       <Form.Control
                         type={showConfirmPassword ? "text" : "password"}
@@ -459,209 +546,15 @@ const RegisterModal = ({ show, onHide }) => {
             </section>
 
             {/* ------------------------------------------------
-              EDUCATION
-            ------------------------------------------------*/}
-            <section className="mb-4">
-              <h5>Education</h5>
-              <Row>
-                {/* Education Level */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Education Level</Form.Label>
-                    <Controller
-                      name="education_level"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          options={educationLevelOptions}
-                          value={
-                            educationLevelOptions.find(
-                              (o) => o.value === field.value
-                            ) || null
-                          }
-                          onChange={(opt) => field.onChange(opt?.value || "")}
-                        />
-                      )}
-                    />
-                  </Form.Group>
-                </Col>
-
-                {/* Course */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Course</Form.Label>
-                    <Controller
-                      name="course_id"
-                      control={control}
-                      render={({ field }) => {
-                        const allCourseOptions = [
-                          ...courseOptions,
-                          ...localCourseOptions,
-                        ];
-
-                        return (
-                          <CreatableSelect
-                            isClearable
-                            options={allCourseOptions}
-                            value={
-                              field.value
-                                ? allCourseOptions.find(
-                                    (o) => o.value === field.value
-                                  ) || {
-                                    label: field.value,
-                                    value: field.value,
-                                  }
-                                : null
-                            }
-                            onChange={(opt) => {
-                              if (
-                                opt &&
-                                !courseOptions.find(
-                                  (o) => o.value === opt.value
-                                )
-                              ) {
-                                setLocalCourseOptions((prev) => [...prev, opt]);
-                              }
-                              field.onChange(opt?.value || "");
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-
-                {/* Major */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Major</Form.Label>
-                    <Controller
-                      name="major"
-                      control={control}
-                      render={({ field }) => {
-                        const allMajorOptions = [
-                          ...majorOptions,
-                          ...localMajorOptions,
-                        ];
-
-                        return (
-                          <CreatableSelect
-                            isClearable
-                            options={allMajorOptions}
-                            value={
-                              field.value
-                                ? allMajorOptions.find(
-                                    (o) => o.value === field.value
-                                  ) || {
-                                    label: field.value,
-                                    value: field.value,
-                                  }
-                                : null
-                            }
-                            onChange={(opt) => {
-                              if (
-                                opt &&
-                                !majorOptions.find((o) => o.value === opt.value)
-                              ) {
-                                setLocalMajorOptions((prev) => [...prev, opt]);
-                              }
-                              field.onChange(opt?.value || "");
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </section>
-
-            {/* ------------------------------------------------
-              ADDRESS
-            ------------------------------------------------*/}
-            <section className="mb-4">
-              <h5>Address</h5>
-              <Row>
-                {/* Country */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Country</Form.Label>
-                    <Controller
-                      name="country"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          options={countryOptions}
-                          value={
-                            countryOptions.find(
-                              (o) => o.value === field.value
-                            ) || null
-                          }
-                          onChange={(opt) => {
-                            field.onChange(opt?.value || "");
-                            setValue("region_id", ""); // reset region
-                          }}
-                        />
-                      )}
-                    />
-                  </Form.Group>
-                </Col>
-
-                {/* Region */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Region</Form.Label>
-                    <Controller
-                      name="region_id"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          isDisabled={!selectedCountry}
-                          options={regionOptions}
-                          value={
-                            regionOptions.find(
-                              (o) => o.value === field.value
-                            ) || null
-                          }
-                          onChange={(opt) => field.onChange(opt?.value || "")}
-                        />
-                      )}
-                    />
-                  </Form.Group>
-                </Col>
-
-                {/* Address */}
-                <Col md={4}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control type="text" {...register("address")} />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </section>
-
-            {/* ------------------------------------------------
-              SOCIAL LOGIN
-            ------------------------------------------------*/}
-            <SocialLogin />
-
-            {/* ------------------------------------------------
               FOOTER BUTTONS
             ------------------------------------------------*/}
-            <Row className="mt-4">
-              <Col className="text-end">
-                <Button
-                  variant="secondary"
-                  type="button"
-                  className="me-2"
-                  onClick={() => setShowCandidateForm(false)}
-                >
-                  Back
-                </Button>
-
+            <Row className="items-center justify-content-center">
+              <Col md={6}>
                 <Button
                   type="submit"
                   variant="primary"
+                  className="text-white font-semibold mb-3 w-100"
+                  style={{ backgroundColor: "#D36314", border: "none" }}
                   disabled={registerMutation.isPending}
                 >
                   {registerMutation.isPending ? "Registering..." : "Register"}
@@ -669,6 +562,33 @@ const RegisterModal = ({ show, onHide }) => {
               </Col>
             </Row>
           </Form>
+
+          {/* SOCIAL LOGIN */}
+          <p className="d-block text-center text-muted mb-4">
+            or continue with
+          </p>
+          <div className="flex items-center gap-4 mb-3">
+            <button className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border border-blue-100 text-Blue hover:bg-blue-100 transition">
+              <FaLinkedin size={18} /> Linkedin
+            </button>
+
+            <button className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border border-blue-100 text-Blue hover:bg-blue-100 transition">
+              <FaGoogle size={18} /> Google
+            </button>
+          </div>
+
+          {/* BOTTOM OPTIONS */}
+          <div className="text-center py-3">
+            <p className="mb-2 text-muted">
+              Already have ekazi account?{" "}
+              <span
+                onClick={() => setShowCandidateForm(false)}
+                className="text-Blue font-semibold underline cursor-pointer"
+              >
+                login
+              </span>
+            </p>
+          </div>
         </Modal.Body>
       </Modal>
 

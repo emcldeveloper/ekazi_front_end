@@ -1,24 +1,27 @@
 import React from "react";
-import { Container, Row, Spinner, Alert, Button } from "react-bootstrap";
+import { Container, Row, Spinner, Alert, Button, Col } from "react-bootstrap";
 import useJob from "../../hooks/useJob.js";
 import JobCard from "./components/jobs/JobCard";
 import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const FeaturedJobsSection = () => {
   const navigate = useNavigate();
   const { jobs, loading, error } = useJob();
 
   return (
-    <Container className="my-5">
-      <h2 className="text-center font-bold mb-4" style={{ color: "#2E58A6" }}>
+    <Container className="my-10">
+      <h2 className="text-center text-3xl font-semibold text-Blue mb-10">
         Latest Jobs
       </h2>
 
       {error && <Alert variant="danger">{error.message}</Alert>}
 
       <Row>
-        {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+        {jobs.slice(0, 9).map((job) => (
+          <Col key={job.id} md={4} className="mb-4">
+            <JobCard job={job} />
+          </Col>
         ))}
       </Row>
 
@@ -29,8 +32,13 @@ const FeaturedJobsSection = () => {
         </div>
       )}
 
-      <div className="text-center my-4">
-        <Button onClick={() => navigate("/jobs")}>View More</Button>
+      <div className="flex justify-center my-4">
+        <button
+          onClick={() => navigate("/jobs")}
+          className="flex items-center gap-2 px-4 py-2 bg-Blue text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          View More <ArrowRight size={18} />
+        </button>
       </div>
     </Container>
   );

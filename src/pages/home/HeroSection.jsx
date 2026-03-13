@@ -59,7 +59,7 @@ export default function HeroSection() {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [localSearch]);
+  }, [localSearch, setSearchTerm]);
 
   return (
     <section className="bg-gray-50 py-16 lg:py-0">

@@ -1,16 +1,19 @@
-import { Alert, Button, Container, Row, Spinner } from "react-bootstrap";
+import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
 import MainLayout1 from "../../layouts/MainLayout1";
 import useJob from "../../hooks/useJob";
 import JobCard from "./components/jobs/JobCard";
 import { useEffect, useState } from "react";
 import JobFilters from "../../components/jobs/JobSearchFilter";
 import { useSearchParams } from "react-router-dom";
+import { ArrowDown } from "lucide-react";
 
 const JobsPage = () => {
   const [searchParams] = useSearchParams();
 
   // jobs fetch
   const { jobs, loading, error, hasMore, loadMore, loadingMore } = useJob();
+
+  console.log("Fetched jobs:", jobs);
 
   const [filters, setFilters] = useState({
     industry: searchParams.get("industry") || "All",
@@ -92,7 +95,9 @@ const JobsPage = () => {
 
         <Row>
           {filteredJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
+            <Col key={job.id} md={4} className="mb-4">
+              <JobCard job={job} />
+            </Col>
           ))}
         </Row>
         {!loading && filteredJobs.length === 0 && (
@@ -108,8 +113,13 @@ const JobsPage = () => {
         )}
         {/* Load More Button */}
         {!loading && hasMore && !loadingMore && (
-          <div className="text-center my-4">
-            <Button onClick={loadMore}>Load More</Button>
+          <div className="flex justify-center my-4">
+            <button
+              onClick={loadMore}
+              className="flex items-center gap-2 px-4 py-2 bg-Blue text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Load More <ArrowDown size={18} />
+            </button>
           </div>
         )}
         {/* Loading More Spinner */}
