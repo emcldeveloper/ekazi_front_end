@@ -1,11 +1,9 @@
 import { useState, useMemo } from "react";
 import { Modal, Button, Form, Col, Row, InputGroup } from "react-bootstrap";
 import Select from "react-select";
-import CreatableSelect from "react-select/creatable";
 import { FaEye, FaEyeSlash, FaGoogle, FaLinkedin } from "react-icons/fa";
 import { useForm, Controller } from "react-hook-form";
 
-import SocialLogin from "./SocialLogin";
 import SuccessModal from "./SuccessRegisterModal";
 import { useRegister } from "../../hooks/useAuth.js";
 
@@ -16,11 +14,6 @@ import {
   useCountries,
   useRegions,
 } from "../../hooks/useUniversal.js";
-import {
-  useCourses,
-  useEducationLevels,
-  useMajors,
-} from "../../hooks/profile/useEducation.js";
 
 const RegisterModal = ({ show, onHide }) => {
   /* ----------------------------------------------
@@ -31,9 +24,6 @@ const RegisterModal = ({ show, onHide }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const [localCourseOptions, setLocalCourseOptions] = useState([]);
-  const [localMajorOptions, setLocalMajorOptions] = useState([]);
-
   /* ----------------------------------------------
     UNIVERSAL BACKEND DATA
   ------------------------------------------------*/
@@ -41,9 +31,6 @@ const RegisterModal = ({ show, onHide }) => {
   const { data: maritalStatuses = [] } = useMaritalStatuses();
   const { data: countries = [] } = useCountries();
   const { data: regions = [] } = useRegions();
-  const { data: courses = [] } = useCourses();
-  const { data: majors = [] } = useMajors();
-  const { data: educationLevels = [] } = useEducationLevels();
 
   /* ----------------------------------------------
     MAP BACKEND TO SELECT OPTIONS
@@ -61,13 +48,6 @@ const RegisterModal = ({ show, onHide }) => {
     "marital_status",
   );
   const countryOptions = mapOptions(countries);
-  const educationLevelOptions = mapOptions(
-    educationLevels,
-    "id",
-    "education_level",
-  );
-  const courseOptions = mapOptions(courses, "id", "course_name");
-  const majorOptions = mapOptions(majors);
 
   /* ----------------------------------------------
     REACT HOOK FORM SETUP
@@ -81,6 +61,7 @@ const RegisterModal = ({ show, onHide }) => {
     getValues,
     setError,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -94,9 +75,6 @@ const RegisterModal = ({ show, onHide }) => {
       phone: "",
       password: "",
       confirmPassword: "",
-      education_level: "",
-      course_id: "",
-      major: "",
       country: "",
       region_id: "",
       address: "",
@@ -104,7 +82,6 @@ const RegisterModal = ({ show, onHide }) => {
   });
 
   const selectedCountry = watch("country");
-  const password = watch("password");
 
   /* ----------------------------------------------
     FILTER REGIONS BY SELECTED COUNTRY
@@ -157,10 +134,6 @@ const RegisterModal = ({ show, onHide }) => {
       password: data.password,
       password_confirmation: data.confirmPassword,
 
-      education_level_id: data.education_level,
-      course_id: data.course_id,
-      major_id: data.major,
-
       country_id: data.country,
       region_id: data.region_id,
 
@@ -172,6 +145,7 @@ const RegisterModal = ({ show, onHide }) => {
         setShowCandidateForm(false);
         setShowSuccessModal(true);
         onHide();
+        reset();
       },
       onError: (err) => {
         if (err && typeof err === "object" && !("message" in err)) {
@@ -247,7 +221,7 @@ const RegisterModal = ({ show, onHide }) => {
             <section className="mb-4">
               <Row>
                 {/* First Name */}
-                <Col md={6}>
+                <Col md={4}>
                   <Form.Group className="mb-3" controlId="firstname">
                     <Form.Label className="text-sm text-Blue font-semibold">
                       First Name
@@ -265,8 +239,26 @@ const RegisterModal = ({ show, onHide }) => {
                   </Form.Group>
                 </Col>
 
+                <Col md={4}>
+                  <Form.Group className="mb-3" controlId="middlename">
+                    <Form.Label className="text-sm text-Blue font-semibold">
+                      Middle Name
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      {...register("middlename", {
+                        required: "Middle name is required",
+                      })}
+                      isInvalid={!!errors.middlename}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.middlename?.message}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+
                 {/* Last Name */}
-                <Col md={6}>
+                <Col md={4}>
                   <Form.Group className="mb-3" controlId="lastname">
                     <Form.Label className="text-sm text-Blue font-semibold">
                       Last Name
