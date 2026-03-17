@@ -38,23 +38,17 @@ const CVBuilder = () => {
           <Row className="align-items-center g-5">
             {/* LEFT CONTENT */}
             <Col lg={7}>
-              <h2
-                className="fw-bold mb-4"
-                style={{
-                  color: "#2E58A6",
-                  fontSize: "2.5rem",
-                }}
-              >
+              <h1 className="text-3xl font-semibold text-Blue mb-2">
                 Create a Job-Winning CV in Minutes
-              </h2>
+              </h1>
 
-              <p className="text-muted font-semibold mb-3 fs-5">
+              <p className="text-muted font-semibold">
                 Your CV is fully portable — download it for external job
                 applications or use it to apply for vacancies directly within
                 the platform.
               </p>
 
-              <div className="text-muted mb-4" style={{ lineHeight: "1.7" }}>
+              <div className="text-muted mb-2">
                 <p>
                   Build a professional CV in minutes — at no cost. Our platform
                   enables job seekers to create a complete, structured, and
@@ -108,18 +102,12 @@ const CVBuilder = () => {
 
               {/* Buttons */}
               <div className="d-flex flex-wrap gap-3">
-                <Button
-                  className="rounded-lg"
-                  size="lg"
-                  style={{
-                    backgroundColor: "#D36314",
-                    border: "none",
-                    padding: "12px 28px",
-                  }}
+                <button
                   onClick={handleClick}
+                  className="bg-Orange hover:bg-[#b95512] text-white px-7 py-3 rounded-lg font-medium transition"
                 >
                   Build Your CV Now
-                </Button>
+                </button>
               </div>
             </Col>
 

@@ -81,7 +81,7 @@ const CandidateFilter = ({ onFilterChange }) => {
     <div className="w-full mb-4">
       <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 max-w-7xl mx-auto">
         {/* Industry */}
-        <select
+        {/* <select
           value={industry}
           onChange={(e) => {
             const value = e.target.value;
@@ -103,7 +103,7 @@ const CandidateFilter = ({ onFilterChange }) => {
               {industry.industry_name}
             </option>
           ))}
-        </select>
+        </select> */}
 
         {/* Search */}
         <input
@@ -115,20 +115,20 @@ const CandidateFilter = ({ onFilterChange }) => {
         />
 
         {/* Toggle Filters */}
-        <button
+        {/* <button
           onClick={toggleFilters}
           className="border rounded-lg px-4 py-2 hover:bg-gray-100"
         >
           Filters
-        </button>
+        </button> */}
 
         {/* Clear */}
-        <button
+        {/* <button
           onClick={clearFilters}
           className="text-blue-500 hover:underline"
         >
           Clear
-        </button>
+        </button> */}
       </div>
 
       {showFilters && (

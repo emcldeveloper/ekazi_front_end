@@ -1,109 +1,27 @@
 import { useEffect, useRef } from "react";
-import {
-  Card,
-  Col,
-  Row,
-  Container,
-  Button,
-  Spinner,
-  Alert,
-} from "react-bootstrap";
+import { Card, Col, Row, Container, Button, Spinner } from "react-bootstrap";
 
 import "../../css/Jobs/SideBarListJobs.css";
 import useJob from "../../hooks/useJob";
 
 const SideBarListJobs = ({
+  filters,
   setSelectedJob,
   setActiveJob,
   activeJob,
-  selectedTime,
-  selectedJobType,
-  selectedCountry,
-  selectedRegion,
-  selectedSubLocation,
-  selectedPositionLevel,
-  selectedIndustry,
-  searchKeyword,
 }) => {
-  const {
-    jobs,
-    loading,
-    error,
-    hasMore,
-    loadMore,
-    loadingMore,
-    setSearchTerm,
-    setSelectedIndustry,
-  } = useJob();
+  const { jobs, loading, error, hasMore, loadMore, loadingMore } =
+    useJob(filters);
 
-  // Track whether user manually selected a job
   const hasUserSelected = useRef(false);
 
-  // 🔄 Sync filters from parent (FindJobs) into hook
   useEffect(() => {
-    setSearchTerm(searchKeyword || "");
-  }, [searchKeyword, setSearchTerm]);
-
-  useEffect(() => {
-    setSelectedIndustry(selectedIndustry || "");
-  }, [selectedIndustry, setSelectedIndustry]);
-
-  // Client-side filters (excluding search & industry)
-  const applyFilters = (jobs) => {
-    return jobs.filter((job) => {
-      const jobTypeId = String(job.job_type?.id || job.type_id || "");
-      const positionLevelId = String(
-        job.position_level?.id || job.position_level_id || "",
-      );
-      const publishDate = new Date(job.publish_date);
-      const address = job.job_addresses?.[0] || {};
-      const subLocation = address.sub_location || "";
-      const regionId = String(address.region?.id || "");
-      const countryId = String(address.region?.country?.id || "");
-
-      if (selectedTime && selectedTime !== "Any Time") {
-        const daysAgo = new Date();
-        daysAgo.setDate(daysAgo.getDate() - parseInt(selectedTime));
-        if (publishDate < daysAgo) return false;
-      }
-
-      if (
-        selectedJobType &&
-        selectedJobType !== "Any Type" &&
-        selectedJobType !== jobTypeId
-      )
-        return false;
-
-      if (
-        selectedPositionLevel &&
-        selectedPositionLevel !== "Any Level" &&
-        selectedPositionLevel !== positionLevelId
-      )
-        return false;
-
-      if (selectedCountry && selectedCountry !== countryId) return false;
-      if (selectedRegion && selectedRegion !== regionId) return false;
-
-      if (
-        selectedSubLocation &&
-        selectedSubLocation.toLowerCase() !== subLocation.toLowerCase()
-      )
-        return false;
-
-      return true;
-    });
-  };
-
-  const filteredJobs = applyFilters(jobs);
-
-  // ✅ Auto-select first job once
-  useEffect(() => {
-    if (filteredJobs.length > 0 && !hasUserSelected.current) {
-      const firstJob = filteredJobs[0];
+    if (jobs.length > 0 && !hasUserSelected.current) {
+      const firstJob = jobs[0];
       setActiveJob(firstJob);
       setSelectedJob(firstJob);
     }
-  }, [filteredJobs, setActiveJob, setSelectedJob]);
+  }, [jobs, setActiveJob, setSelectedJob]);
 
   const handleJobClick = (job) => {
     hasUserSelected.current = true;
@@ -126,8 +44,8 @@ const SideBarListJobs = ({
         <Col md={12}>
           <Card>
             <Card.Body>
-              <h5 className="mb-3">{filteredJobs.length} Jobs Found</h5>
-              <hr className="full-width" />
+              {/* <h5 className="mb-3">{jobs.length} Jobs Found</h5>
+              <hr className="full-width" /> */}
 
               <div
                 style={{
@@ -137,7 +55,7 @@ const SideBarListJobs = ({
                   paddingRight: "10px",
                 }}
               >
-                {filteredJobs.map((job) => (
+                {jobs.map((job) => (
                   <div
                     key={job.id}
                     className={`job-item mb-3 ${
@@ -210,12 +128,6 @@ const SideBarListJobs = ({
                 {!loadingMore && hasMore && (
                   <div className="text-center my-4">
                     <Button onClick={loadMore}>Load More</Button>
-                  </div>
-                )}
-
-                {!hasMore && (
-                  <div className="text-center my-4">
-                    <Alert variant="info">No more jobs to load.</Alert>
                   </div>
                 )}
               </div>

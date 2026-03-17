@@ -6,7 +6,7 @@ import MainLayout1 from "../../layouts/MainLayout1";
 const EmployerDetails = () => {
   return (
     <MainLayout1>
-      <Container className="py-4">
+      <Container className="py-10">
         <Breadcrumb className="custom-breadcrumb mb-4">
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
           <Breadcrumb.Item href="/employers">Employers</Breadcrumb.Item>

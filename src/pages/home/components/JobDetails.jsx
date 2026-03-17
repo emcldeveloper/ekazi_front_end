@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Checkcompleteprofile from "../../../Component/Profile/Checkcomplete";
 import { useSaveJob } from "../../../hooks/useCandidates";
 import { DEFAULT_LOGO, IMG_BASE } from "../../../helpers/img";
+import LoginModal from "../../Auth/LoginModal";
 
 const JobDetails = ({ job, appliedJobIds = [] }) => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
 
   const [profileComplete, setProfileComplete] = useState(true);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const applicantId = localStorage.getItem("applicantId");
   const isLoggedIn = !!applicantId;
@@ -464,17 +466,37 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
             </Col>
 
             <Col md="auto">
-              {isExpired ? null : hasApplied ? null : (
+              {isLoggedIn ? (
+                isExpired ? null : hasApplied ? null : (
+                  <>
+                    <Button
+                      className="mr-2"
+                      variant="primary"
+                      size="md"
+                      onClick={handleSaveJob}
+                    >
+                      Save Job
+                    </Button>
+                    <Button variant="primary" size="md" onClick={handleApply}>
+                      Apply Now
+                    </Button>
+                  </>
+                )
+              ) : (
                 <>
                   <Button
                     className="mr-2"
                     variant="primary"
                     size="md"
-                    onClick={handleSaveJob}
+                    onClick={() => setShowLoginModal(true)}
                   >
                     Save Job
                   </Button>
-                  <Button variant="primary" size="md" onClick={handleApply}>
+                  <Button
+                    variant="primary"
+                    size="md"
+                    onClick={() => setShowLoginModal(true)}
+                  >
                     Apply Now
                   </Button>
                 </>
@@ -491,6 +513,11 @@ const JobDetails = ({ job, appliedJobIds = [] }) => {
           </Row>
         </Card.Body>
       </Card>
+
+      <LoginModal
+        show={showLoginModal}
+        onHide={() => setShowLoginModal(false)}
+      />
     </div>
   );
 };

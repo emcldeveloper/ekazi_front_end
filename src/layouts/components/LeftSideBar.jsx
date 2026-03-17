@@ -20,6 +20,7 @@ import {
 import { useCompleteProfile, usePrimaryData } from "../../hooks/useCandidates";
 import { useAllThreads } from "../../hooks/candidates/useCorrespondence";
 import { FaUserAlt, FaUserPlus } from "react-icons/fa";
+import FeaturedBadge from "../../components/FeaturedBadge";
 
 const LeftSideBar = () => {
   const navigate = useNavigate();
@@ -124,9 +125,12 @@ const LeftSideBar = () => {
         </div>
 
         <Card.Body className="text-start capitalize mt-4">
-          <h5 className="fw-bold mb-1">
-            {dataprimary?.[0]?.first_name} {dataprimary?.[0]?.last_name}
-          </h5>
+          <div className="flex items-center justify-between">
+            <h5 className="fw-bold mb-1">
+              {dataprimary?.[0]?.first_name} {dataprimary?.[0]?.last_name}
+            </h5>
+            <FeaturedBadge />
+          </div>
           <p style={{ fontSize: "12px" }} className="text-muted mb-1">
             {dataprimary?.[0]?.latest_position?.position?.position_name || ""}
           </p>

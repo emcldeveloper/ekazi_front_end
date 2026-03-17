@@ -22,6 +22,8 @@ const AllEmployerCard = ({ jobCompanies }) => {
     return locationParts.join(", ") || "Location not available";
   };
 
+  console.log("Companies", jobCompanies);
+
   return (
     <Container className="py-4">
       <Row>

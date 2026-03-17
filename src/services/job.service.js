@@ -1,8 +1,19 @@
 import api from "../lib/axios.js";
 
 // ---- Fetch paginated jobs for infinite scroll ----
-export const fetchJobsApi = async ({ limit = 12, page = 1 }) => {
-  const res = await api.get("/jobs", { params: { limit, page } });
+export const fetchJobsApi = async ({
+  limit = 12,
+  page = 1,
+  search = "",
+  industry = "",
+}) => {
+  const params = { limit, page };
+
+  if (search) params.search = search;
+  if (industry) params.industry = industry;
+
+  const res = await api.get("/jobs", { params });
+
   return res.data.data || [];
 };
 

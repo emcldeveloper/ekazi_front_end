@@ -29,7 +29,7 @@ const CandidateProfile = () => {
   return (
     <MainLayout1>
       <div style={{ backgroundColor: "#cccccc", paddingBottom: "20px" }}>
-        <Container className="py-4">
+        <Container className="py-10">
           <Breadcrumb className="custom-breadcrumb">
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
             <Breadcrumb.Item href="/candidates">

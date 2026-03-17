@@ -10,15 +10,14 @@ import { ArrowDown } from "lucide-react";
 const JobsPage = () => {
   const [searchParams] = useSearchParams();
 
-  // jobs fetch
-  const { jobs, loading, error, hasMore, loadMore, loadingMore } = useJob();
-
-  console.log("Fetched jobs:", jobs);
-
   const [filters, setFilters] = useState({
-    industry: searchParams.get("industry") || "All",
+    industry: searchParams.get("industry") || "",
     region: searchParams.get("region") || "",
   });
+
+  // jobs fetch
+  const { jobs, loading, error, hasMore, loadMore, loadingMore } =
+    useJob(filters);
 
   // update filters when URL search params change
   useEffect(() => {
@@ -37,55 +36,9 @@ const JobsPage = () => {
     setFilters(filterValues);
   };
 
-  // client-side filtering of jobs based on selected filters
-  const filteredJobs = jobs.filter((job) => {
-    const search = filters.search?.toLowerCase() || "";
-
-    const position = job.job_position?.position_name?.toLowerCase() || "";
-    const industry = job.industry?.industry_name?.toLowerCase() || "";
-
-    if (search && !position.includes(search) && !industry.includes(search)) {
-      return false;
-    }
-
-    if (filters.industry && filters.industry !== "All") {
-      const jobIndustry = job.industry?.industry_name?.toLowerCase() || "";
-      const selectedIndustry = filters.industry.toLowerCase();
-
-      if (!jobIndustry.includes(selectedIndustry)) {
-        return false;
-      }
-    }
-
-    if (
-      filters.jobTypes?.length &&
-      !filters.jobTypes.includes(job.job_type?.type_name)
-    ) {
-      return false;
-    }
-
-    if (
-      filters.positionLevels?.length &&
-      !filters.positionLevels.includes(job.position_level?.id)
-    ) {
-      return false;
-    }
-
-    if (filters.location) {
-      const location =
-        job.job_addresses?.[0]?.region?.region_name?.toLowerCase() || "";
-
-      if (!location.includes(filters.location.toLowerCase())) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
   return (
     <MainLayout1>
-      <Container className="my-5">
+      <Container className="my-10">
         <JobFilters
           onFilterChange={handleFilterChange}
           initialFilters={filters}
@@ -94,13 +47,13 @@ const JobsPage = () => {
         {error && <Alert variant="danger">{error.message}</Alert>}
 
         <Row>
-          {filteredJobs.map((job) => (
+          {jobs.map((job) => (
             <Col key={job.id} md={4} className="mb-4">
               <JobCard job={job} />
             </Col>
           ))}
         </Row>
-        {!loading && filteredJobs.length === 0 && (
+        {!loading && jobs.length === 0 && (
           <div className="text-center my-4">
             <Alert variant="info">No jobs match the selected filters.</Alert>
           </div>
@@ -129,11 +82,11 @@ const JobsPage = () => {
           </div>
         )}
         {/* No More Jobs */}
-        {!loading && !hasMore && jobs.length > 0 && (
+        {/* {!loading && !hasMore && jobs.length > 0 && (
           <div className="text-center my-4">
             <Alert variant="info">No more jobs to load.</Alert>
           </div>
-        )}
+        )} */}
       </Container>
     </MainLayout1>
   );

@@ -5,8 +5,15 @@ import { Menu, X } from "lucide-react";
 import SubscriptionSection from "../pages/subscriptions/Subscription";
 import UserDropdown from "./components/UserDropdown";
 import NotificationDropdown from "./components/NotificationDropdown";
+import { usePrimaryData } from "../hooks/useCandidates";
+import FeaturedBadge from "../components/FeaturedBadge";
 
 const AppHeader = () => {
+  const applicant_id = localStorage.getItem("applicantId");
+  const { data } = usePrimaryData(applicant_id);
+  const featuredApplicant = data?.[0].applicant_featured;
+  console.log(featuredApplicant);
+
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const navItems = [
@@ -21,15 +28,15 @@ const AppHeader = () => {
 
   return (
     <header className="w-full bg-[#DFE3E2] shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-2">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-8 py-2">
+        <div className="flex items-center justify-between h-12">
           {/* LOGO */}
           <NavLink to="/">
-            <img src="/logo.png" alt="eKazi" className="w-24 md:w-32" />
+            <img src="/logo.png" alt="eKazi" className="w-24 md:w-28" />
           </NavLink>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-4">
             {navItems.map((item) => {
               return (
                 <NavLink
@@ -47,8 +54,7 @@ const AppHeader = () => {
                 </NavLink>
               );
             })}
-
-            <SubscriptionSection />
+            {featuredApplicant ? <></> : <SubscriptionSection />}
           </nav>
 
           {/* RIGHT ACTIONS */}
@@ -85,6 +91,7 @@ const AppHeader = () => {
                 {item.name}
               </NavLink>
             ))}
+            {featuredApplicant ? <></> : <SubscriptionSection />}
           </div>
         </div>
       )}

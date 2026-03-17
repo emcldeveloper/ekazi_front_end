@@ -1,8 +1,10 @@
 import { Check } from "lucide-react";
+import SubscriptionBadge from "../../components/SubscriptionBadge";
 
 const plans = [
   {
     title: "Trial Plan",
+    type: "free",
     price: "Free",
     subtitle: "Trial",
     button: "Start Trial",
@@ -13,6 +15,7 @@ const plans = [
   },
   {
     title: "Basic Plan",
+    type: "basic",
     price: "100,000",
     subtitle: "Small Businesses and Startups",
     button: "Buy Now",
@@ -25,6 +28,7 @@ const plans = [
   },
   {
     title: "Standard Plan",
+    type: "standard",
     price: "150,000",
     subtitle: "Medium-sized businesses",
     button: "Buy Now",
@@ -38,6 +42,7 @@ const plans = [
   },
   {
     title: "Premium Plan",
+    type: "premium",
     price: "300,000",
     subtitle: "Large corporations",
     button: "Buy Now",
@@ -54,6 +59,7 @@ const plans = [
   },
   {
     title: "Enterprise Plan",
+    type: "enterprise",
     price: "500,000",
     subtitle: "Enterprise companies",
     button: "Buy Now",
@@ -78,7 +84,13 @@ export default function EmployersPricingCards() {
           hover:shadow-xl transition duration-300"
         >
           {/* Title */}
-          <h3 className="text-xl font-semibold text-Orange">{plan.title}</h3>
+          <div className="flex gap-2 justify-center items-center">
+            {/* <SubscriptionBadge type={plan.type} /> */}
+            <h3 className="text-xl mb-0 font-semibold text-Orange">
+              {plan.title}
+            </h3>
+            <div></div>
+          </div>
 
           {/* Price */}
           <div className="mt-3 mb-2">

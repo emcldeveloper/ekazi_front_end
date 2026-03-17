@@ -9,16 +9,28 @@ import {
 
 import ContactModal from "../Component/Pages/ContactModal";
 import MapModal from "../Component/Pages/MapModal";
+import LoginModal from "../pages/Auth/LoginModal";
 
 const AppFooter = () => {
   const [showModal, setShowModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
   const currentYear = new Date().getFullYear();
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const handleOpenMap = () => setShowMap(true);
   const handleCloseMap = () => setShowMap(false);
+
+  const links = [
+    { label: "Jobs", link: "/jobs" },
+    { label: "Employers", link: "/employers" },
+    { label: "CV builder", link: "/cv-builder" },
+    { label: "Salary Calculator", link: "/salary-calculator" },
+    { label: "View applications", link: "/login", requiresAuth: true },
+    { label: "Job alerts", link: "/login", requiresAuth: true },
+  ];
 
   return (
     <section className="bg-Blue text-white w-100">
@@ -78,19 +90,18 @@ const AppFooter = () => {
           {/* Job Seeker Links */}
           <div>
             <h6 className="fw-bold">Job seeker</h6>
-            {[
-              ["Jobs", "/jobs"],
-              ["Employers", "/employers"],
-              ["CV builder", "/cv-builder"],
-              ["Salary Calculator", "/salary-calculator"],
-              ["View applications", "/login"],
-              ["Job alerts", "/login"],
-            ].map(([label, link]) => (
+
+            {links.map(({ label, link, requiresAuth }) => (
               <div key={label}>
                 <a
                   href={link}
-                  alt={label}
                   className="text-gray-300 text-decoration-none"
+                  onClick={(e) => {
+                    if (requiresAuth) {
+                      e.preventDefault(); // stop navigation
+                      setShowLoginModal(true);
+                    }
+                  }}
                 >
                   {label}
                 </a>
@@ -102,10 +113,10 @@ const AppFooter = () => {
           <div>
             <h6 className="fw-bold">Employer</h6>
             {[
-              ["Post a job", "/login"],
-              ["Featured candidates", "/featured-jobseeker"],
-              ["Applicant tracking", "/login"],
-              ["Search resume", "/login"],
+              ["Post a job", "https://api.ekazi.co.tz/login"],
+              ["Featured candidates", "/candidates"],
+              ["Applicant tracking", "https://api.ekazi.co.tz/login"],
+              ["Search resume", "https://api.ekazi.co.tz/login"],
             ].map(([label, link]) => (
               <div key={label}>
                 <a
@@ -172,6 +183,11 @@ const AppFooter = () => {
           </div>
         </div>
       </div>
+
+      <LoginModal
+        show={showLoginModal}
+        onHide={() => setShowLoginModal(false)}
+      />
     </section>
   );
 };

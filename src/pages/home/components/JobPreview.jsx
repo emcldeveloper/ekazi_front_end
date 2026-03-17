@@ -89,7 +89,7 @@ const JobPreview = () => {
         <meta property="og:type" content="website" />
       </Helmet>
 
-      <Container className="py-4">
+      <Container className="py-10">
         <Breadcrumb className="custom-breadcrumb">
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
           <Breadcrumb.Item href="/jobs">Jobs</Breadcrumb.Item>

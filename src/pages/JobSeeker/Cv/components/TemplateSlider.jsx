@@ -41,10 +41,19 @@ export default function TemplateSlider() {
   return (
     <>
       <Card className="shadow-sm">
+        <Card.Header className="p-0">
+          <div className="relative bg-gradient-to-r from-Orange  to-Orange h-auto flex items-center justify-between p-3 rounded-t-lg shadow-md">
+            <div>
+              <h5 className="text-white text-xl mb-0 font-bold tracking-wide">
+                Available CV Templates
+              </h5>
+            </div>
+          </div>
+        </Card.Header>
         <Card.Body>
-          <h3 className="text-base font-bold text-gray-900 mb-2">
+          {/* <h3 className="text-base font-bold text-gray-900 mb-2">
             Available CV Templates
-          </h3>
+          </h3> */}
 
           <div
             className="w-full overflow-hidden rounded-lg cursor-pointer mb-2"

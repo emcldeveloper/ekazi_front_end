@@ -52,24 +52,6 @@ const Employer = () => {
     <MainLayout1>
       <Container className="my-4">
         <Row>
-          {/* FILTER SIDEBAR */}
-          {/* <Col
-            xs={12}
-            md={3}
-            className="mb-3"
-            style={{
-              position: "sticky",
-              top: "180px",
-              alignSelf: "flex-start",
-            }}
-          >
-            <EmployerFilter
-              filters={filters}
-              onChange={handleFilterChange}
-              onReset={handleResetFilters}
-            />
-          </Col> */}
-
           {/* EMPLOYER LIST */}
           <Col xs={12} md={9}>
             <AllEmployerList

@@ -67,7 +67,7 @@ const FeaturedCandidates = () => {
 
   return (
     <MainLayout1>
-      <Container className="py-4">
+      <Container className="py-10">
         <Breadcrumb className="custom-breadcrumb">
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
           <Breadcrumb.Item active className="text-black">
@@ -75,9 +75,11 @@ const FeaturedCandidates = () => {
           </Breadcrumb.Item>
         </Breadcrumb>
 
-        <CandidateFilter onFilterChange={setFilters} />
-
         <Row>
+          <Col md={9}>
+            <CandidateFilter onFilterChange={setFilters} />
+          </Col>
+
           <Col md={9}>
             {isLoading && (
               <div className="text-center">

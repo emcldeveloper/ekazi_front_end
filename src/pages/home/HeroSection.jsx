@@ -9,28 +9,18 @@ import Counter from "../../components/Counter";
 
 export default function HeroSection() {
   const { data: stats } = useSiteStatistics();
-
-  const {
-    jobs,
-    loading,
-    loadMore,
-    hasMore,
-    searchTerm,
-    setSearchTerm,
-    selectedIndustry,
-    setSelectedIndustry,
-    loadingMore,
-  } = useJob();
-
   const { data: industries } = useIndustry();
+
+  const [filters, setFilters] = useState({
+    search: "",
+    industry: "",
+  });
+
+  const { jobs, loading, loadMore, hasMore, loadingMore } = useJob(filters);
 
   const [showModal, setShowModal] = useState(false);
   const modalBodyRef = useRef(null);
 
-  /**
-   * 🔥 Instead of filtering again, we use the ALREADY FILTERED jobs from useJob()
-   * When Search is clicked → open modal and show the filtered jobs
-   */
   const handleSearch = () => {
     setShowModal(true);
   };
@@ -51,28 +41,30 @@ export default function HeroSection() {
     }
   };
 
-  const [localSearch, setLocalSearch] = useState(searchTerm);
+  const [localSearch, setLocalSearch] = useState(filters.search);
 
+  // debounce search
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSearchTerm(localSearch);
+      setFilters((prev) => ({
+        ...prev,
+        search: localSearch,
+      }));
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [localSearch, setSearchTerm]);
+  }, [localSearch]);
 
   return (
     <section className="bg-gray-50 py-16 lg:py-0">
       <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8 items-center">
         {/* LEFT CONTENT */}
         <div>
-          {/* Heading */}
           <h1 className="animate__animated animate__fadeInDown text-4xl lg:text-5xl font-bold text-Blue leading-tight">
             A Place Where <span className="text-Orange">Employers</span> Meet
             Potential Candidates
           </h1>
 
-          {/* Subtitle */}
           <p className="animate__animated animate__fadeInLeft mt-3 text-lg text-gray-600">
             Set your career in motion with Ekazi. Discover opportunities,
             connect with employers, and build your future.
@@ -90,16 +82,21 @@ export default function HeroSection() {
 
             <select
               className="px-2 py-2 truncate rounded-lg text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-Orange"
-              value={selectedIndustry}
-              onChange={(e) => setSelectedIndustry(e.target.value)}
+              value={filters.industry}
+              onChange={(e) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  industry: e.target.value,
+                }))
+              }
             >
-              <option>Select Category</option>
-              {industries?.length > 0 &&
-                industries.map((ind) => (
-                  <option key={ind.id} value={ind.id}>
-                    {ind.industry_name}
-                  </option>
-                ))}
+              <option value="">Select Category</option>
+
+              {industries?.map((ind) => (
+                <option key={ind.id} value={ind.industry_name}>
+                  {ind.industry_name}
+                </option>
+              ))}
             </select>
 
             <button
@@ -157,7 +154,7 @@ export default function HeroSection() {
         handleClose={handleClose}
         modalBodyRef={modalBodyRef}
         handleScroll={handleScroll}
-        filteredJobs={jobs} // Jobs are ALREADY filtered by useJob hook
+        filteredJobs={jobs}
         loadingMore={loadingMore}
         hasMore={hasMore}
         loading={loading}

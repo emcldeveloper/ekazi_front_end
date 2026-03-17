@@ -25,15 +25,15 @@ export default function AppNavbar() {
 
   return (
     <header className="w-full bg-[#DFE3E2] shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-8 py-4">
+        <div className="flex items-center justify-between h-12">
           {/* LOGO */}
           <NavLink to="/">
-            <img src="/logo.png" alt="eKazi" className="w-24 md:w-32" />
+            <img src="/logo.png" alt="eKazi" className="w-24 md:w-28" />
           </NavLink>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}

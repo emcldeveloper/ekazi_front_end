@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Spinner, Alert, Button, Col } from "react-bootstrap";
+import { Container, Row, Spinner, Alert, Col } from "react-bootstrap";
 import useJob from "../../hooks/useJob.js";
 import JobCard from "./components/jobs/JobCard";
 import { useNavigate } from "react-router-dom";

@@ -50,9 +50,13 @@ export default function UserDropdown() {
           <img src={picture} alt="User" />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">{username}</span>
+        <span className="hidden md:block mr-1 font-medium text-theme-sm">
+          {username}
+        </span>
 
-        {isOpen ? <ChevronUp /> : <ChevronDown />}
+        <span className="hidden md:block">
+          {isOpen ? <ChevronUp /> : <ChevronDown />}
+        </span>
       </button>
 
       <Dropdown
@@ -92,7 +96,7 @@ export default function UserDropdown() {
               Change Password
             </DropdownItem>
           </div>
-          <div>
+          {/* <div>
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
@@ -102,7 +106,7 @@ export default function UserDropdown() {
               <CircleAlert />
               Support
             </DropdownItem>
-          </div>
+          </div> */}
         </div>
         <div
           onClick={handleLogout}
