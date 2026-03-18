@@ -7,32 +7,18 @@ const BannerSection = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src="/banners/ekazi.jpg"
-            alt="ekazi banner"
-          />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="/banners/ekazi.jpg"
-            alt="ekazi banner"
-          />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="/banners/ekazi.jpg"
+            src="/banners/ekazi-banner.jpeg"
             alt="ekazi banner"
           />
         </Carousel.Item>
 
-        {/* <Carousel.Item>
+        <Carousel.Item>
           <img
             className="d-block w-100"
-            src="/banners/exact.jpeg"
+            src="/banners/exact-banner.jpeg"
             alt="exact banner"
           />
-        </Carousel.Item> */}
+        </Carousel.Item>
       </Carousel>
     </Container>
   );

@@ -44,7 +44,7 @@ const AppFooter = () => {
               style={{ maxWidth: "120px", marginBottom: "10px" }}
             />
             <p className="mb-4 text-gray-300">
-              ekazi is An Online Recruitment Management Platform Designed for
+              An Online Recruitment Management Platform Designed for
               Employers/Recruiters, Job Seekers and Freelancers.
             </p>
             <div className="d-flex gap-3">
